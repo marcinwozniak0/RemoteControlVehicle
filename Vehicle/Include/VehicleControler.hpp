@@ -15,6 +15,8 @@ public:
     void controlVehicle();
     void vehicleEmergencyStop();
 
+    bool _isControlerActive = false;
+
 private:
     std::optional<std::string> getCommandToExecute();
     void executeCommand(const std::string&);

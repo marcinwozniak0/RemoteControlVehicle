@@ -1,3 +1,6 @@
+#include <thread>
+#include <chrono>
+
 #include "VehicleControler.hpp"
 
 VehicleControler::VehicleControler(CommandReceiver& commandReceiver,
@@ -5,23 +8,26 @@ VehicleControler::VehicleControler(CommandReceiver& commandReceiver,
     : _commandReceiver(commandReceiver)
     , _commandsQueue(_commandReceiver.shareCommandsQueue())
     , _vehicle(vehicle)
-{}
+{
+    _isControlerActive = true;
+}
 
 void VehicleControler::controlVehicle()
 {
     //think about receiving commands
-    while(true)
+    while(_isControlerActive)
     {
         if (const auto command = getCommandToExecute())
         {
             executeCommand(command.value());
         }
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 }
 
 void VehicleControler::vehicleEmergencyStop()
 {
-    //execute emergency command
+    //TODO execute emergency command
 }
 
 std::optional<std::string> VehicleControler::getCommandToExecute()
@@ -44,5 +50,13 @@ void VehicleControler::executeCommand(const std::string& command)
     if("START" == command)
     {
         _vehicle.startVehicle();
+    }
+    else if("STOP" == command)
+    {
+        _vehicle.stopVehicle();
+    }
+    else if("DEACTIVATE")
+    {
+        _isControlerActive = false;
     }
 }
