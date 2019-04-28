@@ -1,7 +1,19 @@
 #include <iostream>
 
+#include "VehicleControler.hpp"
+
 int main()
 {
-    std::cout << "Hello World!" << std::endl;
+    VehicleControler vehicleControler;
+
+    try
+    {
+        vehicleControler.controlVehicle();
+    }
+    catch(...)
+    {
+        vehicleControler.vehicleEmergencyStop();
+    }
+
     return 0;
 }
