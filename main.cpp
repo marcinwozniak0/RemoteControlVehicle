@@ -4,7 +4,9 @@
 
 int main()
 {
-    VehicleControler vehicleControler;
+    CommandReceiver commandReceiver;
+    Vehicle vehicle;
+    VehicleControler vehicleControler(commandReceiver, vehicle);
 
     try
     {
