@@ -17,16 +17,20 @@ include(External_GTest.cmake)
 
 # SRC
 include_directories(Vehicle/Include)
+include_directories(Router/Include)
 add_subdirectory(Vehicle/Source)
+add_subdirectory(Router/Source)
 
 # TEST
 include_directories(Vehicle/Test)
+include_directories(Router/Test)
 add_subdirectory(Vehicle/Test)
+add_subdirectory(Router/Test)
 
 add_library(source_objects_lib OBJECT ${SOURCES})
 
-add_executable(${PROJECT_NAME} $<TARGET_OBJECTS:source_objects_lib>
-                               "main.cpp")
+add_executable(intelligent_Vehicle $<TARGET_OBJECTS:source_objects_lib>
+                                   "main.cpp")
 
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
