@@ -34,10 +34,7 @@ std::optional<std::string> VehicleControler::getCommandToExecute()
 {
     if (not _commandsQueue->empty())
     {
-        const auto command = _commandsQueue->front();
-        _commandsQueue->pop();
-
-        return command;
+        return std::move(_commandsQueue->front());
     }
     else
     {

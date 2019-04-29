@@ -41,3 +41,10 @@ target_link_libraries(intelligent_Vehicle_UT ${GTEST_MAIN_LIBRARY}
                                           ${GTEST_LIBRARY}
                                           ${GMOCK_MAIN_LIBRARY}
                                           ${GMOCK_LIBRARY})
+find_program(VALGRIND "valgrind")
+if(VALGRIND)
+    target_link_libraries(intelligent_Vehicle_UT LINK_PUBLIC)
+    add_custom_target(valgrind COMMAND "${VALGRIND}" --tool=memcheck  --leak-check=yes
+    --show-reachable=yes --num-callers=20 --track-fds=no
+    $<TARGET_FILE:intelligent_Vehicle_UT>)
+endif()

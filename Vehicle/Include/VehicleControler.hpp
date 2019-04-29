@@ -13,9 +13,7 @@ public:
     VehicleControler(CommandReceiver&, Vehicle&);
 
     void controlVehicle();
-    void vehicleEmergencyStop();
-
-    bool _isControlerActive = false;
+    void vehicleEmergencyStop();  
 
 private:
     std::optional<std::string> getCommandToExecute();
@@ -24,4 +22,5 @@ private:
     CommandReceiver& _commandReceiver;
     std::shared_ptr<std::queue<std::string>> _commandsQueue;
     Vehicle& _vehicle;
+    bool _isControlerActive = false;
 };
