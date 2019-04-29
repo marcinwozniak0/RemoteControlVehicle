@@ -1,6 +1,7 @@
 #include "Vehicle.hpp"
 
-Vehicle::Vehicle()
+Vehicle::Vehicle(const PropulsionSystem& propulsionSystem)
+    : _propulsionSystem(propulsionSystem)
 {
     _vehicleState = VehicleState::Idle;
 }

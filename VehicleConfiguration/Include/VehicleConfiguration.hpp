@@ -1,4 +1,3 @@
-#ifndef VEHICLECONFIGURATION_HPP
-#define VEHICLECONFIGURATION_HPP
+#pragma once
 
-#endif // VEHICLECONFIGURATION_HPP
+static constexpr uint8_t NUMBER_OF_ENGINES = 2;
