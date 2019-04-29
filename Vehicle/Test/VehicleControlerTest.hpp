@@ -7,14 +7,13 @@
 
 #include "VehicleControler.hpp"
 #include "CommandReceiverMock.hpp"
-#include "DcEngine.hpp"
-#include "SingleAxisPropulsionSystem.hpp"
+#include "EngineMock.hpp"
+#include "PropulsionSystemMock.hpp"
 
 namespace
 {
 const std::shared_ptr<CommandsQueue> COMMANDS_QUEUE = std::make_shared<CommandsQueue>();
-
-}
+}//namespace
 
 using namespace ::testing;
 
@@ -22,22 +21,19 @@ class VehicleControlerTest : public Test
 {
 public:
     VehicleControlerTest()
-        : _propulsionSystem({_firstEngine, _secondEngine})
-        , _vehicle(_propulsionSystem)
+        : _vehicle(_propulsionSystemMock)
     {
         EXPECT_CALL(_commandReceiverMock, shareCommandsQueue()).WillOnce(Return(COMMANDS_QUEUE));
         _sut = std::make_unique<VehicleControler>(_commandReceiverMock, _vehicle);
     }
 
+    std::unique_ptr<VehicleControler> _sut;
+    NiceMock<PropulsionSystemMock> _propulsionSystemMock;
+    NiceMock<CommandReceiverMock> _commandReceiverMock;
+    Vehicle _vehicle;
+
 private:
-    DcEngine _firstEngine;
-    DcEngine _secondEngine;
-    SingleAxisPropulsionSystem _propulsionSystem;
-    StrictMock<CommandReceiverMock> _commandReceiverMock;
     std::shared_ptr<CommandsQueue> _commandQueue;
 
-public:
-    std::unique_ptr<VehicleControler> _sut;
-    Vehicle _vehicle;
 };
 

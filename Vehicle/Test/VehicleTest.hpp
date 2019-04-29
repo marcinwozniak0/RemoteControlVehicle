@@ -3,19 +3,18 @@
 #include <gtest/gtest.h>
 
 #include "Vehicle.hpp"
-#include "SingleAxisPropulsionSystem.hpp"
-#include "DcEngine.hpp"
+#include "PropulsionSystemMock.hpp"
+#include "EngineMock.hpp"
 
-class VehicleTest : public ::testing::Test
+using namespace ::testing;
+
+class VehicleTest : public Test
 {
 public:
     VehicleTest()
-        : _propulsionSystem({_firstEngine, _secondEngine})
-        , _sut(_propulsionSystem)
+        : _sut(_propulsionSystem)
     {}
 
-    DcEngine _firstEngine;
-    DcEngine _secondEngine;
-    SingleAxisPropulsionSystem _propulsionSystem;
+    NiceMock<PropulsionSystemMock> _propulsionSystem;
     Vehicle _sut;
 };

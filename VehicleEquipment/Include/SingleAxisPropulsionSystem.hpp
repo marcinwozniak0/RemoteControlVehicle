@@ -7,7 +7,9 @@
 class SingleAxisPropulsionSystem : public PropulsionSystem
 {
 public:
-    SingleAxisPropulsionSystem(const Engines engines);
+    SingleAxisPropulsionSystem(Engines engines);
+
+     void transferCharacteristicValues(const std::vector<uint8_t>&&) override;
 private:
-    const Engines _engines;
+    Engines _engines;
 };

@@ -2,21 +2,22 @@
 
 #include "VehicleState.hpp"
 #include "PropulsionSystem.hpp"
+#include "Commands.hpp"
 
 class Vehicle
 {
 public:
-    Vehicle(const PropulsionSystem& propulsionSystem);
+    Vehicle(PropulsionSystem& propulsionSystem);
 
     void startVehicle();
     void stopVehicle();
     void switchToAutomaticMode();
 
-    void jedzProsto();
+    void run(const USER_COMMAND_TO_DRIVE&&); //TODO better name
 
     VehicleState getVehicleState();
 
 private:
     VehicleState _vehicleState;
-    const PropulsionSystem& _propulsionSystem;
+    PropulsionSystem& _propulsionSystem;
 };

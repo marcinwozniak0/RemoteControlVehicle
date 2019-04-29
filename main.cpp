@@ -9,7 +9,8 @@ int main()
     CommandReceiver commandReceiver;
     DcEngine firstEngine;
     DcEngine secondEngine;
-    SingleAxisPropulsionSystem propulsionSystem({firstEngine, secondEngine});
+    SingleAxisPropulsionSystem propulsionSystem({std::make_unique<DcEngine>(firstEngine),
+                                                 std::make_unique<DcEngine>(secondEngine)});
     Vehicle vehicle(propulsionSystem);
     VehicleControler vehicleControler(commandReceiver, vehicle);
 

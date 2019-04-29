@@ -25,12 +25,12 @@ add_subdirectory(Router/Source)
 add_subdirectory(VehicleEquipment/Source)
 
 # TEST
+include_directories(VehicleEquipment/Test)
 include_directories(Vehicle/Test)
 include_directories(Router/Test)
-include_directories(VehicleEquimpent/Test)
+add_subdirectory(VehicleEquipment/Test)
 add_subdirectory(Vehicle/Test)
 add_subdirectory(Router/Test)
-add_subdirectory(VehicleEquipment/Test)
 
 add_library(source_objects_lib OBJECT ${SOURCES})
 
