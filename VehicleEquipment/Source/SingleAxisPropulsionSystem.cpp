@@ -1,6 +1,6 @@
 #include "SingleAxisPropulsionSystem.hpp"
 
-SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(const std::array<Engine, 2> engines)
+SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(const Engines engines)
     :_engines(engines)
 {
 

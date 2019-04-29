@@ -12,7 +12,7 @@ void CommandReceiver::receiveCommand()
     queueCommand(command);
 }
 
-std::shared_ptr<std::queue<std::string>> CommandReceiver::shareCommandsQueue()
+std::shared_ptr<CommandsQueue> CommandReceiver::shareCommandsQueue()
 {
     return _commandsQueue;
 }

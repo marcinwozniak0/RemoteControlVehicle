@@ -20,7 +20,7 @@ private:
     void executeCommand(const std::string&);
 
     CommandReceiver& _commandReceiver;
-    std::shared_ptr<std::queue<std::string>> _commandsQueue;
+    std::shared_ptr<CommandsQueue> _commandsQueue;
     Vehicle& _vehicle;
     bool _isControlerActive = false;
 };

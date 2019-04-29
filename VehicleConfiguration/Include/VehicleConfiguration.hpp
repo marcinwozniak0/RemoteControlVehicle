@@ -1,3 +1,3 @@
 #pragma once
 
-static constexpr uint8_t NUMBER_OF_ENGINES = 2;
+static constexpr uint8_t ENGINES_IN_PROPULSION_SYSTEM = 2;

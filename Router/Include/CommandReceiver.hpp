@@ -4,6 +4,11 @@
 #include <memory>
 #include <queue>
 
+namespace
+{
+using CommandsQueue = std::queue<std::string>;
+}//namespace
+
 class CommandReceiver
 {
 public:
@@ -12,8 +17,8 @@ public:
 
     virtual void receiveCommand();
     virtual void queueCommand(const std::string& command);
-    virtual std::shared_ptr<std::queue<std::string>> shareCommandsQueue();
+    virtual std::shared_ptr<CommandsQueue> shareCommandsQueue();
 
 private:
-     std::shared_ptr<std::queue<std::string>> _commandsQueue = std::make_shared<std::queue<std::string>>();
+     std::shared_ptr<CommandsQueue> _commandsQueue = std::make_shared<CommandsQueue>();
 };

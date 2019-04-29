@@ -12,7 +12,7 @@
 
 namespace
 {
-const std::shared_ptr<std::queue<std::string>> COMMANDS_QUEUE = std::make_shared<std::queue<std::string>>();
+const std::shared_ptr<CommandsQueue> COMMANDS_QUEUE = std::make_shared<CommandsQueue>();
 
 }
 
@@ -34,7 +34,7 @@ private:
     DcEngine _secondEngine;
     SingleAxisPropulsionSystem _propulsionSystem;
     StrictMock<CommandReceiverMock> _commandReceiverMock;
-    std::shared_ptr<std::queue<std::string>> _commandQueue;   
+    std::shared_ptr<CommandsQueue> _commandQueue;
 
 public:
     std::unique_ptr<VehicleControler> _sut;
