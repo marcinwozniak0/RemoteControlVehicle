@@ -14,7 +14,7 @@ int main()
     Vehicle vehicle(propulsionSystem);
     VehicleControler vehicleControler(commandReceiver, vehicle);
 
-    int data[] = {3,6,10,5,13,10,5,13,10};  //Random data we want to send
+  /* int data[] = {3,6,10,5,13,10,5,13,10};  //Random data we want to send
     FILE *file;
     file = fopen("/dev/ttyACM0","w");  //Opening device file
     int i = 0;
@@ -24,7 +24,7 @@ int main()
         fprintf(file,"%c",','); //To separate digits
     }
     fclose(file);
-    return  0;
+    return  0;*/
     try
     {
         vehicleControler.controlVehicle();

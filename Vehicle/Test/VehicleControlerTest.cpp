@@ -25,7 +25,7 @@ TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldTransferToEnginePrope
     COMMANDS_QUEUE->push("DRIVE|1|55|");
     COMMANDS_QUEUE->push("DEACTIVATE");
 
-    EXPECT_CALL(_propulsionSystemMock, transferCharacteristicValues(std::vector<uint8_t>{2, 55}));
+    EXPECT_CALL(_propulsionSystemMock, transferCharacteristicValues(std::vector<uint8_t>{1, 55}));
 
     _sut->controlVehicle();
 
