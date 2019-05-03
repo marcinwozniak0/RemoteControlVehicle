@@ -4,12 +4,16 @@
 
 #include "PropulsionSystem.hpp"
 
+class Engine;
+
 class SingleAxisPropulsionSystem : public PropulsionSystem
 {
 public:
-    SingleAxisPropulsionSystem(Engines engines);
+    SingleAxisPropulsionSystem(Engine&, Engine&);
 
      void transferCharacteristicValues(const std::vector<uint8_t>&&) override;
 private:
-    Engines _engines;
+    Engine& _rightEngine;
+    Engine& _leftEngine;
+
 };

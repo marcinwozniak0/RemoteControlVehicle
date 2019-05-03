@@ -1,14 +1,14 @@
 #include "SingleAxisPropulsionSystem.hpp"
+#include "Engine.hpp"
 
-SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engines engines)
-{
-    _engines = std::move(engines);
-}
+SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engine& rightEngine,
+                                                       Engine& leftEngine)
+    : _rightEngine(rightEngine)
+    , _leftEngine(leftEngine)
+{}
 
 void SingleAxisPropulsionSystem::transferCharacteristicValues(const std::vector<uint8_t>&& characteristic)
 {
-    for (const auto& engine : _engines)
-    {
-        engine->setValues(std::move(characteristic));
-    }
+    _rightEngine.setValues(std::move(characteristic));
+    _leftEngine.setValues(std::move(characteristic));
 }
