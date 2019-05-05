@@ -1,21 +1,27 @@
 #include "DcEngine.hpp"
 #include "PinValueSetter.hpp"
 
-DcEngine::DcEngine(const PinValueSetter& pinValueSetter)
-    : _pinValueSetter(pinValueSetter)
+DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
+                   const uint8_t secondOutputPinNumber,
+                   const uint8_t pwmPinNumber,
+                   const PinValueSetter& pinValueSetter)
+    : _firstOutputPinNumber(firstOutputPinNumber)
+    , _secondOutputPinNumber(secondOutputPinNumber)
+    , _pwmOutputPinNumber (pwmPinNumber)
+    , _pinValueSetter(pinValueSetter)
 {}
 
 void DcEngine::saveValues(const std::vector<uint8_t>&& valueList)//array?
 {
     //TODO if!=3 to throw ze sraka
-    out1Val = *valueList.begin();
-    out2Val = *(valueList.begin() + 1);
-    pwmVal = *(valueList.begin() + 2);
+    _firstOutputValue = *valueList.begin();
+    _secondOutputValue = *(valueList.begin() + 1);
+    _pwmValue = *(valueList.begin() + 2);
 }
 
 void DcEngine::startEngine()
 {
-    _pinValueSetter.setValue(out1, out1Val);
-    _pinValueSetter.setValue(out2, out2Val);
-    _pinValueSetter.setValue(pwm, pwmVal);
+    _pinValueSetter.setValue(_firstOutputPinNumber, _firstOutputValue);
+    _pinValueSetter.setValue(_secondOutputPinNumber, _secondOutputValue);
+    _pinValueSetter.setValue(_pwmOutputPinNumber, _pwmValue);
 }
