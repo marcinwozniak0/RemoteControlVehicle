@@ -4,12 +4,15 @@
 #include "VehicleControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
 #include "DcEngine.hpp"
+#include "ArduinoPinValueSetter.hpp"
 
 int main()
 {
+    constexpr auto arduinoPortDesignation = "/dev/ttyACM0";
     CommandReceiver commandReceiver;
-    DcEngine firstEngine;
-    DcEngine secondEngine;
+    ArduinoPinValueSetter arduinoPinValueSetter(arduinoPortDesignation);
+    DcEngine firstEngine(arduinoPinValueSetter);
+    DcEngine secondEngine(arduinoPinValueSetter);
     SingleAxisPropulsionSystem propulsionSystem(firstEngine, secondEngine);
     Vehicle vehicle(propulsionSystem);
     VehicleControler vehicleControler(commandReceiver, vehicle);

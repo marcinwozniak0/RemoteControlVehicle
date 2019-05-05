@@ -9,6 +9,7 @@ SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engine& rightEngine,
 
 void SingleAxisPropulsionSystem::transferCharacteristicValues(const std::vector<uint8_t>&& characteristic)
 {
-    _rightEngine.setValues(std::move(characteristic));
-    _leftEngine.setValues(std::move(characteristic));
+    //tmp = L295D.calculatePinValue(characteristic);
+    _rightEngine.saveValues({1,1,200});
+    _leftEngine.saveValues(std::move(characteristic));
 }
