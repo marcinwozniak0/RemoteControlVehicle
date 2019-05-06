@@ -18,6 +18,7 @@ void VehicleControler::controlVehicle()
     //think about receiving commands
     while(_isControlerActive)
     {
+        _commandReceiver.receiveCommand(); //temporary solution
         if (const auto command = getCommandToExecute())
         {
             executeCommand(command.value());
@@ -44,7 +45,7 @@ std::optional<std::string> VehicleControler::getCommandToExecute()
         return {};
     }
 }
-#include <iostream>
+
 namespace
 {
 bool startsWith(const std::string& str, const std::string& pattern)

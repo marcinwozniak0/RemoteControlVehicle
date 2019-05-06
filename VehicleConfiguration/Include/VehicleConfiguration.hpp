@@ -2,6 +2,8 @@
 
 #include "stdint.h"
 
+constexpr uint8_t NUMBER_OF_ENGINES = 2;
+constexpr uint8_t NUMBER_OF_PINS_PER_ENGINE = 3;
 constexpr auto ARDUINO_PORT_DESIGNATION = "/dev/ttyACM0";
 
 namespace PIN_NUMBERS
