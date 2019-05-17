@@ -9,6 +9,10 @@ public:
         calculatePinValues(const std::vector<uint8_t>&) const override;
 
 private:
-    const std::array<std::array<uint8_t, 2>, 2> _drivingForward {{{1, 0}, {0, 1}}};
-    const std::array<std::array<uint8_t, 2>, 2> _drivingBackward {{{0, 1}, {1, 0}}};
+    const std::array<std::array<uint8_t, NUMBER_OF_ENGINES>, NUMBER_OF_INPUT_PIN_IN_ENGINE>
+        _drivingForward {{{PIN_STATE::HIGH, PIN_STATE::LOW},
+                          {PIN_STATE::LOW, PIN_STATE::HIGH}}};
+    const std::array<std::array<uint8_t, NUMBER_OF_ENGINES>, NUMBER_OF_INPUT_PIN_IN_ENGINE>
+        _drivingBackward {{{PIN_STATE::LOW, PIN_STATE::HIGH},
+                           {PIN_STATE::HIGH, PIN_STATE::LOW}}};
 };
