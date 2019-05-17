@@ -7,6 +7,6 @@
 class EngineMock : public Engine
 {
 public:
-    MOCK_METHOD1(saveValues, void(const std::vector<uint8_t>&&));
+    MOCK_METHOD1(saveValues, void(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>&));
     MOCK_METHOD0(startEngine, void());
 };

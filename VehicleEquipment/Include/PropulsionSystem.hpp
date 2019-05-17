@@ -6,7 +6,7 @@
 class PropulsionSystem
 {
 public:
-    virtual void transferCharacteristicValues(const std::vector<uint8_t>&&) = 0;
+    virtual void transferCharacteristicValues(const std::vector<uint8_t>&) = 0;
 
     virtual ~PropulsionSystem() = default;
 };

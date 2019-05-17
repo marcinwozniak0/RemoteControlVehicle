@@ -11,7 +11,7 @@ DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
     , _pinValueSetter(pinValueSetter)
 {}
 
-void DcEngine::saveValues(const std::vector<uint8_t>&& valueList)//array?
+void DcEngine::saveValues(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>& valueList)
 {
     //TODO if!=3 to throw ze sraka
     _firstOutputValue = *valueList.begin();

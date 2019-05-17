@@ -1,12 +1,14 @@
 #pragma once
 
-#include <vector>
+#include <array>
 #include <stdint.h>
+
+#include "VehicleConfiguration.hpp"
 
 class Engine
 {
 public:
-    virtual void saveValues(const std::vector<uint8_t>&&) = 0;
+    virtual void saveValues(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>&) = 0;
     virtual void startEngine() = 0;
 
     virtual ~Engine() = default;
