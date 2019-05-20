@@ -28,6 +28,7 @@ VehicleState Vehicle::getVehicleState()
 
 void Vehicle::run(const USER_COMMAND_TO_DRIVE&& command)
 {
-    const std::vector<uint8_t> characteristicToSend {command._direction, command._speed};
+    const auto& characteristicToSend = command._coordinateSystem;
+
     _propulsionSystem.transferCharacteristicValues(characteristicToSend);
 }

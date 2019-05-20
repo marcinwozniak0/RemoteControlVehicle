@@ -22,10 +22,13 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 
 TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldTransferToEngineProperValues)
 {
-    COMMANDS_QUEUE->push("DRIVE|1|55|");
+    COMMANDS_QUEUE->push("DRIVE|700|5500|");
     COMMANDS_QUEUE->push("DEACTIVATE");
 
-    EXPECT_CALL(_propulsionSystemMock, transferCharacteristicValues(std::vector<uint8_t>{1, 55}));
+    constexpr int16_t xCoordinate = 700;
+    constexpr int16_t yCoordinate = 5500;
+
+    EXPECT_CALL(_propulsionSystemMock, transferCharacteristicValues(std::make_pair(xCoordinate, yCoordinate)));
 
     _sut->controlVehicle();
 

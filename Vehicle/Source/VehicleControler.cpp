@@ -82,8 +82,8 @@ void VehicleControler::executeCommand(const std::string& command)
     {
         //TODO jak obslugiwac i pobierac te mesgi
         //TODO musi byc w stanie != IDLE zeby przyjac takiego mesga
-        const uint8_t direction = static_cast<uint8_t>(std::stoi(getFieldFromCommand(command, 0)));
-        const uint8_t speed = static_cast<uint8_t>(std::stoi(getFieldFromCommand(command, 1)));
+        const auto direction = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, 0)));
+        const auto speed = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, 1)));
 
         _vehicle.run(USER_COMMAND_TO_DRIVE{direction, speed});
     }

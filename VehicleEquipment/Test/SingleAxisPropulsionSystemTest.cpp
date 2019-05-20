@@ -2,11 +2,11 @@
 
 TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 {
-    constexpr auto direction = 1u;
-    constexpr auto speed = 70;
-    constexpr auto pwmValue = speed * PWM_MAX_RANGE / 100;
+    constexpr int16_t xCoordinate = 1000;
+    constexpr int16_t yCoordinate = 700;
+    constexpr auto pwmValue = yCoordinate * PWM_MAX_RANGE / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
 
-    const std::vector<uint8_t> characteristic {direction, speed};
+    const auto characteristic = std::make_pair(xCoordinate, yCoordinate);
     const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfLeftEngine =
         {PIN_STATE::HIGH, PIN_STATE::LOW, pwmValue};
     const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfRightEngine =

@@ -10,7 +10,7 @@ SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engine& rightEngine,
     , _engineDriver(engineDriver)
 {}
 
-void SingleAxisPropulsionSystem::transferCharacteristicValues(const std::vector<uint8_t>& characteristic)
+void SingleAxisPropulsionSystem::transferCharacteristicValues(const std::pair<int16_t, int16_t>& characteristic)
 {
     const auto pinValues = _engineDriver.calculatePinValues(characteristic);
     _leftEngine.saveValues(pinValues.at(0));

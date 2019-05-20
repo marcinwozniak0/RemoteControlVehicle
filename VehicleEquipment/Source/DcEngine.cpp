@@ -13,10 +13,9 @@ DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
 
 void DcEngine::saveValues(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>& valueList)
 {
-    //TODO if!=3 to throw ze sraka
-    _firstOutputValue = *valueList.begin();
-    _secondOutputValue = *(valueList.begin() + 1);
-    _pwmValue = *(valueList.begin() + 2);
+    _firstOutputValue = valueList.at(0);
+    _secondOutputValue = valueList.at(1);
+    _pwmValue = valueList.at(2);
 }
 
 void DcEngine::startEngine()
