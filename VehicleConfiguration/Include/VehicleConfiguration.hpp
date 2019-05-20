@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdint.h"
+#include <stdint.h>
 
 static constexpr uint8_t NUMBER_OF_ENGINES = 2;
 static constexpr uint8_t NUMBER_OF_INPUT_PIN_IN_ENGINE = 2;
