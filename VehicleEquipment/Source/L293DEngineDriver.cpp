@@ -31,10 +31,15 @@ L293DEngineDriver::calculatePinValues(const std::pair<int16_t, int16_t>& charact
                                    _drivingBackward.at(1).at(1),
                                    pwmValue};
     }
-    else
+    else if (areCoordinatesInRange(characteristic) and directionChangeTreshold == characteristic.second)
     {
-        // y == 0
-        //TODO else if STOP
+        pinValuesOfLeftEngine = {_stopEngine.at(0).at(0),
+                                 _stopEngine.at(0).at(1),
+                                 pwmValue};
+
+        pinValuesOfRightEngine = {_stopEngine.at(1).at(0),
+                                  _stopEngine.at(1).at(1),
+                                  pwmValue};
     }
 
     return {pinValuesOfLeftEngine, pinValuesOfRightEngine};

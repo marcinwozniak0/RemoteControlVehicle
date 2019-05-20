@@ -17,4 +17,7 @@ private:
     const std::array<std::array<uint8_t, NUMBER_OF_ENGINES>, NUMBER_OF_INPUT_PIN_IN_ENGINE>
         _drivingBackward {{{PIN_STATE::LOW, PIN_STATE::HIGH},
                            {PIN_STATE::HIGH, PIN_STATE::LOW}}};
+    const std::array<std::array<uint8_t, NUMBER_OF_ENGINES>, NUMBER_OF_INPUT_PIN_IN_ENGINE>
+        _stopEngine {{{PIN_STATE::HIGH, PIN_STATE::HIGH},
+                      {PIN_STATE::HIGH, PIN_STATE::HIGH}}};
 };
