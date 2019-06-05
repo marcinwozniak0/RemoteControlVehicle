@@ -70,6 +70,10 @@ std::string getFieldFromCommand(const std::string& command, const uint8_t fieldN
 
 void VehicleControler::executeCommand(const std::string& command)
 {
+    //TODO komenda do wybrania manula czy auto
+    //komendy strignowe do jakiegos namesapce
+    //pomyslec o tym xmlu
+    //moze cos w stylu START|MANUAL ?
     if("START" == command)
     {
         _vehicle.startVehicle();
@@ -81,9 +85,12 @@ void VehicleControler::executeCommand(const std::string& command)
     else if(startsWith(command, "DRIVE"))
     {
         //TODO jak obslugiwac i pobierac te mesgi
+        //TODO moze jakies xml czy coś do tych mesgow
         //TODO musi byc w stanie != IDLE zeby przyjac takiego mesga
-        const auto direction = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, 0)));
-        const auto speed = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, 1)));
+        constexpr uint8_t xCoordinationField = 0;
+        constexpr uint8_t yCoordinationField = 1;
+        const auto direction = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, xCoordinationField)));
+        const auto speed = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, yCoordinationField)));
 
         _vehicle.run(USER_COMMAND_TO_DRIVE{direction, speed});
     }

@@ -15,6 +15,6 @@ void SingleAxisPropulsionSystem::transferCharacteristicValues(const std::pair<in
     const auto pinValues = _engineDriver.calculatePinValues(characteristic);
     _leftEngine.saveValues(pinValues.at(0));
     _rightEngine.saveValues(pinValues.at(1));
-    _rightEngine.startEngine();
+    _rightEngine.startEngine(); //TODO extract to separate method startEngines()
     _leftEngine.startEngine();
 }
