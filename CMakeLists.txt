@@ -14,6 +14,7 @@ set(BINARY_OUTPUT_PATH build/)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 include(External_GTest.cmake)
+find_package(nlohmann_json 3.2.0 REQUIRED)
 
 # SRC
 include_directories(Vehicle/Include)
@@ -37,6 +38,8 @@ add_library(source_objects_lib OBJECT ${SOURCES})
 add_executable(intelligent_Vehicle $<TARGET_OBJECTS:source_objects_lib>
                                    "main.cpp")
 
+target_link_libraries(intelligent_Vehicle nlohmann_json::nlohmann_json)
+
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
                       ${MAIN_TEST})
@@ -45,7 +48,8 @@ add_executable(intelligent_Vehicle_UT ${TEST_BINARY_FILES})
 target_link_libraries(intelligent_Vehicle_UT ${GTEST_MAIN_LIBRARY}
                                           ${GTEST_LIBRARY}
                                           ${GMOCK_MAIN_LIBRARY}
-                                          ${GMOCK_LIBRARY})
+                                          ${GMOCK_LIBRARY}
+                                          nlohmann_json::nlohmann_json)
 find_program(VALGRIND "valgrind")
 if(VALGRIND)
     target_link_libraries(intelligent_Vehicle_UT LINK_PUBLIC)
