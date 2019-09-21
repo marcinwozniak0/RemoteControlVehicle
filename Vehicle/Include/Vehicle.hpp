@@ -1,13 +1,15 @@
 #pragma once
 
 #include "VehicleState.hpp"
-#include "PropulsionSystem.hpp"
 #include "Commands.hpp"
+
+class PropulsionSystem;
+class SteeringSystem;
 
 class Vehicle
 {
 public:
-    Vehicle(PropulsionSystem& propulsionSystem);
+    Vehicle(PropulsionSystem&, SteeringSystem&);
 
     void startVehicle();
     void stopVehicle();
@@ -20,4 +22,6 @@ public:
 private:
     VehicleState _vehicleState;
     PropulsionSystem& _propulsionSystem;
+    SteeringSystem& _steeringSystem;
+
 };

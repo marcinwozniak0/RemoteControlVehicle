@@ -9,6 +9,7 @@
 #include "CommandReceiverMock.hpp"
 #include "EngineMock.hpp"
 #include "PropulsionSystemMock.hpp"
+#include "SteeringSystemMock.hpp"
 
 namespace
 {
@@ -21,7 +22,7 @@ class VehicleControlerTest : public Test
 {
 public:
     VehicleControlerTest()
-        : _vehicle(_propulsionSystemMock)
+        : _vehicle(_propulsionSystemMock, _steeringSystemMock)
     {
         EXPECT_CALL(_commandReceiverMock, shareCommandsQueue()).WillOnce(Return(COMMANDS_QUEUE));
         _sut = std::make_unique<VehicleControler>(_commandReceiverMock, _vehicle);
@@ -30,6 +31,7 @@ public:
     std::unique_ptr<VehicleControler> _sut;
     NiceMock<PropulsionSystemMock> _propulsionSystemMock;
     NiceMock<CommandReceiverMock> _commandReceiverMock;
+    NiceMock<SteeringSystemMock> _steeringSystemMock;
     Vehicle _vehicle;
 
 private:

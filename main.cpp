@@ -7,6 +7,8 @@
 #include "ArduinoPinValueSetter.hpp"
 #include "VehicleConfiguration.hpp"
 #include "L293DEngineDriver.hpp"
+#include "ThirtyDegreesSteeringWheel.hpp"
+#include "FrontAxialSteeringSystem.hpp"
 
 int main()
 {
@@ -23,7 +25,10 @@ int main()
     SingleAxisPropulsionSystem propulsionSystem(firstEngine,
                                                 secondEngine,
                                                 engineDriver);
-    Vehicle vehicle(propulsionSystem);
+    ThirtyDegreesSteeringWheel steeringWheel;
+    FrontAxialSteeringSystem steeringSystem(steeringWheel);
+
+    Vehicle vehicle(propulsionSystem, steeringSystem);
     CommandReceiver commandReceiver;
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle);
