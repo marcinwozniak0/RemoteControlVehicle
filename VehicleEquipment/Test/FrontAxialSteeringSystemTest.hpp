@@ -3,13 +3,13 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
-#include "SingleAxisPropulsionSystem.hpp"
+#include "FrontAxialSteeringSystem.hpp"
 
 using namespace ::testing;
 
 class FrontAxialSteeringSystemTest : public Test
 {
 public:
-    FrontAxialSteeringSystemTest();
+    FrontAxialSteeringSystem _sut;
 };
 

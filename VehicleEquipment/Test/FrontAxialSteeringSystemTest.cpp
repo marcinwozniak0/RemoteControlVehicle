@@ -1,6 +1,6 @@
 #include "FrontAxialSteeringSystemTest.hpp"
 
-FrontAxialSteeringSystemTest::FrontAxialSteeringSystemTest()
+TEST_F(FrontAxialSteeringSystemTest, FooTest)
 {
-
+    GTEST_SUCCEED();
 }
