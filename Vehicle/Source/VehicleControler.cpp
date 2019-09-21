@@ -89,10 +89,9 @@ void VehicleControler::executeCommand(const std::string& command)
         //TODO musi byc w stanie != IDLE zeby przyjac takiego mesga
         constexpr uint8_t xCoordinationField = 0;
         constexpr uint8_t yCoordinationField = 1;
-        const auto direction = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, xCoordinationField)));
-        const auto speed = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, yCoordinationField)));
-
-        _vehicle.run(USER_COMMAND_TO_DRIVE{direction, speed});
+        const auto directionX = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, xCoordinationField)));
+        const auto directionY = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, yCoordinationField)));
+        _vehicle.run(USER_COMMAND_TO_DRIVE{directionX, directionY});
     }
     else if("DEACTIVATE")
     {
