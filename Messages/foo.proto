@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package tutorial;
-
-message Message {
-  string Foo = 1;
-  string Bar = 2;
-  int32 ID   = 3;
-}
