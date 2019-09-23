@@ -1,7 +1,8 @@
 #pragma once
 
+#include <UserCommandToRun.pb.h>
+
 #include "VehicleState.hpp"
-#include "Commands.hpp"
 
 class PropulsionSystem;
 class SteeringSystem;
@@ -15,7 +16,7 @@ public:
     void stopVehicle();
     void switchToAutomaticMode();
 
-    void run(const USER_COMMAND_TO_DRIVE&&); //TODO better name
+    void run(const Messages::CoordinateSystem&); //TODO better name
 
     VehicleState getVehicleState();
 

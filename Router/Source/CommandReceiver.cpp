@@ -6,7 +6,7 @@ void CommandReceiver::queueCommand(const std::string& command)
 }
 
 #include <iostream>
-void CommandReceiver::receiveCommand()
+void CommandReceiver::receiveMessage()
 {
     //think about mechanism to receiving commands
     //constexpr auto command = "randomCommand";

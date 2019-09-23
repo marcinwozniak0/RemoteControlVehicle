@@ -15,7 +15,7 @@ public:
     CommandReceiver() = default;
     virtual ~CommandReceiver() = default;
 
-    virtual void receiveCommand();
+    virtual void receiveMessage();
     virtual void queueCommand(const std::string& command);
     virtual std::shared_ptr<CommandsQueue> shareCommandsQueue();
 

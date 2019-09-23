@@ -9,10 +9,12 @@
 #include "L293DEngineDriver.hpp"
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
-#include "foo.pb.h"
+#include <google/protobuf/stubs/common.h>
 
 int main()
 {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     ArduinoPinValueSetter arduinoPinValueSetter(ARDUINO_PORT_DESIGNATION);
     L293DEngineDriver engineDriver;
     DcEngine firstEngine(PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,

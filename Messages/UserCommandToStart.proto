@@ -2,7 +2,5 @@ syntax = "proto3";
 
 package Messages;
 
-import "google/protobuf/any.proto";
-
 message UserCommandToStart
 {}

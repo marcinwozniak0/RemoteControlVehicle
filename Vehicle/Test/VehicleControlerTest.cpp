@@ -2,8 +2,8 @@
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
-    COMMANDS_QUEUE->push("START");
-    COMMANDS_QUEUE->push("DEACTIVATE");
+    _commandQueue->push(createSerializedUserCommandToStart());
+    _commandQueue->push(createSerializedDeactivateMessage());
 
     _sut->controlVehicle();
 
@@ -12,8 +12,9 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 
 TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
-    COMMANDS_QUEUE->push("STOP");
-    COMMANDS_QUEUE->push("DEACTIVATE");
+    _commandQueue->push(createSerializedUserCommandToStart());
+    _commandQueue->push(createSerializedUserCommandToStop());
+    _commandQueue->push(createSerializedDeactivateMessage());
 
     _sut->controlVehicle();
 
@@ -22,11 +23,8 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 
 TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldTransferToEngineProperValues)
 {
-    COMMANDS_QUEUE->push("DRIVE|700|5500|");
-    COMMANDS_QUEUE->push("DEACTIVATE");
-
-    constexpr int16_t xCoordinate = 700;
-    constexpr int16_t yCoordinate = 5500;
+    _commandQueue->push(createSerializedUserCommandToRun());
+    _commandQueue->push(createSerializedDeactivateMessage());
 
     EXPECT_CALL(_propulsionSystemMock, transferCharacteristicValues(std::make_pair(xCoordinate, yCoordinate)));
 

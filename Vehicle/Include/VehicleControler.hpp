@@ -16,8 +16,8 @@ public:
     void vehicleEmergencyStop();  
 
 private:
-    std::optional<std::string> getCommandToExecute();
-    void executeCommand(const std::string&);
+    std::optional<std::string> getMessageToExecute();
+    void executeMessage(const std::string&);
 
     CommandReceiver& _commandReceiver;
     std::shared_ptr<CommandsQueue> _commandsQueue;

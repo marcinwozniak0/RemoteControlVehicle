@@ -1,8 +1,12 @@
 #include <thread>
 #include <chrono>
 
+#include <UserCommandToStart.pb.h>
+#include <UserCommandToStop.pb.h>
+#include <UserCommandToRun.pb.h>
+#include <Deactivate.pb.h>
+
 #include "VehicleControler.hpp"
-#include "Commands.hpp"
 
 VehicleControler::VehicleControler(CommandReceiver& commandReceiver,
                                    Vehicle& vehicle)
@@ -18,10 +22,10 @@ void VehicleControler::controlVehicle()
     //think about receiving commands
     while(_isControlerActive)
     {
-        _commandReceiver.receiveCommand(); //temporary solution
-        if (const auto command = getCommandToExecute())
+        _commandReceiver.receiveMessage(); //temporary solution
+        if (const auto command = getMessageToExecute())
         {
-            executeCommand(command.value());
+            executeMessage(command.value());
         }
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
@@ -32,13 +36,13 @@ void VehicleControler::vehicleEmergencyStop()
     //TODO execute emergency command
 }
 
-std::optional<std::string> VehicleControler::getCommandToExecute()
+std::optional<std::string> VehicleControler::getMessageToExecute()
 {
     if (not _commandsQueue->empty())
     {
-        const auto command = _commandsQueue->front();
+        const auto message = _commandsQueue->front();
         _commandsQueue->pop();
-        return command;
+        return message;
     }
     else
     {
@@ -46,54 +50,27 @@ std::optional<std::string> VehicleControler::getCommandToExecute()
     }
 }
 
-namespace
+void VehicleControler::executeMessage(const std::string& message)
 {
-bool startsWith(const std::string& str, const std::string& pattern)
-{
-    return str.rfind(pattern, 0) ? false : true; //return 0 on succes
-}
+    google::protobuf::Any incommingMessage;
+    incommingMessage.ParseFromString(message);
 
-std::string getFieldFromCommand(const std::string& command, const uint8_t fieldNumber)
-{
-    uint8_t acctualPossition = 0;
-    for (uint8_t i = 0; i <= fieldNumber; i++)
-    {
-        acctualPossition = command.find('|', acctualPossition);
-        ++acctualPossition;
-    }
-
-    uint8_t endMarker = command.find('|', acctualPossition);
-
-    return std::string(command.begin() + acctualPossition, command.begin() + endMarker);
-}
-}//namespace
-
-void VehicleControler::executeCommand(const std::string& command)
-{
-    //TODO komenda do wybrania manula czy auto
-    //komendy strignowe do jakiegos namesapce
-    //pomyslec o tym xmlu
-    //moze cos w stylu START|MANUAL ?
-    if("START" == command)
+    if (incommingMessage.Is<Messages::UserCommandToStart>())
     {
         _vehicle.startVehicle();
     }
-    else if("STOP" == command)
+    else if (incommingMessage.Is<Messages::UserCommandToStop>())
     {
         _vehicle.stopVehicle();
     }
-    else if(startsWith(command, "DRIVE"))
+    else if(incommingMessage.Is<Messages::UserCommandToRun>())
     {
-        //TODO jak obslugiwac i pobierac te mesgi
-        //TODO moze jakies xml czy coś do tych mesgow
-        //TODO musi byc w stanie != IDLE zeby przyjac takiego mesga
-        constexpr uint8_t xCoordinationField = 0;
-        constexpr uint8_t yCoordinationField = 1;
-        const auto directionX = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, xCoordinationField)));
-        const auto directionY = static_cast<int16_t>(std::stoi(getFieldFromCommand(command, yCoordinationField)));
-        _vehicle.run(USER_COMMAND_TO_DRIVE{directionX, directionY});
+        Messages::UserCommandToRun payload;
+        incommingMessage.UnpackTo(&payload);
+
+        _vehicle.run(payload.coordinate_system());
     }
-    else if("DEACTIVATE")
+    else if(incommingMessage.Is<Messages::Deactivate>())
     {
         _isControlerActive = false;
     }
