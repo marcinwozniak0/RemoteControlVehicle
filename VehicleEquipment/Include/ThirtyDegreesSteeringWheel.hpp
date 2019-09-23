@@ -7,11 +7,11 @@
 class ThirtyDegreesSteeringWheel : public SteeringWheel
 {
 public:
-    ThirtyDegreesSteeringWheel() = default;
+    ThirtyDegreesSteeringWheel(const uint8_t);
     ~ThirtyDegreesSteeringWheel() = default;
     void setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_STEERING_WHEEL>&) override;
-    const PinConfiguration getConfiguration() override {return {};}
+    const PinConfiguration& getConfiguration() const override;
 
 private:
-    std::map<PinNumber, PinState> _pinConfiguration;
+    PinConfiguration _pinConfiguration;
 };

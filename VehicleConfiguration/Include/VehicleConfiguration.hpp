@@ -17,15 +17,17 @@ static constexpr uint8_t FIRST_ENGINE_PWM = 3;
 static constexpr uint8_t SECOND_ENGINE_FIRST_OUTPUT = 7;
 static constexpr uint8_t SECOND_ENGINE_SECOND_OUTPUT = 8;
 static constexpr uint8_t SECOND_ENGINE_PWM = 5;
+static constexpr uint8_t STEERING_WHEEL_PWM = 44;
 }//PIN_NUMBERS
 
 namespace PIN_STATE
 {
 static constexpr uint8_t LOW = 0;
 static constexpr uint8_t HIGH = 1;
+static constexpr uint8_t INITIAL_PWM = 0;
 }//PIN_STATE
 
 namespace EXTERNAL_INTERFACES
 {
-static constexpr uint16_t COORDINATE_SYSTEM_RESOLUTION = 16000;
+static constexpr int32_t COORDINATE_SYSTEM_RESOLUTION = 16000;
 }//EXTERNAL_INTERFACES

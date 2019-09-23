@@ -28,7 +28,7 @@ int main()
     SingleAxisPropulsionSystem propulsionSystem(firstEngine,
                                                 secondEngine,
                                                 engineDriver);
-    ThirtyDegreesSteeringWheel steeringWheel;
+    ThirtyDegreesSteeringWheel steeringWheel(PIN_NUMBERS::STEERING_WHEEL_PWM);
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
     Vehicle vehicle(propulsionSystem, steeringSystem);

@@ -8,6 +8,5 @@ class SteeringWheelMock : public SteeringWheel
 {
 public:
     MOCK_METHOD1(setConfiguration, void(const std::array<uint8_t, NUMBER_OF_PINS_PER_STEERING_WHEEL>&));
-    MOCK_METHOD0(getConfiguration, const PinConfiguration());
+    MOCK_CONST_METHOD0(getConfiguration, const PinConfiguration&());
 };
-
