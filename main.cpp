@@ -32,7 +32,7 @@ int main()
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
     Vehicle vehicle(propulsionSystem, steeringSystem);
-    CommandReceiver commandReceiver;
+    MessageReceiver commandReceiver;
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle);
 

@@ -47,7 +47,7 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForStopEngine)
 
 struct UnknownCoordinates
 {
-    std::pair<int16_t, int16_t> coordinateSystem;
+    std::pair<int32_t, int32_t> coordinateSystem;
 };
 
 class UnknownCoordinatesTest : public L293DEngineDriverTest,

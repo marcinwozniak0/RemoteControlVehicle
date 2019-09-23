@@ -2,8 +2,8 @@
 
 TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 {
-    constexpr int16_t xCoordinate = 1000;
-    constexpr int16_t yCoordinate = 700;
+    constexpr int32_t xCoordinate = 1000;
+    constexpr int32_t yCoordinate = 700;
     constexpr auto pwmValue = yCoordinate * PWM_MAX_RANGE / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
 
     const auto characteristic = std::make_pair(xCoordinate, yCoordinate);

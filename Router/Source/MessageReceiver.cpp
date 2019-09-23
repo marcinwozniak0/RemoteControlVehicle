@@ -1,12 +1,12 @@
-#include "CommandReceiver.hpp"
+#include "MessageReceiver.hpp"
 
-void CommandReceiver::queueCommand(const std::string& command)
+void MessageReceiver::queueCommand(const std::string& command)
 {
     _commandsQueue->push(command);
 }
 
 #include <iostream>
-void CommandReceiver::receiveMessage()
+void MessageReceiver::receiveMessage()
 {
     //think about mechanism to receiving commands
     //constexpr auto command = "randomCommand";
@@ -15,7 +15,7 @@ void CommandReceiver::receiveMessage()
     queueCommand(command);
 }
 
-std::shared_ptr<CommandsQueue> CommandReceiver::shareCommandsQueue()
+std::shared_ptr<CommandsQueue> MessageReceiver::shareMessagesQueue()
 {
     return _commandsQueue;
 }

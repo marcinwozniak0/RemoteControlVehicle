@@ -8,10 +8,10 @@
 
 #include "VehicleControler.hpp"
 
-VehicleControler::VehicleControler(CommandReceiver& commandReceiver,
+VehicleControler::VehicleControler(MessageReceiver& messageReceiver,
                                    Vehicle& vehicle)
-    : _commandReceiver(commandReceiver)
-    , _commandsQueue(_commandReceiver.shareCommandsQueue())
+    : _messageReceiver(messageReceiver)
+    , _commandsQueue(_messageReceiver.shareMessagesQueue())
     , _vehicle(vehicle)
 {
     _isControlerActive = true;
@@ -22,7 +22,7 @@ void VehicleControler::controlVehicle()
     //think about receiving commands
     while(_isControlerActive)
     {
-        _commandReceiver.receiveMessage(); //temporary solution
+        _messageReceiver.receiveMessage(); //temporary solution
         if (const auto command = getMessageToExecute())
         {
             executeMessage(command.value());

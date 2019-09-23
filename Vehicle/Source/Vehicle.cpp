@@ -31,9 +31,7 @@ VehicleState Vehicle::getVehicleState()
 
 void Vehicle::run(const Messages::CoordinateSystem& coordinateSystem)
 {
-    //TODO change int16 to int32 !
     const auto characteristicToSend = std::make_pair(coordinateSystem.x_coordinate(), coordinateSystem.y_coordinate());
     _propulsionSystem.transferCharacteristicValues(characteristicToSend);
     //TODO _steeringSystem.turn();
-
 }

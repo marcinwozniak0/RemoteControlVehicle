@@ -11,7 +11,7 @@
 #include <UserCommandToRun.pb.h>
 
 #include "VehicleControler.hpp"
-#include "CommandReceiverMock.hpp"
+#include "MessageReceiverMock.hpp"
 #include "EngineMock.hpp"
 #include "PropulsionSystemMock.hpp"
 #include "SteeringSystemMock.hpp"
@@ -20,8 +20,8 @@ using namespace ::testing;
 
 namespace
 {
-constexpr int16_t xCoordinate = 700;
-constexpr int16_t yCoordinate = 5500;
+constexpr int32_t xCoordinate = 700;
+constexpr int32_t yCoordinate = 5500;
 
 const std::string createSerializedDeactivateMessage()
 {
@@ -82,13 +82,13 @@ public:
         : _commandQueue(std::make_shared<CommandsQueue>())
         ,_vehicle(_propulsionSystemMock, _steeringSystemMock)
     {
-        EXPECT_CALL(_commandReceiverMock, shareCommandsQueue()).WillOnce(Return(_commandQueue));
+        EXPECT_CALL(_commandReceiverMock, shareMessagesQueue()).WillOnce(Return(_commandQueue));
         _sut = std::make_unique<VehicleControler>(_commandReceiverMock, _vehicle);
     }
 
     std::unique_ptr<VehicleControler> _sut;
     NiceMock<PropulsionSystemMock> _propulsionSystemMock;
-    NiceMock<CommandReceiverMock> _commandReceiverMock;
+    NiceMock<MessageReceiverMock> _commandReceiverMock;
     NiceMock<SteeringSystemMock> _steeringSystemMock;
     std::shared_ptr<CommandsQueue> _commandQueue;
     Vehicle _vehicle;
