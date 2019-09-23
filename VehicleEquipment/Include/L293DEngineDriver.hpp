@@ -6,7 +6,7 @@ class L293DEngineDriver : public EngineDriver
 {
 public:
     std::array<std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>, NUMBER_OF_ENGINES>
-        calculatePinValues(const std::pair<int32_t, int32_t>&) const override;
+        calculatePinsConfiguration(const std::pair<int32_t, int32_t>&) const override;
 
 private:
     bool areCoordinatesInRange(const std::pair<int32_t, int32_t>&) const;

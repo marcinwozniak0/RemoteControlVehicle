@@ -1,6 +1,13 @@
 #include "DcEngine.hpp"
 #include "PinValueSetter.hpp"
 
+namespace
+{
+constexpr uint8_t firstOutputPin = 0u;
+constexpr uint8_t secondOutputPin = 1u;
+constexpr uint8_t pwmPin = 2u;
+}
+
 DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
                    const uint8_t secondOutputPinNumber,
                    const uint8_t pwmPinNumber,
@@ -11,14 +18,14 @@ DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
     , _pinValueSetter(pinValueSetter)
 {}
 
-void DcEngine::saveValues(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>& valueList)
+void DcEngine::setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>& valueList)
 {
-    _firstOutputValue = valueList.at(0);
-    _secondOutputValue = valueList.at(1);
-    _pwmValue = valueList.at(2);
+    _firstOutputValue = valueList.at(firstOutputPin);
+    _secondOutputValue = valueList.at(secondOutputPin);
+    _pwmValue = valueList.at(pwmPin);
 }
 
-void DcEngine::startEngine()
+void DcEngine::activateConfiguration()
 {
     _pinValueSetter.setValue(_firstOutputPinNumber, _firstOutputValue);
     _pinValueSetter.setValue(_secondOutputPinNumber, _secondOutputValue);

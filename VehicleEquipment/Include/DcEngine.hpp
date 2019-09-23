@@ -9,8 +9,8 @@ class DcEngine : public Engine
 public:
     DcEngine(const uint8_t, const uint8_t, const uint8_t, const PinValueSetter&);
 
-    void saveValues(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>&) override;
-    void startEngine() override;
+    void setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>&) override;
+    void activateConfiguration() override;
 
 private:
     const uint8_t _firstOutputPinNumber;

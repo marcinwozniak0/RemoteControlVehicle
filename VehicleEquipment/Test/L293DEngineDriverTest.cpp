@@ -18,7 +18,7 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForForwardDirection)
             expectedPinValues {{{PIN_STATE::HIGH, PIN_STATE::LOW , pwmValue},
                                 {PIN_STATE::LOW, PIN_STATE::HIGH, pwmValue}}};
 
-    ASSERT_EQ(_sut.calculatePinValues(forwardDirectionCharacteristic), expectedPinValues);
+    ASSERT_EQ(_sut.calculatePinsConfiguration(forwardDirectionCharacteristic), expectedPinValues);
 }
 
 TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForBackwardDirection)
@@ -30,7 +30,7 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForBackwardDirection)
             expectedPinValues {{{PIN_STATE::LOW, PIN_STATE::HIGH, pwmValue},
                                 {PIN_STATE::HIGH, PIN_STATE::LOW, pwmValue}}};
 
-    ASSERT_EQ(_sut.calculatePinValues(backwardDirectionCharacteristic), expectedPinValues);
+    ASSERT_EQ(_sut.calculatePinsConfiguration(backwardDirectionCharacteristic), expectedPinValues);
 }
 
 TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForStopEngine)
@@ -42,7 +42,7 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForStopEngine)
             expectedPinValues {{{PIN_STATE::HIGH, PIN_STATE::HIGH, pwmValue},
                                 {PIN_STATE::HIGH, PIN_STATE::HIGH, pwmValue}}};
 
-    ASSERT_EQ(_sut.calculatePinValues(stopEngineCharacteristic), expectedPinValues);
+    ASSERT_EQ(_sut.calculatePinsConfiguration(stopEngineCharacteristic), expectedPinValues);
 }
 
 struct UnknownCoordinates
@@ -59,7 +59,7 @@ TEST_P(UnknownCoordinatesTest, ShouldReturnEmptyPinValues)
     std::array<std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>, NUMBER_OF_ENGINES>
             expectedPinValues {{{},{}}};
 
-    ASSERT_EQ(_sut.calculatePinValues(GetParam().coordinateSystem), expectedPinValues);
+    ASSERT_EQ(_sut.calculatePinsConfiguration(GetParam().coordinateSystem), expectedPinValues);
 }
 
 INSTANTIATE_TEST_CASE_P(OverRangeXCoordinate, UnknownCoordinatesTest,

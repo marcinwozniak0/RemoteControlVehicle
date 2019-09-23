@@ -2,7 +2,7 @@
 #include "VehicleConfiguration.hpp"
 
 std::array<std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>, NUMBER_OF_ENGINES>
-L293DEngineDriver::calculatePinValues(const std::pair<int32_t, int32_t>& characteristic) const
+L293DEngineDriver::calculatePinsConfiguration(const std::pair<int32_t, int32_t>& characteristic) const
 {
     std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfLeftEngine {};
     std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfRightEngine {};

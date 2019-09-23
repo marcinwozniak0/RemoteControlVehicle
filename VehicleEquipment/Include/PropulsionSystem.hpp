@@ -6,7 +6,7 @@
 class PropulsionSystem
 {
 public:
-    virtual void transferCharacteristicValues(const std::pair<int32_t, int32_t>&) = 0;
+    virtual void applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>&) = 0;
 
     virtual ~PropulsionSystem() = default;
 };

@@ -26,7 +26,7 @@ TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldTransferToEnginePrope
     _commandQueue->push(createSerializedUserCommandToRun());
     _commandQueue->push(createSerializedDeactivateMessage());
 
-    EXPECT_CALL(_propulsionSystemMock, transferCharacteristicValues(std::make_pair(xCoordinate, yCoordinate)));
+    EXPECT_CALL(_propulsionSystemMock, applyNewConfigurationBasedOnCoordinates(std::make_pair(xCoordinate, yCoordinate)));
 
     _sut->controlVehicle();
 

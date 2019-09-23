@@ -10,11 +10,14 @@ SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engine& rightEngine,
     , _engineDriver(engineDriver)
 {}
 
-void SingleAxisPropulsionSystem::transferCharacteristicValues(const std::pair<int32_t, int32_t>& characteristic)
+void SingleAxisPropulsionSystem::applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>& coordinates)
 {
-    const auto pinValues = _engineDriver.calculatePinValues(characteristic);
-    _leftEngine.saveValues(pinValues.at(0));
-    _rightEngine.saveValues(pinValues.at(1));
-    _rightEngine.startEngine(); //TODO extract to separate method startEngines()
-    _leftEngine.startEngine();
+    const auto pinConfiguration = _engineDriver.calculatePinsConfiguration(coordinates);
+    constexpr auto pinConfigurationForFirstEngine = 0u;
+    constexpr auto pinConfigurationForSecondEngine = 1u;
+
+    _leftEngine.setConfiguration(pinConfiguration.at(pinConfigurationForFirstEngine));
+    _rightEngine.setConfiguration(pinConfiguration.at(pinConfigurationForSecondEngine));
+    _rightEngine.activateConfiguration();
+    _leftEngine.activateConfiguration();
 }
