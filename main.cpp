@@ -9,6 +9,7 @@
 #include "L293DEngineDriver.hpp"
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
+#include "foo.pb.h"
 
 int main()
 {
@@ -41,6 +42,8 @@ int main()
     {
         vehicleControler.vehicleEmergencyStop();
     }
+
+    google::protobuf::ShutdownProtobufLibrary();
 
     return 0;
 }

@@ -15,6 +15,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 include(External_GTest.cmake)
 find_package(nlohmann_json 3.2.0 REQUIRED)
+find_package(Protobuf REQUIRED)
 
 # SRC
 include_directories(Vehicle/Include)
@@ -33,12 +34,16 @@ add_subdirectory(VehicleEquipment/Test)
 add_subdirectory(Vehicle/Test)
 add_subdirectory(Router/Test)
 
+# GENERATED
+include_directories(${CMAKE_BINARY_DIR}/Messages)
+add_subdirectory(Messages)
+
 add_library(source_objects_lib OBJECT ${SOURCES})
 
 add_executable(intelligent_Vehicle $<TARGET_OBJECTS:source_objects_lib>
                                    "main.cpp")
 
-target_link_libraries(intelligent_Vehicle nlohmann_json::nlohmann_json)
+target_link_libraries(intelligent_Vehicle nlohmann_json::nlohmann_json messages)
 
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
