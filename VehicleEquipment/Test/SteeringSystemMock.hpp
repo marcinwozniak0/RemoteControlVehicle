@@ -7,5 +7,5 @@
 class SteeringSystemMock : public SteeringSystem
 {
 public:
-    MOCK_METHOD1(turn, void(const int16_t));
+    MOCK_METHOD1(applyNewConfigurationBasedOnCoordinates, void(const std::pair<int32_t, int32_t>&));
 };

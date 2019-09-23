@@ -1,14 +1,17 @@
 #pragma once
 
+#include <utility>
+
 #include "SteeringWheel.hpp"
 
 class ThirtyDegreesSteeringWheel : public SteeringWheel
 {
-
 public:
-    ThirtyDegreesSteeringWheel();
+    ThirtyDegreesSteeringWheel() = default;
+    ~ThirtyDegreesSteeringWheel() = default;
+    void setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_STEERING_WHEEL>&) override;
+    const PinConfiguration getConfiguration() override {return {};}
 
-    uint8_t getMaxTurningAngle() const override {return 1u;}
-    void setTurningAngle(const uint8_t) override {}
+private:
+    std::map<PinNumber, PinState> _pinConfiguration;
 };
-

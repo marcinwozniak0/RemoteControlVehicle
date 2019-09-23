@@ -1,5 +1,7 @@
 #pragma once
 
+#include <utility>
+
 #include "SteeringSystem.hpp"
 
 class SteeringWheel;
@@ -7,9 +9,9 @@ class SteeringWheel;
 class FrontAxialSteeringSystem : public SteeringSystem
 {
 public:
-    FrontAxialSteeringSystem(const SteeringWheel&  steeringWheel);
+    FrontAxialSteeringSystem(SteeringWheel&  steeringWheel);
 
-    void turn(const int16_t turningAngle) override;
+    void applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>&) override;
 private:
-    const SteeringWheel& _steeringWheel;
+    SteeringWheel& _steeringWheel;
 };

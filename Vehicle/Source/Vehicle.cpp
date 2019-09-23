@@ -34,5 +34,5 @@ void Vehicle::run(const Messages::CoordinateSystem& coordinateSystem)
     const auto coordinatesToSend = std::make_pair(coordinateSystem.x_coordinate(), coordinateSystem.y_coordinate());
 
     _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
-    //TODO _steeringSystem.turn();
+    _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
 }

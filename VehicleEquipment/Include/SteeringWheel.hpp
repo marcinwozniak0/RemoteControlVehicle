@@ -1,10 +1,18 @@
 #pragma once
 
 #include <stdint.h>
+#include <array>
+#include <map>
+
+#include "VehicleConfiguration.hpp"
+
+using PinNumber = uint8_t;
+using PinState = uint8_t;
+using PinConfiguration = std::map<PinNumber, PinState>;
 
 class SteeringWheel
 {
 public:
-    virtual uint8_t getMaxTurningAngle() const = 0;
-    virtual void setTurningAngle(const uint8_t) = 0;
+    virtual void setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_STEERING_WHEEL>&) = 0;
+    virtual const PinConfiguration getConfiguration() = 0;
 };

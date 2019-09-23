@@ -1,11 +1,10 @@
 #include "FrontAxialSteeringSystem.hpp"
 #include "SteeringWheel.hpp"
 
-FrontAxialSteeringSystem::FrontAxialSteeringSystem(const SteeringWheel&  steeringWheel)
+FrontAxialSteeringSystem::FrontAxialSteeringSystem(SteeringWheel&  steeringWheel)
     : _steeringWheel(steeringWheel)
 {}
 
-void FrontAxialSteeringSystem::turn(const int16_t turningAngle)
+void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>& coordinates)
 {
-
 }
