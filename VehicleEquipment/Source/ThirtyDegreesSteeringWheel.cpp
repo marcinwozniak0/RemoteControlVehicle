@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "VehicleConfiguration.hpp"
 
@@ -5,12 +7,32 @@ ThirtyDegreesSteeringWheel::ThirtyDegreesSteeringWheel(const uint8_t pwmPinNumbe
     : _pinConfiguration({std::make_pair(pwmPinNumber, PIN_STATE::INITIAL_PWM)})
 {}
 
-void ThirtyDegreesSteeringWheel::setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_STEERING_WHEEL>&)
+namespace
 {
+bool isPinsConfigurationsAreEqual(const PinsConfiguration& lhs, const PinsConfiguration& rhs)
+{
+    return lhs.size() == rhs.size()
+           && std::equal(lhs.begin(),
+                         lhs.end(),
+                         rhs.begin(),
+                         [](const auto a, const auto b){return a.first == b.first;});
+
+}//namespace
 
 }
+void ThirtyDegreesSteeringWheel::setConfiguration(const PinsConfiguration& pinConfiguration)
+{
+    if(isPinsConfigurationsAreEqual(_pinConfiguration, pinConfiguration))
+    {
+        _pinConfiguration = pinConfiguration;
+    }
+    else
+    {
 
-const PinConfiguration& ThirtyDegreesSteeringWheel::getConfiguration() const
+    }
+}
+
+const PinsConfiguration& ThirtyDegreesSteeringWheel::getConfiguration() const
 {
     return _pinConfiguration;
 }

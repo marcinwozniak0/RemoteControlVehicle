@@ -8,6 +8,9 @@
 namespace
 {
 constexpr uint8_t steeringWheelPwmPinNumer = 0;
+constexpr uint8_t unknownSteeringWheelPwmPinNumer = 1;
+constexpr uint8_t pinValueInNeutralState = 0;
+constexpr uint8_t pinValue = 32;
 }
 
 using namespace ::testing;
