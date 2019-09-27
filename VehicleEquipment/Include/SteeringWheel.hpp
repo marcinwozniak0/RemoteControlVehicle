@@ -15,4 +15,6 @@ class SteeringWheel
 public:
     virtual void setConfiguration(const PinsConfiguration&) = 0;
     virtual const PinsConfiguration& getConfiguration() const = 0;
+
+    virtual ~SteeringWheel() = default;
 };
