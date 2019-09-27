@@ -10,8 +10,8 @@ public:
     ThirtyDegreesSteeringWheel(const uint8_t);
     ~ThirtyDegreesSteeringWheel() = default;
 
-    void setConfiguration(const PinsConfiguration&) override;
-    const PinsConfiguration& getConfiguration() const override;
+    bool setPinsConfiguration(const PinsConfiguration&) override;
+    const PinsConfiguration& getPinsConfiguration() const override;
 
 private:
     PinsConfiguration _pinConfiguration;

@@ -7,6 +7,6 @@
 class SteeringWheelMock : public SteeringWheel
 {
 public:
-    MOCK_METHOD1(setConfiguration, void(const PinsConfiguration&));
-    MOCK_CONST_METHOD0(getConfiguration, const PinsConfiguration&());
+    MOCK_METHOD1(setPinsConfiguration, bool(const PinsConfiguration&));
+    MOCK_CONST_METHOD0(getPinsConfiguration, const PinsConfiguration&());
 };

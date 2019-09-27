@@ -13,8 +13,8 @@ using PinsConfiguration = std::map<const PinNumber, PinState>;
 class SteeringWheel
 {
 public:
-    virtual void setConfiguration(const PinsConfiguration&) = 0;
-    virtual const PinsConfiguration& getConfiguration() const = 0;
+    virtual bool setPinsConfiguration(const PinsConfiguration&) = 0;
+    virtual const PinsConfiguration& getPinsConfiguration() const = 0;
 
     virtual ~SteeringWheel() = default;
 };

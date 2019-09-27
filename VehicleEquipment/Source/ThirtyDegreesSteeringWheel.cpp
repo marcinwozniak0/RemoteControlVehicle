@@ -9,30 +9,31 @@ ThirtyDegreesSteeringWheel::ThirtyDegreesSteeringWheel(const uint8_t pwmPinNumbe
 
 namespace
 {
-bool isPinsConfigurationsAreEqual(const PinsConfiguration& lhs, const PinsConfiguration& rhs)
+bool isNewPinsConfigurationIsCorrect(const PinsConfiguration& currentConfiguration, const PinsConfiguration& newConfiguration)
 {
-    return lhs.size() == rhs.size()
-           && std::equal(lhs.begin(),
-                         lhs.end(),
-                         rhs.begin(),
+    return currentConfiguration.size() == newConfiguration.size()
+           && std::equal(currentConfiguration.begin(),
+                         currentConfiguration.end(),
+                         newConfiguration.begin(),
                          [](const auto a, const auto b){return a.first == b.first;});
 
 }//namespace
 
 }
-void ThirtyDegreesSteeringWheel::setConfiguration(const PinsConfiguration& pinConfiguration)
+bool ThirtyDegreesSteeringWheel::setPinsConfiguration(const PinsConfiguration& newPinsConfiguration)
 {
-    if(isPinsConfigurationsAreEqual(_pinConfiguration, pinConfiguration))
-    {
-        _pinConfiguration = pinConfiguration;
-    }
-    else
-    {
+    bool isNewConfigurationHasBeenApplied = false;
 
+    if(isNewPinsConfigurationIsCorrect(_pinConfiguration, newPinsConfiguration))
+    {
+        _pinConfiguration = newPinsConfiguration;
+        isNewConfigurationHasBeenApplied = true;
     }
+
+    return isNewConfigurationHasBeenApplied;
 }
 
-const PinsConfiguration& ThirtyDegreesSteeringWheel::getConfiguration() const
+const PinsConfiguration& ThirtyDegreesSteeringWheel::getPinsConfiguration() const
 {
     return _pinConfiguration;
 }
