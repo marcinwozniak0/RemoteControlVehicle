@@ -15,4 +15,5 @@ public:
 
 private:
     PinsConfiguration _pinConfiguration;
+    int8_t _steeringAngle;
 };

@@ -8,6 +8,7 @@ static constexpr uint8_t NUMBER_OF_PINS_PER_ENGINE = 3;
 static constexpr uint8_t NUMBER_OF_PINS_PER_STEERING_WHEEL = 1;
 static constexpr auto ARDUINO_PORT_DESIGNATION = "/dev/ttyACM0";
 static constexpr uint8_t PWM_MAX_RANGE = 255;
+static constexpr int8_t INITIAL_STEERING_ANGLE = 0;
 
 namespace PIN_NUMBERS
 {

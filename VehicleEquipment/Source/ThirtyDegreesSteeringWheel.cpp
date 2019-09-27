@@ -5,6 +5,7 @@
 
 ThirtyDegreesSteeringWheel::ThirtyDegreesSteeringWheel(const uint8_t pwmPinNumber)
     : _pinConfiguration({std::make_pair(pwmPinNumber, PIN_STATE::INITIAL_PWM)})
+    , _steeringAngle(INITIAL_STEERING_ANGLE)
 {}
 
 namespace
@@ -17,9 +18,9 @@ bool isNewPinsConfigurationIsCorrect(const PinsConfiguration& currentConfigurati
                          newConfiguration.begin(),
                          [](const auto a, const auto b){return a.first == b.first;});
 
+}
 }//namespace
 
-}
 bool ThirtyDegreesSteeringWheel::setPinsConfiguration(const PinsConfiguration& newPinsConfiguration)
 {
     bool isNewConfigurationHasBeenApplied = false;
