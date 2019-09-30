@@ -10,7 +10,7 @@ SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engine& rightEngine,
     , _engineDriver(engineDriver)
 {}
 
-void SingleAxisPropulsionSystem::applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>& coordinates)
+void SingleAxisPropulsionSystem::applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem& coordinates)
 {
     const auto pinConfiguration = _engineDriver.calculatePinsConfiguration(coordinates);
     constexpr auto pinConfigurationForFirstEngine = 0u;

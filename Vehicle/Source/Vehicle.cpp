@@ -33,6 +33,6 @@ void Vehicle::applyNewConfiguration(const Messages::CoordinateSystem& coordinate
 {
     const auto coordinatesToSend = std::make_pair(coordinateSystem.x_coordinate(), coordinateSystem.y_coordinate());
 
-    _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
+    _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
     _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
 }

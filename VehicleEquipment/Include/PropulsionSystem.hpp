@@ -1,12 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <stdint.h>
+#include <UserCommandToRun.pb.h>
 
 class PropulsionSystem
 {
 public:
-    virtual void applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>&) = 0;
+    virtual void applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem&) = 0;
 
     virtual ~PropulsionSystem() = default;
 };

@@ -71,6 +71,7 @@ void VehicleControler::executeMessage(const std::string& message)
         incommingMessage.UnpackTo(&payload);
 
         _vehicle.applyNewConfiguration(payload.coordinate_system());
+
     }
     else if(incommingMessage.Is<Messages::Deactivate>())
     {

@@ -17,6 +17,14 @@ TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFro
     ASSERT_NO_THROW(_sut.getPinsConfiguration());
 }
 
+struct PwmValueTest
+{
+    PwmValueTest() {}
+
+    const PinsConfiguration expectedConfiguration;
+    const std::pair<int32_t, int32_t> givenCoordinates;
+};
+
 TEST_F(FrontAxialSteeringSystemTest, WhenReceivedCoordinatesAreZeroPwmValueShouldBeNeutral)
 {
     const PinsConfiguration expectedConfiguration{std::make_pair(PIN_NUMBERS::STEERING_WHEEL_PWM,

@@ -7,5 +7,5 @@
 class PropulsionSystemMock : public PropulsionSystem
 {
 public:
-    MOCK_METHOD1(applyNewConfigurationBasedOnCoordinates, void(const std::pair<int32_t, int32_t>&));
+    MOCK_METHOD1(applyNewConfigurationBasedOnCoordinates, void(const Messages::CoordinateSystem&));
 };
