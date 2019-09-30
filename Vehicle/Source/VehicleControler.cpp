@@ -9,10 +9,12 @@
 #include "VehicleControler.hpp"
 
 VehicleControler::VehicleControler(MessageReceiver& messageReceiver,
-                                   Vehicle& vehicle)
+                                   Vehicle& vehicle,
+                                   const PinValueSetter& pinValueSetter)
     : _messageReceiver(messageReceiver)
     , _commandsQueue(_messageReceiver.shareMessagesQueue())
     , _vehicle(vehicle)
+    , _pinValueSeter(pinValueSetter)
 {
     _isControlerActive = true;
 }
@@ -68,7 +70,7 @@ void VehicleControler::executeMessage(const std::string& message)
         Messages::UserCommandToRun payload;
         incommingMessage.UnpackTo(&payload);
 
-        _vehicle.run(payload.coordinate_system());
+        _vehicle.applyNewConfiguration(payload.coordinate_system());
     }
     else if(incommingMessage.Is<Messages::Deactivate>())
     {

@@ -29,13 +29,10 @@ VehicleState Vehicle::getVehicleState()
     return _vehicleState;
 }
 
-void Vehicle::run(const Messages::CoordinateSystem& coordinateSystem)
+void Vehicle::applyNewConfiguration(const Messages::CoordinateSystem& coordinateSystem)
 {
     const auto coordinatesToSend = std::make_pair(coordinateSystem.x_coordinate(), coordinateSystem.y_coordinate());
 
     _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
     _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
-
-    //Message msg = getNewVehicleConfiguration();
-    //_messageSender = sendNewConfiguration();
 }

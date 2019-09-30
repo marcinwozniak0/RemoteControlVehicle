@@ -34,7 +34,8 @@ int main()
     Vehicle vehicle(propulsionSystem, steeringSystem);
     MessageReceiver commandReceiver;
     VehicleControler vehicleControler(commandReceiver,
-                                      vehicle);
+                                      vehicle,
+                                      arduinoPinValueSetter);
 
     try
     {

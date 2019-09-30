@@ -16,7 +16,7 @@ public:
     void stopVehicle();
     void switchToAutomaticMode();
 
-    void run(const Messages::CoordinateSystem&); //TODO better name
+    void applyNewConfiguration(const Messages::CoordinateSystem&); //TODO better name
 
     VehicleState getVehicleState();
 
