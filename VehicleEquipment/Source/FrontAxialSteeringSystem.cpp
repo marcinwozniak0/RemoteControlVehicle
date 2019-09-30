@@ -15,12 +15,18 @@ void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const std
 
 int FrontAxialSteeringSystem::calculateSteeringAngle(const std::pair<int32_t, int32_t>& coordinates) const
 {
-    return 0;
+    if (coordinates.first == EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
+        return 30;
+
+    return {};
 }
 
 int FrontAxialSteeringSystem::calculatePwmValue(const int steeringAngle) const
 {
-    return 0;
+    if (30 == steeringAngle)
+        return 42;
+
+    return 19;
 }
 
 const PinsConfiguration& FrontAxialSteeringSystem::getPinsConfiguration() const
