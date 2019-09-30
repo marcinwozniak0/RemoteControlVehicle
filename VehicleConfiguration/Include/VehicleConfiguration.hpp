@@ -17,7 +17,7 @@ static constexpr uint8_t FIRST_ENGINE_PWM = 3;
 static constexpr uint8_t SECOND_ENGINE_FIRST_OUTPUT = 7;
 static constexpr uint8_t SECOND_ENGINE_SECOND_OUTPUT = 8;
 static constexpr uint8_t SECOND_ENGINE_PWM = 5;
-static constexpr uint8_t STEERING_WHEEL_PWM = 44;
+static constexpr int STEERING_WHEEL_PWM = 44;
 }//PIN_NUMBERS
 
 namespace PIN_STATE

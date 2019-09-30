@@ -35,4 +35,7 @@ void Vehicle::run(const Messages::CoordinateSystem& coordinateSystem)
 
     _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
     _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinatesToSend);
+
+    //Message msg = getNewVehicleConfiguration();
+    //_messageSender = sendNewConfiguration();
 }

@@ -6,8 +6,8 @@
 
 #include "VehicleConfiguration.hpp"
 
-using PinNumber = uint8_t;
-using PinState = uint8_t;
+using PinNumber = int;
+using PinState = int;
 using PinsConfiguration = std::map<const PinNumber, PinState>;
 
 class SteeringWheel
