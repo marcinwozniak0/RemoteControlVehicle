@@ -22,3 +22,8 @@ int FrontAxialSteeringSystem::calculatePwmValue(const int steeringAngle) const
 {
     return 0;
 }
+
+const PinsConfiguration& FrontAxialSteeringSystem::getPinsConfiguration() const
+{
+    return _steeringWheel.getPinsConfiguration();
+}
