@@ -1,14 +1,7 @@
 #pragma once
 
-#include <stdint.h>
-#include <array>
-#include <map>
-
 #include "VehicleConfiguration.hpp"
-
-using PinNumber = int;
-using PinState = int;
-using PinsConfiguration = std::map<const PinNumber, PinState>;
+#include "VehicleTypes.hpp"
 
 class SteeringWheel
 {
