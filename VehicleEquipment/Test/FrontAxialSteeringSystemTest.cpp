@@ -11,6 +11,15 @@ static constexpr auto pwmPinNumber = PIN_NUMBERS::STEERING_WHEEL_PWM;
 static constexpr auto coordinateSystemResolution = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
 static constexpr int steeringWheelPwmValueInNeutralPosition = pwmMaxRange * steeringWheelPwmDutyCycleInNeutralPosition;
 static constexpr int steeringWheelPwmValueIn30DegreesPosition = pwmMaxRange * steeringWheelPwmDutyCycleIn30DegreesPosition;
+
+auto buildCoordinates(int x, int y)
+{
+    Messages::CoordinateSystem coordinateSystem;
+    coordinateSystem.set_x_coordinate(x);
+    coordinateSystem.set_y_coordinate(y);
+
+    return coordinateSystem;
+}
 }
 
 TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFromSteeringWheel)
@@ -23,13 +32,13 @@ TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFro
 
 struct PwmValueTest
 {
-    PwmValueTest(PinsConfiguration x, std::pair<int, int> y)
+    PwmValueTest(PinsConfiguration x, Messages::CoordinateSystem y)
         : expectedConfiguration(x)
         , givenCoordinates(y)
     {}
 
     const PinsConfiguration expectedConfiguration;
-    const std::pair<int, int> givenCoordinates;
+    const Messages::CoordinateSystem givenCoordinates;
 };
 
 struct CalculatePwmValueTest : FrontAxialSteeringSystemTest,
@@ -45,8 +54,8 @@ TEST_P(CalculatePwmValueTest, FromGivenCoordinatesShouldApplyPwmValue)
 
 INSTANTIATE_TEST_CASE_P(WhenSteeringAngleExceeds30Degree, CalculatePwmValueTest,
                         Values(PwmValueTest{PinsConfiguration{{pwmPinNumber, steeringWheelPwmValueIn30DegreesPosition}},
-                                           {coordinateSystemResolution, coordinateSystemResolution}}));
+                               buildCoordinates(coordinateSystemResolution, coordinateSystemResolution)}));
 
 INSTANTIATE_TEST_CASE_P(WhenSteeringAngleNotExceeds30Degree, CalculatePwmValueTest,
                         Values(PwmValueTest{PinsConfiguration{{pwmPinNumber, steeringWheelPwmValueInNeutralPosition}},
-                                            {0,0}}));
+                               buildCoordinates(0, 0)}));

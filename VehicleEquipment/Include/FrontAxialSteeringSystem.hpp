@@ -11,11 +11,11 @@ class FrontAxialSteeringSystem : public SteeringSystem
 public:
     FrontAxialSteeringSystem(SteeringWheel&  steeringWheel);
 
-    void applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>&) override;
+    void applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem&) override;
     const PinsConfiguration& getPinsConfiguration() const override;
 
 private:
-    int calculateSteeringAngle(const std::pair<int32_t, int32_t>& coordinates) const;
+    int calculateSteeringAngle(const Messages::CoordinateSystem&) const;
     int calculatePwmValue(const int steeringAngle) const;
 
     SteeringWheel& _steeringWheel;

@@ -5,7 +5,7 @@ FrontAxialSteeringSystem::FrontAxialSteeringSystem(SteeringWheel&  steeringWheel
     : _steeringWheel(steeringWheel)
 {}
 
-void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const std::pair<int32_t, int32_t>& coordinates)
+void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem& coordinates)
 {
     auto steeringAngle = calculateSteeringAngle(coordinates);
     auto pwmValue = calculatePwmValue(steeringAngle);
@@ -13,9 +13,9 @@ void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const std
     _steeringWheel.setPinsConfiguration(PinsConfiguration{std::make_pair(PIN_NUMBERS::STEERING_WHEEL_PWM, pwmValue)});
 }
 
-int FrontAxialSteeringSystem::calculateSteeringAngle(const std::pair<int32_t, int32_t>& coordinates) const
+int FrontAxialSteeringSystem::calculateSteeringAngle(const Messages::CoordinateSystem& coordinates) const
 {
-    if (coordinates.first == EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
+    if (coordinates.x_coordinate() == EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
         return 30;
 
     return {};
