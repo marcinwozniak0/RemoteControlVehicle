@@ -16,6 +16,8 @@ void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const Mes
 int FrontAxialSteeringSystem::calculateSteeringAngle(const Messages::CoordinateSystem& coordinates) const
 {
     if (coordinates.x_coordinate() == EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
+        return -30;
+    else if (coordinates.x_coordinate() == -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
         return 30;
 
     return {};
@@ -23,8 +25,10 @@ int FrontAxialSteeringSystem::calculateSteeringAngle(const Messages::CoordinateS
 
 int FrontAxialSteeringSystem::calculatePwmValue(const int steeringAngle) const
 {
-    if (30 == steeringAngle)
-        return 42;
+    if (-30 == steeringAngle)
+        return 14;
+    else if (30 == steeringAngle)
+       return 23;
 
     return 19;
 }
