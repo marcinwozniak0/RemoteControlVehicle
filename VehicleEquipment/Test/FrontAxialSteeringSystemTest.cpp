@@ -1,14 +1,18 @@
 #include "FrontAxialSteeringSystemTest.hpp"
 
+#include <UserCommandToRun.pb.h>
+
 namespace
 {
-static constexpr auto STEERING_WHEEL_PWM_DUTY_CYCLE_IN_NEUTRAL_POSITION = 0.075;
-static constexpr auto STEERING_WHEEL_PWM_DUTY_CYCLE_IN_30_DEGREES_POSITION = 0.166;
-static constexpr auto STEERING_WHEEL_PWM_VALUE_IN_NEUTRAL_POSITION =
-        static_cast<int>(255 * STEERING_WHEEL_PWM_DUTY_CYCLE_IN_NEUTRAL_POSITION);
-static constexpr auto STEERING_WHEEL_PWM_VALUE_IN_30_DEGREES_POSITION =
-        static_cast<int>(255 * STEERING_WHEEL_PWM_DUTY_CYCLE_IN_30_DEGREES_POSITION);
+static constexpr auto steeringWheelPwmDutyCycleInNeutralPosition = 0.075;
+static constexpr auto steeringWheelPwmDutyCycleIn30DegreesPosition = 0.166;
+static constexpr auto pwmMaxRange = 255;
+static constexpr auto pwmPinNumber = PIN_NUMBERS::STEERING_WHEEL_PWM;
+static constexpr auto coordinateSystemResolution = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+static constexpr int steeringWheelPwmValueInNeutralPosition = pwmMaxRange * steeringWheelPwmDutyCycleInNeutralPosition;
+static constexpr int steeringWheelPwmValueIn30DegreesPosition = pwmMaxRange * steeringWheelPwmDutyCycleIn30DegreesPosition;
 }
+
 TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFromSteeringWheel)
 {
     PinsConfiguration pinsConfiguration {};
@@ -19,29 +23,30 @@ TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFro
 
 struct PwmValueTest
 {
-    PwmValueTest() {}
+    PwmValueTest(PinsConfiguration x, std::pair<int, int> y)
+        : expectedConfiguration(x)
+        , givenCoordinates(y)
+    {}
 
     const PinsConfiguration expectedConfiguration;
-    const std::pair<int32_t, int32_t> givenCoordinates;
+    const std::pair<int, int> givenCoordinates;
 };
 
-TEST_F(FrontAxialSteeringSystemTest, WhenReceivedCoordinatesAreZeroPwmValueShouldBeNeutral)
+struct CalculatePwmValueTest : FrontAxialSteeringSystemTest,
+                               ::WithParamInterface<PwmValueTest>
+{};
+
+TEST_P(CalculatePwmValueTest, FromGivenCoordinatesShouldApplyPwmValue)
 {
-    const PinsConfiguration expectedConfiguration{std::make_pair(PIN_NUMBERS::STEERING_WHEEL_PWM,
-                                                                 STEERING_WHEEL_PWM_VALUE_IN_NEUTRAL_POSITION)};
+    EXPECT_CALL(_steeringWheelMock, setPinsConfiguration(GetParam().expectedConfiguration));
 
-    EXPECT_CALL(_steeringWheelMock, setPinsConfiguration(expectedConfiguration));
-
-    ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates({0, 0}));
+    ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(GetParam().givenCoordinates));
 }
 
-TEST_F(FrontAxialSteeringSystemTest, WhenReceivedCoordinatesHaveMaximumPositiveValuesPwmValueShouldBeHavleValueFor30DegreeSAngle)
-{
-    const PinsConfiguration expectedConfiguration{std::make_pair(PIN_NUMBERS::STEERING_WHEEL_PWM,
-                                                                 STEERING_WHEEL_PWM_VALUE_IN_30_DEGREES_POSITION)};
+INSTANTIATE_TEST_CASE_P(WhenSteeringAngleExceeds30Degree, CalculatePwmValueTest,
+                        Values(PwmValueTest{PinsConfiguration{{pwmPinNumber, steeringWheelPwmValueIn30DegreesPosition}},
+                                           {coordinateSystemResolution, coordinateSystemResolution}}));
 
-    EXPECT_CALL(_steeringWheelMock, setPinsConfiguration(expectedConfiguration));
-
-    ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates({EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION,
-                                                                  EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION}));
-}
+INSTANTIATE_TEST_CASE_P(WhenSteeringAngleNotExceeds30Degree, CalculatePwmValueTest,
+                        Values(PwmValueTest{PinsConfiguration{{pwmPinNumber, steeringWheelPwmValueInNeutralPosition}},
+                                            {0,0}}));
