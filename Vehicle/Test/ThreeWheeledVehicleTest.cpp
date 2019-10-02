@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "VehicleTest.hpp"
+#include "ThreeWheeledVehicleTest.hpp"
 #include "VehicleState.hpp"
 
 TEST_F(VehicleTest, vehicleStateShouldBeIdleByDefault)

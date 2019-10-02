@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Vehicle.hpp"
+#include "ThreeWheeledVehicle.hpp"
 #include "PropulsionSystemMock.hpp"
 #include "EngineMock.hpp"
 #include "SteeringSystemMock.hpp"
@@ -18,5 +18,5 @@ public:
 
     NiceMock<PropulsionSystemMock> _propulsionSystem;
     NiceMock<SteeringSystemMock> _steeringSystemMock;
-    Vehicle _sut;
+    ThreeWheeledVehicle _sut;
 };

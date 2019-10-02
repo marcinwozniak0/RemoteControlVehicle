@@ -1,5 +1,4 @@
-#include <iostream>
-#include <stdio.h>
+#include <google/protobuf/stubs/common.h>
 
 #include "VehicleControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
@@ -9,7 +8,7 @@
 #include "L293DEngineDriver.hpp"
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
-#include <google/protobuf/stubs/common.h>
+#include "ThreeWheeledVehicle.hpp"
 
 int main()
 {
@@ -31,7 +30,7 @@ int main()
     ThirtyDegreesSteeringWheel steeringWheel(PIN_NUMBERS::STEERING_WHEEL_PWM);
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
-    Vehicle vehicle(propulsionSystem, steeringSystem);
+    ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
     MessageReceiver commandReceiver;
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle,

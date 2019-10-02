@@ -14,9 +14,9 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
     _commandQueue->push(createSerializedUserCommandToStart());
     _commandQueue->push(createSerializedDeactivateMessage());
 
-    _sut->controlVehicle();
+    EXPECT_CALL(_vehicleMock, startVehicle());
 
-    EXPECT_EQ(VehicleState::Manual, _vehicle.getVehicleState());
+    _sut->controlVehicle();
 }
 
 TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
@@ -25,12 +25,12 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
     _commandQueue->push(createSerializedUserCommandToStop());
     _commandQueue->push(createSerializedDeactivateMessage());
 
-    _sut->controlVehicle();
+    EXPECT_CALL(_vehicleMock, stopVehicle());
 
-    EXPECT_EQ(VehicleState::Idle, _vehicle.getVehicleState());
+    _sut->controlVehicle();
 }
 
-TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldTransferToEngineProperValues)
+TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldApplyNewVehicleConfiguration)
 {
     _commandQueue->push(createSerializedUserCommandToRun());
     _commandQueue->push(createSerializedDeactivateMessage());
@@ -39,7 +39,7 @@ TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldTransferToEnginePrope
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 
-    EXPECT_CALL(_propulsionSystemMock, applyNewConfigurationBasedOnCoordinates(coordinates));
+    EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
 
     _sut->controlVehicle();
 

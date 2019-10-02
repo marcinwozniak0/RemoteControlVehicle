@@ -16,6 +16,7 @@
 #include "PropulsionSystemMock.hpp"
 #include "SteeringSystemMock.hpp"
 #include "PinValueSetterMock.hpp"
+#include "VehicleMock.hpp"
 
 using namespace ::testing;
 
@@ -81,18 +82,18 @@ class VehicleControlerTest : public Test
 public:
     VehicleControlerTest()
         : _commandQueue(std::make_shared<CommandsQueue>())
-        ,_vehicle(_propulsionSystemMock,_steeringSystemMock)
     {
         EXPECT_CALL(_commandReceiverMock, shareMessagesQueue()).WillOnce(Return(_commandQueue));
-        _sut = std::make_unique<VehicleControler>(_commandReceiverMock, _vehicle, _pinValueSetterMock);
+        _sut = std::make_unique<VehicleControler>(_commandReceiverMock, _vehicleMock, _pinValueSetterMock);
     }
 
     std::unique_ptr<VehicleControler> _sut;
+    std::shared_ptr<CommandsQueue> _commandQueue;
+
+    NiceMock<VehicleMock> _vehicleMock;
     NiceMock<PropulsionSystemMock> _propulsionSystemMock;
     NiceMock<MessageReceiverMock> _commandReceiverMock;
     NiceMock<SteeringSystemMock> _steeringSystemMock;
     NiceMock<PinValueSetterMock> _pinValueSetterMock;
-    std::shared_ptr<CommandsQueue> _commandQueue;
-    Vehicle _vehicle;
 };
 

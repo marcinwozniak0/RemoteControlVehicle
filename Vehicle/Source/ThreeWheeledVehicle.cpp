@@ -1,35 +1,35 @@
-#include "Vehicle.hpp"
+#include "ThreeWheeledVehicle.hpp"
 #include "PropulsionSystem.hpp"
 #include "SteeringSystem.hpp"
 
-Vehicle::Vehicle(PropulsionSystem& propulsionSystem, SteeringSystem& steeringSystem)
+ThreeWheeledVehicle::ThreeWheeledVehicle(PropulsionSystem& propulsionSystem, SteeringSystem& steeringSystem)
     : _propulsionSystem(propulsionSystem)
     , _steeringSystem(steeringSystem)
 {
     _vehicleState = VehicleState::Idle;
 }
 
-void Vehicle::startVehicle()
+void ThreeWheeledVehicle::startVehicle()
 {
     _vehicleState = VehicleState::Manual;
 }
 
-void Vehicle::stopVehicle()
+void ThreeWheeledVehicle::stopVehicle()
 {
     _vehicleState = VehicleState::Idle;
 }
 
-void Vehicle::switchToAutomaticMode()
+void ThreeWheeledVehicle::switchToAutomaticMode()
 {
     _vehicleState = VehicleState::Auto;
 }
 
-VehicleState Vehicle::getVehicleState()
+VehicleState ThreeWheeledVehicle::getVehicleState()
 {
     return _vehicleState;
 }
 
-void Vehicle::applyNewConfiguration(const Messages::CoordinateSystem& coordinateSystem)
+void ThreeWheeledVehicle::applyNewConfiguration(const Messages::CoordinateSystem& coordinateSystem)
 {
     _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
     _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);

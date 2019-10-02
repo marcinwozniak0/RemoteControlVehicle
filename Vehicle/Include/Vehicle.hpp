@@ -4,25 +4,14 @@
 
 #include "VehicleState.hpp"
 
-class PropulsionSystem;
-class SteeringSystem;
-
 class Vehicle
 {
 public:
-    Vehicle(PropulsionSystem&, SteeringSystem&);
+    virtual void startVehicle() = 0;
+    virtual void stopVehicle() = 0;
+    virtual void switchToAutomaticMode() = 0;
+    virtual void applyNewConfiguration(const Messages::CoordinateSystem&) = 0;
+    virtual VehicleState getVehicleState() = 0;
 
-    void startVehicle();
-    void stopVehicle();
-    void switchToAutomaticMode();
-
-    void applyNewConfiguration(const Messages::CoordinateSystem&); //TODO better name
-
-    VehicleState getVehicleState();
-
-private:
-    VehicleState _vehicleState;
-    PropulsionSystem& _propulsionSystem;
-    SteeringSystem& _steeringSystem;
-
+    virtual ~Vehicle() = default;
 };
