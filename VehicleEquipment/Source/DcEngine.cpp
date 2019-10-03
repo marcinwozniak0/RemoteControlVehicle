@@ -22,3 +22,8 @@ void DcEngine::setPinsConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER
     _secondOutputValue = valueList.at(secondOutputPin);
     _pwmValue = valueList.at(pwmPin);
 }
+
+const PinsConfiguration& DcEngine::getPinsConfiguration() const
+{
+    return _pinsConfiguration;
+}
