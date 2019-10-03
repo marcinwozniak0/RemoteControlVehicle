@@ -7,10 +7,9 @@ class PinValueSetter;
 class DcEngine : public Engine
 {
 public:
-    DcEngine(const uint8_t, const uint8_t, const uint8_t, const PinValueSetter&);
+    DcEngine(const uint8_t, const uint8_t, const uint8_t);
 
-    void setConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>&) override;
-    void activateConfiguration() override;
+    void setPinsConfiguration(const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>&) override;
 
 private:
     const uint8_t _firstOutputPinNumber;
@@ -19,5 +18,4 @@ private:
     uint8_t _firstOutputValue;
     uint8_t _secondOutputValue;
     uint8_t _pwmValue;
-    const PinValueSetter& _pinValueSetter;
 };

@@ -16,8 +16,6 @@ void SingleAxisPropulsionSystem::applyNewConfigurationBasedOnCoordinates(const M
     constexpr auto pinConfigurationForFirstEngine = 0u;
     constexpr auto pinConfigurationForSecondEngine = 1u;
 
-    _leftEngine.setConfiguration(pinConfiguration.at(pinConfigurationForFirstEngine));
-    _rightEngine.setConfiguration(pinConfiguration.at(pinConfigurationForSecondEngine));
-    _rightEngine.activateConfiguration();
-    _leftEngine.activateConfiguration();
+    _leftEngine.setPinsConfiguration(pinConfiguration.at(pinConfigurationForFirstEngine));
+    _rightEngine.setPinsConfiguration(pinConfiguration.at(pinConfigurationForSecondEngine));
 }

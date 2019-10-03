@@ -28,8 +28,8 @@ TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
             pinValues {pinValuesOfLeftEngine, pinValuesOfRightEngine};
 
     EXPECT_CALL(_engineDriverMock, calculatePinsConfiguration(coordinates)).WillOnce(Return(pinValues));
-    EXPECT_CALL(_leftEngineMock, setConfiguration(pinValuesOfLeftEngine));
-    EXPECT_CALL(_rightEngineMock, setConfiguration(pinValuesOfRightEngine));
+    EXPECT_CALL(_leftEngineMock, setPinsConfiguration(pinValuesOfLeftEngine));
+    EXPECT_CALL(_rightEngineMock, setPinsConfiguration(pinValuesOfRightEngine));
 
     ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(coordinates));
 }

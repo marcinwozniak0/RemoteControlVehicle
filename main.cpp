@@ -18,12 +18,10 @@ int main()
     L293DEngineDriver engineDriver;
     DcEngine firstEngine(PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,
                          PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT,
-                         PIN_NUMBERS::FIRST_ENGINE_PWM,
-                         arduinoPinValueSetter);
+                         PIN_NUMBERS::FIRST_ENGINE_PWM);
     DcEngine secondEngine(PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT,
                           PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,
-                          PIN_NUMBERS::SECOND_ENGINE_PWM,
-                          arduinoPinValueSetter);
+                          PIN_NUMBERS::SECOND_ENGINE_PWM);
     SingleAxisPropulsionSystem propulsionSystem(firstEngine,
                                                 secondEngine,
                                                 engineDriver);
