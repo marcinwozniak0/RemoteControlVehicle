@@ -1,33 +1,31 @@
 #pragma once
 
-#include <stdint.h>
-
-static constexpr uint8_t NUMBER_OF_ENGINES = 2;
-static constexpr uint8_t NUMBER_OF_INPUT_PIN_IN_ENGINE = 2;
-static constexpr uint8_t NUMBER_OF_PINS_PER_ENGINE = 3;
-static constexpr uint8_t NUMBER_OF_PINS_PER_STEERING_WHEEL = 1;
+static constexpr auto NUMBER_OF_ENGINES = 2u;
+static constexpr auto NUMBER_OF_INPUT_PIN_IN_ENGINE = 2u;
+static constexpr auto NUMBER_OF_PINS_PER_ENGINE = 3u;
+static constexpr auto NUMBER_OF_PINS_PER_STEERING_WHEEL = 1u;
 static constexpr auto ARDUINO_PORT_DESIGNATION = "/dev/ttyACM0";
-static constexpr uint8_t PWM_MAX_RANGE = 255;
+static constexpr auto PWM_MAX_RANGE = 255u;
 
 namespace PIN_NUMBERS
 {
-static constexpr uint8_t FIRST_ENGINE_FIRST_OUTPUT = 2;
-static constexpr uint8_t FIRST_ENGINE_SECOND_OUTPUT = 4;
-static constexpr uint8_t FIRST_ENGINE_PWM = 3;
-static constexpr uint8_t SECOND_ENGINE_FIRST_OUTPUT = 7;
-static constexpr uint8_t SECOND_ENGINE_SECOND_OUTPUT = 8;
-static constexpr uint8_t SECOND_ENGINE_PWM = 5;
-static constexpr int STEERING_WHEEL_PWM = 44;
+static constexpr auto FIRST_ENGINE_FIRST_OUTPUT = 2u;
+static constexpr auto FIRST_ENGINE_SECOND_OUTPUT = 4u;
+static constexpr auto FIRST_ENGINE_PWM = 3u;
+static constexpr auto SECOND_ENGINE_FIRST_OUTPUT = 7u;
+static constexpr auto SECOND_ENGINE_SECOND_OUTPUT = 8u;
+static constexpr auto SECOND_ENGINE_PWM = 5u;
+static constexpr auto STEERING_WHEEL_PWM = 44u;
 }//PIN_NUMBERS
 
 namespace PIN_STATE
 {
-static constexpr uint8_t LOW = 0;
-static constexpr uint8_t HIGH = 1;
-static constexpr uint8_t INITIAL_PWM = 0;
+static constexpr auto LOW = 0u;
+static constexpr auto HIGH = 1u;
+static constexpr auto INITIAL_PWM = 0u;
 }//PIN_STATE
 
 namespace EXTERNAL_INTERFACES
 {
-static constexpr int32_t COORDINATE_SYSTEM_RESOLUTION = 16000;
+static constexpr auto COORDINATE_SYSTEM_RESOLUTION = 16000;
 }//EXTERNAL_INTERFACES

@@ -11,8 +11,8 @@ namespace Messages {
 
 TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 {
-    constexpr int32_t xCoordinate = 1000;
-    constexpr int32_t yCoordinate = 700;
+    constexpr auto xCoordinate = 1000;
+    constexpr auto yCoordinate = 700;
     constexpr auto pwmValue = yCoordinate * PWM_MAX_RANGE / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
 
 
@@ -20,16 +20,18 @@ TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 
-    const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfLeftEngine =
-        {PIN_STATE::HIGH, PIN_STATE::LOW, pwmValue};
-    const std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfRightEngine =
-        {PIN_STATE::LOW, PIN_STATE::HIGH, pwmValue};
-    const std::array<std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>, NUMBER_OF_ENGINES>
-            pinValues {pinValuesOfLeftEngine, pinValuesOfRightEngine};
+    PinsConfiguration expectedPinsConfiguration {};
 
-    EXPECT_CALL(_engineDriverMock, calculatePinsConfiguration(coordinates)).WillOnce(Return(pinValues));
-    EXPECT_CALL(_leftEngineMock, setPinsConfiguration(pinValuesOfLeftEngine));
-    EXPECT_CALL(_rightEngineMock, setPinsConfiguration(pinValuesOfRightEngine));
+    expectedPinsConfiguration.try_emplace(PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,  PIN_STATE::HIGH);
+    expectedPinsConfiguration.try_emplace(PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT, PIN_STATE::LOW);
+    expectedPinsConfiguration.try_emplace(PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT, PIN_STATE::LOW);
+    expectedPinsConfiguration.try_emplace(PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,PIN_STATE::HIGH);
+    expectedPinsConfiguration.try_emplace(PIN_NUMBERS::FIRST_ENGINE_PWM,           pwmValue);
+    expectedPinsConfiguration.try_emplace(PIN_NUMBERS::SECOND_ENGINE_PWM,          pwmValue);
+
+    EXPECT_CALL(_engineDriverMock, calculatePinsConfiguration(coordinates)).WillOnce(Return(expectedPinsConfiguration));
+    EXPECT_CALL(_leftEngineMock, setPinsConfiguration(expectedPinsConfiguration));
+    EXPECT_CALL(_rightEngineMock, setPinsConfiguration(expectedPinsConfiguration));
 
     ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(coordinates));
 }

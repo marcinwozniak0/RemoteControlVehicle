@@ -1,48 +1,33 @@
 #include "L293DEngineDriver.hpp"
 #include "VehicleConfiguration.hpp"
 
-std::array<std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE>, NUMBER_OF_ENGINES>
-L293DEngineDriver::calculatePinsConfiguration(const Messages::CoordinateSystem& coordinates) const
+namespace
 {
-    std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfLeftEngine {};
-    std::array<uint8_t, NUMBER_OF_PINS_PER_ENGINE> pinValuesOfRightEngine {};
+constexpr auto firstEngine = 0u;
+constexpr auto secondEngine = 1u;
+constexpr auto firstInput = 0u;
+constexpr auto secondInput = 1u;
+}
 
-    const uint8_t pwmValue = PWM_MAX_RANGE * coordinates.y_coordinate() / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
-    constexpr uint8_t directionChangeTreshold = 0;
+const PinsConfiguration L293DEngineDriver::calculatePinsConfiguration(const Messages::CoordinateSystem& coordinates) const
+{
+    const auto pwmValue = PWM_MAX_RANGE * coordinates.y_coordinate() / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+    constexpr auto directionChangeTreshold = 0;
 
     if (areCoordinatesInRange(coordinates) and directionChangeTreshold < coordinates.y_coordinate())
     {
-         pinValuesOfLeftEngine = {_drivingForward.at(0).at(0),
-                                  _drivingForward.at(0).at(1),
-                                  pwmValue};
-
-        pinValuesOfRightEngine = {_drivingForward.at(1).at(0),
-                                  _drivingForward.at(1).at(1),
-                                  pwmValue};
-
+        return createPinsConfiguration(_drivingForward, pwmValue);
     }
     else if (areCoordinatesInRange(coordinates) and directionChangeTreshold > coordinates.y_coordinate())
     {
-         pinValuesOfLeftEngine = {_drivingBackward.at(0).at(0),
-                                  _drivingBackward.at(0).at(1),
-                                  pwmValue};
-
-         pinValuesOfRightEngine = {_drivingBackward.at(1).at(0),
-                                   _drivingBackward.at(1).at(1),
-                                   pwmValue};
+        return createPinsConfiguration(_drivingBackward, pwmValue);
     }
     else if (areCoordinatesInRange(coordinates) and directionChangeTreshold == coordinates.y_coordinate())
     {
-        pinValuesOfLeftEngine = {_stopEngine.at(0).at(0),
-                                 _stopEngine.at(0).at(1),
-                                 pwmValue};
-
-        pinValuesOfRightEngine = {_stopEngine.at(1).at(0),
-                                  _stopEngine.at(1).at(1),
-                                  pwmValue};
+        return createPinsConfiguration(_stopEngine, pwmValue);
     }
 
-    return {pinValuesOfLeftEngine, pinValuesOfRightEngine};
+    return {};
 }
 
 bool L293DEngineDriver::areCoordinatesInRange(const Messages::CoordinateSystem& coordinates) const
@@ -51,4 +36,19 @@ bool L293DEngineDriver::areCoordinatesInRange(const Messages::CoordinateSystem& 
            coordinates.y_coordinate() <= EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and
            coordinates.x_coordinate() >= -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and
            coordinates.y_coordinate() >= -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+}
+
+const PinsConfiguration L293DEngineDriver::createPinsConfiguration(const PinStatesConfiguration& pinStatesConfiguration,
+                                                                   const int pwmValue) const
+{
+    PinsConfiguration pinsConfiguration {};
+
+    pinsConfiguration.try_emplace(PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,  pinStatesConfiguration.at(firstEngine).at(firstInput));
+    pinsConfiguration.try_emplace(PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT, pinStatesConfiguration.at(firstEngine).at(secondInput));
+    pinsConfiguration.try_emplace(PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT, pinStatesConfiguration.at(secondEngine).at(firstInput));
+    pinsConfiguration.try_emplace(PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,pinStatesConfiguration.at(secondEngine).at(secondInput));
+    pinsConfiguration.try_emplace(PIN_NUMBERS::FIRST_ENGINE_PWM,           pwmValue);
+    pinsConfiguration.try_emplace(PIN_NUMBERS::SECOND_ENGINE_PWM,          pwmValue);
+
+    return pinsConfiguration;
 }
