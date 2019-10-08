@@ -13,10 +13,10 @@ class VehicleTest : public Test
 {
 public:
     VehicleTest()
-        : _sut(_propulsionSystem, _steeringSystemMock)
+        : _sut(_propulsionSystemMock, _steeringSystemMock)
     {}
 
-    NiceMock<PropulsionSystemMock> _propulsionSystem;
+    NiceMock<PropulsionSystemMock> _propulsionSystemMock;
     NiceMock<SteeringSystemMock> _steeringSystemMock;
     ThreeWheeledVehicle _sut;
 };

@@ -34,3 +34,14 @@ void ThreeWheeledVehicle::applyNewConfiguration(const Messages::CoordinateSystem
     _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
     _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
 }
+
+const PinsConfiguration ThreeWheeledVehicle::getCurrentPinsConfiguration() const
+{
+    auto propulsionSystemPinsConfiguration = _propulsionSystem.getPinsConfiguration();
+    auto steeringSystemSystemPinsConfiguration = _steeringSystem.getPinsConfiguration();
+
+    auto& vehiclePinsConfiguration = propulsionSystemPinsConfiguration;
+    vehiclePinsConfiguration.merge(steeringSystemSystemPinsConfiguration);
+
+    return vehiclePinsConfiguration;
+}

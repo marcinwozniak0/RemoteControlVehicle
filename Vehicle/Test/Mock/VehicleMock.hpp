@@ -11,5 +11,6 @@ public:
     MOCK_METHOD0(stopVehicle, void());
     MOCK_METHOD0(switchToAutomaticMode, void());
     MOCK_METHOD1(applyNewConfiguration, void(const Messages::CoordinateSystem&));
+    MOCK_CONST_METHOD0(getCurrentPinsConfiguration, const PinsConfiguration());
     MOCK_METHOD0(getVehicleState, VehicleState());
 };
