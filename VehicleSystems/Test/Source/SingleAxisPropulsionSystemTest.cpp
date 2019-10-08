@@ -35,3 +35,20 @@ TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 
     ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(coordinates));
 }
+
+TEST_F(SingleAxisPropulsionSystemTest, getPinsConfigurationShouldReturnPinsConfigurationOfBoothEngines)
+{
+    const PinsConfiguration boothEnginesPinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,  PIN_STATE::HIGH},
+                                                             {PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,PIN_STATE::HIGH},
+                                                             {PIN_NUMBERS::SECOND_ENGINE_PWM,          0}};
+
+    const PinsConfiguration rightEnginePinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,  PIN_STATE::HIGH}};
+
+    const PinsConfiguration leftEnginePinsConfiguration = {{PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,PIN_STATE::HIGH},
+                                                           {PIN_NUMBERS::SECOND_ENGINE_PWM,          0}};
+
+    EXPECT_CALL(_rightEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(rightEnginePinsConfiguration));
+    EXPECT_CALL(_leftEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(leftEnginePinsConfiguration));
+
+    ASSERT_EQ(boothEnginesPinsConfiguration, _sut.getPinsConfiguration());
+}

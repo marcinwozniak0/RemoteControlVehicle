@@ -17,3 +17,14 @@ void SingleAxisPropulsionSystem::applyNewConfigurationBasedOnCoordinates(const M
     _leftEngine.setPinsConfiguration(pinConfiguration);
     _rightEngine.setPinsConfiguration(pinConfiguration);
 }
+
+const PinsConfiguration SingleAxisPropulsionSystem::getPinsConfiguration() const
+{
+    auto rightEnginePinsConfiguration = _rightEngine.getPinsConfiguration();
+    auto leftEnginePinsConfiguration = _leftEngine.getPinsConfiguration();
+
+    auto& boothEnginesPinsConfiguration = rightEnginePinsConfiguration;
+    boothEnginesPinsConfiguration.merge(leftEnginePinsConfiguration);
+
+    return boothEnginesPinsConfiguration;
+}

@@ -13,6 +13,7 @@ public:
     SingleAxisPropulsionSystem(Engine&, Engine&, const EngineDriver&);
 
     void applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem&) override;
+    const PinsConfiguration getPinsConfiguration() const override;
 
 private:
     Engine& _rightEngine;
