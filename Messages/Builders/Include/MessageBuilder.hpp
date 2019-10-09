@@ -1,6 +1,6 @@
 #pragma once
 
-#include <google/protobuf/any.h>
+#include <google/protobuf/any.pb.h>
 
 class MessageBuilder
 {
