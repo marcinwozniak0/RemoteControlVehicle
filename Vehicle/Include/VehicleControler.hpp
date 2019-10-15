@@ -4,7 +4,7 @@
 #include <queue>
 #include <optional>
 
-#include "MessageReceiver.hpp"
+#include "UsbSerialPortMesageReceiver.hpp"
 #include "Vehicle.hpp"
 
 class PinValueSetter;
@@ -22,7 +22,6 @@ private:
     void executeMessage(const std::string&);
 
     MessageReceiver& _messageReceiver;
-    std::shared_ptr<CommandsQueue> _commandsQueue;
     Vehicle& _vehicle;
     const PinValueSetter& _pinValueSeter;
 

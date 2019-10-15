@@ -7,7 +7,6 @@
 class MessageReceiverMock : public MessageReceiver
 {
 public:
-    MOCK_METHOD0(receiveMessage, void());
-    MOCK_METHOD1(queueCommand, void(const std::string&));
-    MOCK_METHOD0(shareMessagesQueue, std::shared_ptr<CommandsQueue>());
+    MOCK_METHOD(void, receiveMessage, ());
+    MOCK_METHOD(std::optional<const std::string>, takeMessageFromQueue, ());
 };

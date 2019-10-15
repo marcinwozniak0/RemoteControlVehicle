@@ -12,7 +12,6 @@ VehicleControler::VehicleControler(MessageReceiver& messageReceiver,
                                    Vehicle& vehicle,
                                    const PinValueSetter& pinValueSetter)
     : _messageReceiver(messageReceiver)
-    , _commandsQueue(_messageReceiver.shareMessagesQueue())
     , _vehicle(vehicle)
     , _pinValueSeter(pinValueSetter)
 {
@@ -21,11 +20,10 @@ VehicleControler::VehicleControler(MessageReceiver& messageReceiver,
 
 void VehicleControler::controlVehicle()
 {
-    //think about receiving commands
     while(_isControlerActive)
     {
-        _messageReceiver.receiveMessage(); //temporary solution
-        if (const auto command = getMessageToExecute())
+        _messageReceiver.receiveMessage();
+        if (const auto command = _messageReceiver.takeMessageFromQueue())
         {
             executeMessage(command.value());
         }
@@ -36,20 +34,6 @@ void VehicleControler::controlVehicle()
 void VehicleControler::vehicleEmergencyStop()
 {
     //TODO execute emergency command
-}
-
-std::optional<std::string> VehicleControler::getMessageToExecute()
-{
-    if (not _commandsQueue->empty())
-    {
-        const auto message = _commandsQueue->front();
-        _commandsQueue->pop();
-        return message;
-    }
-    else
-    {
-        return {};
-    }
 }
 
 void VehicleControler::executeMessage(const std::string& message)

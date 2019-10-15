@@ -29,7 +29,7 @@ int main()
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
-    MessageReceiver commandReceiver;
+    UsbSerialPortMesageReceiver commandReceiver("~/tmp.txt");
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle,
                                       arduinoPinValueSetter);
