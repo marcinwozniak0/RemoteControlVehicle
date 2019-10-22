@@ -1,13 +1,13 @@
 #include <fstream>
 #include <filesystem>
 
-#include "UsbSerialPortMesageReceiver.hpp"
+#include "TcpCommunicationSocket.hpp"
 
-UsbSerialPortMesageReceiver::UsbSerialPortMesageReceiver(std::string_view portDesignation)
+TcpCommunicationSocket::TcpCommunicationSocket(std::string_view portDesignation)
     : _portDesignation(portDesignation)
 {}
 
-void UsbSerialPortMesageReceiver::receiveMessage()
+void TcpCommunicationSocket::receiveMessage()
 {
     std::string str;
     std::fstream port;
@@ -20,13 +20,13 @@ void UsbSerialPortMesageReceiver::receiveMessage()
     clearAlreadyReadMessagesOnPort();
 }
 
-void UsbSerialPortMesageReceiver::clearAlreadyReadMessagesOnPort() const
+void TcpCommunicationSocket::clearAlreadyReadMessagesOnPort() const
 {
     constexpr auto newFileSize = 0u;
     std::filesystem::resize_file(_portDesignation, newFileSize);
 }
 
-std::optional<const std::string> UsbSerialPortMesageReceiver::takeMessageFromQueue()
+std::optional<const std::string> TcpCommunicationSocket::takeMessageFromQueue()
 {
     if (not _commandsQueue.empty())
     {

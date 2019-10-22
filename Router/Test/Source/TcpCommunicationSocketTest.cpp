@@ -1,11 +1,11 @@
-#include "UsbSerialPortMesageReceiverTest.hpp"
+#include "TcpCommunicationSocketTest.hpp"
 
 namespace
 {
 constexpr auto queueIsEmpty = false;
 }
 
-TEST_F(UsbSerialPortMesageReceiverTest, takeMessageShouldReturnFirstMessageInQueue)
+TEST_F(TcpCommunicationSocketTest, takeMessageShouldReturnFirstMessageInQueue)
 {
     addMessageToPort("firstMessage");
     addMessageToPort("secondMessage");
@@ -15,14 +15,14 @@ TEST_F(UsbSerialPortMesageReceiverTest, takeMessageShouldReturnFirstMessageInQue
     ASSERT_EQ(_sut.takeMessageFromQueue().value(), "firstMessage");
 }
 
-TEST_F(UsbSerialPortMesageReceiverTest, takeMessageShouldReturnNulloptWhenMessagesQueueIsEmpty)
+TEST_F(TcpCommunicationSocketTest, takeMessageShouldReturnNulloptWhenMessagesQueueIsEmpty)
 {
     _sut.receiveMessage();
 
     ASSERT_EQ(_sut.takeMessageFromQueue(), std::nullopt);
 }
 
-TEST_F(UsbSerialPortMesageReceiverTest, takeMessageShouldRemoveFirstMessageInQueue)
+TEST_F(TcpCommunicationSocketTest, takeMessageShouldRemoveFirstMessageInQueue)
 {
     addMessageToPort("firstMessage");
 
@@ -32,14 +32,14 @@ TEST_F(UsbSerialPortMesageReceiverTest, takeMessageShouldRemoveFirstMessageInQue
     ASSERT_EQ(_sut.takeMessageFromQueue().has_value(), queueIsEmpty);
 }
 
-TEST_F(UsbSerialPortMesageReceiverTest, receiveMessageShouldNotQueueAnyMessagesIfPortIsEmpty)
+TEST_F(TcpCommunicationSocketTest, receiveMessageShouldNotQueueAnyMessagesIfPortIsEmpty)
 {
     _sut.receiveMessage();
 
     ASSERT_EQ(_sut.takeMessageFromQueue().has_value(), queueIsEmpty);
 }
 
-TEST_F(UsbSerialPortMesageReceiverTest, receiveMessageShouldQueueMessageFromPort)
+TEST_F(TcpCommunicationSocketTest, receiveMessageShouldQueueMessageFromPort)
 {
     addMessageToPort("firstMessage");
 
@@ -48,7 +48,7 @@ TEST_F(UsbSerialPortMesageReceiverTest, receiveMessageShouldQueueMessageFromPort
     ASSERT_EQ(_sut.takeMessageFromQueue().has_value(), not queueIsEmpty);
 }
 
-TEST_F(UsbSerialPortMesageReceiverTest, portShouldBeEmptyAfterReceivedAllMessages)
+TEST_F(TcpCommunicationSocketTest, portShouldBeEmptyAfterReceivedAllMessages)
 {
     addMessageToPort("firstMessage");
 

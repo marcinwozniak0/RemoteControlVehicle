@@ -4,10 +4,10 @@
 
 #include "CommunicationSocket.hpp"
 
-class UsbSerialPortMesageReceiver : public CommunicationSocket
+class TcpCommunicationSocket : public CommunicationSocket
 {
 public:
-    UsbSerialPortMesageReceiver(std::string_view portDesignation);
+    TcpCommunicationSocket(std::string_view portDesignation);
 
     void receiveMessage() override;
     std::optional<const std::string> takeMessageFromQueue() override;

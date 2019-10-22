@@ -4,7 +4,7 @@
 #include <queue>
 #include <optional>
 
-#include "UsbSerialPortMesageReceiver.hpp"
+#include "TcpCommunicationSocket.hpp"
 #include "Vehicle.hpp"
 
 class PinValueSetter;

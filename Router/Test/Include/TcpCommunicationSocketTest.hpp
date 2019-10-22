@@ -5,24 +5,24 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "UsbSerialPortMesageReceiver.hpp"
+#include "TcpCommunicationSocket.hpp"
 
 namespace
 {
 const std::string home = getenv("HOME");
-const std::string portDesignation = home + "/UsbSerialPortMesageReceiverTest.txt";
+const std::string portDesignation = home + "/TcpCommunicationSocketTest.txt";
 }
 
-class UsbSerialPortMesageReceiverTest : public ::testing::Test
+class TcpCommunicationSocketTest : public ::testing::Test
 {
 public:
-    UsbSerialPortMesageReceiverTest()
+    TcpCommunicationSocketTest()
         : _sut(portDesignation)
     {
         _portStub.open(portDesignation);
     }
 
-    ~UsbSerialPortMesageReceiverTest()
+    ~TcpCommunicationSocketTest()
     {
         std::remove(portDesignation.c_str());
     }
@@ -32,6 +32,6 @@ public:
         _portStub << message << std::endl;
     }
 
-    UsbSerialPortMesageReceiver _sut;
+    TcpCommunicationSocket _sut;
     std::ofstream _portStub;
 };
