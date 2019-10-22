@@ -16,7 +16,7 @@ class VehicleControlerTest : public Test
 {
 public:
     VehicleControlerTest()
-        : _sut(_communicationSocketMock, _vehicleMock, _pinValueSetterMock)
+        : _sut(_communicationSocketMock, _vehicleMock)
     {}
 
     VehicleControler _sut;
@@ -25,6 +25,5 @@ public:
     NiceMock<VehicleMock> _vehicleMock;
     NiceMock<PropulsionSystemMock> _propulsionSystemMock;
     NiceMock<SteeringSystemMock> _steeringSystemMock;
-    NiceMock<PinValueSetterMock> _pinValueSetterMock;
 };
 

@@ -4,7 +4,6 @@ static constexpr auto NUMBER_OF_ENGINES = 2u;
 static constexpr auto NUMBER_OF_INPUT_PIN_IN_ENGINE = 2u;
 static constexpr auto NUMBER_OF_PINS_PER_ENGINE = 3u;
 static constexpr auto NUMBER_OF_PINS_PER_STEERING_WHEEL = 1u;
-static constexpr auto ARDUINO_PORT_DESIGNATION = "/dev/ttyACM0";
 static constexpr auto PWM_MAX_RANGE = 255u;
 
 namespace PIN_NUMBERS

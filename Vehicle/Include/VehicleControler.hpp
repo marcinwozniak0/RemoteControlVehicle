@@ -12,7 +12,7 @@ class PinValueSetter;
 class VehicleControler
 {
 public:
-    VehicleControler(CommunicationSocket&, Vehicle&, const PinValueSetter&);
+    VehicleControler(CommunicationSocket&, Vehicle&);
 
     void controlVehicle();
     void vehicleEmergencyStop();  
@@ -23,7 +23,6 @@ private:
 
     CommunicationSocket& _communicationSocket;
     Vehicle& _vehicle;
-    const PinValueSetter& _pinValueSeter;
 
     bool _isControlerActive = false;
 };

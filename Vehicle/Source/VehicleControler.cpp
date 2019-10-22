@@ -10,11 +10,9 @@
 #include "ControlerCommandToRunMessageBuilder.hpp"
 
 VehicleControler::VehicleControler(CommunicationSocket& CommunicationSocket,
-                                   Vehicle& vehicle,
-                                   const PinValueSetter& pinValueSetter)
+                                   Vehicle& vehicle)
     : _communicationSocket(CommunicationSocket)
     , _vehicle(vehicle)
-    , _pinValueSeter(pinValueSetter)
 {
     _isControlerActive = true;
 }

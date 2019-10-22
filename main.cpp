@@ -3,7 +3,6 @@
 #include "VehicleControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
 #include "DcEngine.hpp"
-#include "ArduinoPinValueSetter.hpp"
 #include "VehicleConfiguration.hpp"
 #include "L293DEngineDriver.hpp"
 #include "ThirtyDegreesSteeringWheel.hpp"
@@ -14,7 +13,6 @@ int main()
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
-    ArduinoPinValueSetter arduinoPinValueSetter(ARDUINO_PORT_DESIGNATION);
     L293DEngineDriver engineDriver;
     DcEngine firstEngine(PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,
                          PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT,
@@ -31,8 +29,7 @@ int main()
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
     TcpCommunicationSocket commandReceiver("~/tmp.txt");
     VehicleControler vehicleControler(commandReceiver,
-                                      vehicle,
-                                      arduinoPinValueSetter);
+                                      vehicle);
 
     try
     {
