@@ -76,7 +76,7 @@ namespace Messages
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
     EXPECT_CALL(_vehicleMock, startVehicle());
-    EXPECT_CALL(_messageReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
             .WillOnce(Return(createSerializedUserCommandToStart()))
             .WillOnce(Return(createSerializedDeactivateMessage()));
 
@@ -86,7 +86,7 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
     EXPECT_CALL(_vehicleMock, stopVehicle());
-    EXPECT_CALL(_messageReceiverMock, takeMessageFromQueue()).Times(3)
+    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(3)
             .WillOnce(Return(createSerializedUserCommandToStart()))
             .WillOnce(Return(createSerializedUserCommandToStop()))
             .WillOnce(Return(createSerializedDeactivateMessage()));
@@ -96,7 +96,7 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 
 TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldApplyNewVehicleConfiguration)
 {
-    EXPECT_CALL(_messageReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
             .WillOnce(Return(createSerializedUserCommandToRun()))
             .WillOnce(Return(createSerializedDeactivateMessage()));
 

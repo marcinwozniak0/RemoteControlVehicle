@@ -12,7 +12,7 @@ class PinValueSetter;
 class VehicleControler
 {
 public:
-    VehicleControler(MessageReceiver&, Vehicle&, const PinValueSetter&);
+    VehicleControler(CommunicationSocket&, Vehicle&, const PinValueSetter&);
 
     void controlVehicle();
     void vehicleEmergencyStop();  
@@ -21,7 +21,7 @@ private:
     std::optional<std::string> getMessageToExecute();
     void executeMessage(const std::string&);
 
-    MessageReceiver& _messageReceiver;
+    CommunicationSocket& _communicationSocket;
     Vehicle& _vehicle;
     const PinValueSetter& _pinValueSeter;
 

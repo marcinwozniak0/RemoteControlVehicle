@@ -2,9 +2,9 @@
 
 #include <gmock/gmock.h>
 
-#include "MessageReceiver.hpp"
+#include "CommunicationSocket.hpp"
 
-class MessageReceiverMock : public MessageReceiver
+class CommunicationSocketMock : public CommunicationSocket
 {
 public:
     MOCK_METHOD(void, receiveMessage, ());

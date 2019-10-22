@@ -3,11 +3,11 @@
 #include <string>
 #include <optional>
 
-class MessageReceiver
+class CommunicationSocket
 {
 public:
     virtual void receiveMessage() = 0;
     virtual std::optional<const std::string> takeMessageFromQueue() = 0;
 
-    virtual ~MessageReceiver() = default;
+    virtual ~CommunicationSocket() = default;
 };

@@ -2,9 +2,9 @@
 
 #include <queue>
 
-#include "MessageReceiver.hpp"
+#include "CommunicationSocket.hpp"
 
-class UsbSerialPortMesageReceiver : public MessageReceiver
+class UsbSerialPortMesageReceiver : public CommunicationSocket
 {
 public:
     UsbSerialPortMesageReceiver(std::string_view portDesignation);

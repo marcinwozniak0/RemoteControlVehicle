@@ -7,11 +7,12 @@
 #include <Deactivate.pb.h>
 
 #include "VehicleControler.hpp"
+#include "ControlerCommandToRunMessageBuilder.hpp"
 
-VehicleControler::VehicleControler(MessageReceiver& messageReceiver,
+VehicleControler::VehicleControler(CommunicationSocket& CommunicationSocket,
                                    Vehicle& vehicle,
                                    const PinValueSetter& pinValueSetter)
-    : _messageReceiver(messageReceiver)
+    : _communicationSocket(CommunicationSocket)
     , _vehicle(vehicle)
     , _pinValueSeter(pinValueSetter)
 {
@@ -22,8 +23,8 @@ void VehicleControler::controlVehicle()
 {
     while(_isControlerActive)
     {
-        _messageReceiver.receiveMessage();
-        if (const auto command = _messageReceiver.takeMessageFromQueue())
+        _communicationSocket.receiveMessage();
+        if (const auto command = _communicationSocket.takeMessageFromQueue())
         {
             executeMessage(command.value());
         }
