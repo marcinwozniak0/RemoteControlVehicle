@@ -5,6 +5,8 @@ static constexpr auto NUMBER_OF_INPUT_PIN_IN_ENGINE = 2u;
 static constexpr auto NUMBER_OF_PINS_PER_ENGINE = 3u;
 static constexpr auto NUMBER_OF_PINS_PER_STEERING_WHEEL = 1u;
 static constexpr auto PWM_MAX_RANGE = 255u;
+static constexpr auto PORT = 8080u;
+static constexpr auto IP_ADDRESS = "127.0.0.1";
 
 namespace PIN_NUMBERS
 {

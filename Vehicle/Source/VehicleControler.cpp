@@ -9,9 +9,9 @@
 #include "VehicleControler.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 
-VehicleControler::VehicleControler(CommunicationSocket& CommunicationSocket,
+VehicleControler::VehicleControler(CommunicationSocket& communicationSocket,
                                    Vehicle& vehicle)
-    : _communicationSocket(CommunicationSocket)
+    : _communicationSocket(communicationSocket)
     , _vehicle(vehicle)
 {
     _isControlerActive = true;

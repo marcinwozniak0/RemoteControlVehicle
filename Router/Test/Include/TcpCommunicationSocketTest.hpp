@@ -1,37 +1,24 @@
 #pragma once
 
+#include <boost/asio.hpp>
 #include <gtest/gtest.h>
-#include <fstream>
-#include <cstdio>
-#include <cstdlib>
 
 #include "TcpCommunicationSocket.hpp"
 
 namespace
 {
-const std::string home = getenv("HOME");
-const std::string portDesignation = home + "/TcpCommunicationSocketTest.txt";
+static constexpr auto port = 35271;
+static constexpr auto ipAddress = "127.0.0.1";
 }
 
-class TcpCommunicationSocketTest : public ::testing::Test
+using ip::tcp;
+using std::string;
+
+class DISABLED_TcpCommunicationSocketTest : public ::testing::Test
 {
 public:
-    TcpCommunicationSocketTest()
-        : _sut(portDesignation)
-    {
-        _portStub.open(portDesignation);
-    }
-
-    ~TcpCommunicationSocketTest()
-    {
-        std::remove(portDesignation.c_str());
-    }
-
     void addMessageToPort(const std::string& message)
-    {
-        _portStub << message << std::endl;
-    }
+    {}
 
-    TcpCommunicationSocket _sut;
-    std::ofstream _portStub;
+    std::unique_ptr<TcpCommunicationSocket> _sut;
 };

@@ -3,27 +3,20 @@
 
 #include "TcpCommunicationSocket.hpp"
 
-TcpCommunicationSocket::TcpCommunicationSocket(std::string_view portDesignation)
-    : _portDesignation(portDesignation)
-{}
+TcpCommunicationSocket::TcpCommunicationSocket(const int port, std::string_view ipAddress)
+    : _port(port)
+    , _ipAddress(ipAddress)
+    , _socket(_ioService)
+{
+    if (not connectToSocket())
+    {
+        exit(1);
+    }
+}
 
 void TcpCommunicationSocket::receiveMessage()
 {
-    std::string str;
-    std::fstream port;
-    port.open(_portDesignation);
-    while (port >> str)
-    {
-       _commandsQueue.push(str);
-    }
-
-    clearAlreadyReadMessagesOnPort();
-}
-
-void TcpCommunicationSocket::clearAlreadyReadMessagesOnPort() const
-{
-    constexpr auto newFileSize = 0u;
-    std::filesystem::resize_file(_portDesignation, newFileSize);
+    //TODO
 }
 
 std::optional<const std::string> TcpCommunicationSocket::takeMessageFromQueue()
@@ -38,4 +31,17 @@ std::optional<const std::string> TcpCommunicationSocket::takeMessageFromQueue()
     {
         return {};
     }
+}
+
+bool TcpCommunicationSocket::connectToSocket()
+{
+    boost::system::error_code errorHandler;
+    _socket.connect(ip::tcp::endpoint( boost::asio::ip::address::from_string(_ipAddress), _port), errorHandler);
+
+     if (errorHandler)
+     {
+         return false;
+     }
+
+    return true;
 }

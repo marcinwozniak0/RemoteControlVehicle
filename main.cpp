@@ -27,7 +27,7 @@ int main()
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
-    TcpCommunicationSocket commandReceiver("~/tmp.txt");
+    TcpCommunicationSocket commandReceiver(PORT, IP_ADDRESS);
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle);
 

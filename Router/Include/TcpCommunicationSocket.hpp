@@ -1,20 +1,28 @@
 #pragma once
 
 #include <queue>
+#include <boost/asio.hpp>
 
 #include "CommunicationSocket.hpp"
+
+using namespace boost::asio;
 
 class TcpCommunicationSocket : public CommunicationSocket
 {
 public:
-    TcpCommunicationSocket(std::string_view portDesignation);
+    TcpCommunicationSocket(const int port, std::string_view ipAddress);
 
     void receiveMessage() override;
     std::optional<const std::string> takeMessageFromQueue() override;
 
 private:
     void clearAlreadyReadMessagesOnPort() const;
+    bool connectToSocket();
 
     std::queue<std::string> _commandsQueue;
-    const std::string _portDesignation;
+
+    const int _port;
+    const std::string _ipAddress;
+    io_service _ioService;
+    ip::tcp::socket _socket;
 };
