@@ -32,6 +32,7 @@ TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFro
     ASSERT_NO_THROW(_sut.getPinsConfiguration());
 }
 
+#pragma GCC diagnostic ignored "-Wclass-memaccess"
 struct PwmValueTest
 {
     PwmValueTest(PinsConfiguration x, Messages::CoordinateSystem y)
@@ -39,9 +40,17 @@ struct PwmValueTest
         , givenCoordinates(y)
     {}
 
-    const PinsConfiguration expectedConfiguration;
-    const Messages::CoordinateSystem givenCoordinates;
+    PinsConfiguration expectedConfiguration;
+    Messages::CoordinateSystem givenCoordinates;
+
+    PwmValueTest(const PwmValueTest& a)
+    {
+        memset(this, 0, sizeof(*this));
+        this->expectedConfiguration = a.expectedConfiguration;
+        this->givenCoordinates = a.givenCoordinates;
+    }
 };
+#pragma GCC diagnostic pop
 
 struct CalculatePwmValueTest : FrontAxialSteeringSystemTest,
                                ::WithParamInterface<PwmValueTest>
