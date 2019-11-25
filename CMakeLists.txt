@@ -70,7 +70,7 @@ target_link_libraries(intelligent_vehicle messages)
 # UT
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
-                      ${MAIN_TEST})
+                      "MainTest.cpp")
 add_executable(intelligent_vehicle_ut ${TEST_BINARY_FILES})
 target_link_libraries(intelligent_vehicle_ut ${GTEST_MAIN_LIBRARY}
                                           ${GTEST_LIBRARY}
@@ -81,11 +81,17 @@ target_link_libraries(intelligent_vehicle_ut ${GTEST_MAIN_LIBRARY}
 add_dependencies(source_objects_lib messages)
 add_dependencies(messages googletest)
 
+
 # Valgrind
+find_program(VALGRIND "valgrind")
+if(VALGRIND)
 target_link_libraries(intelligent_vehicle_ut LINK_PUBLIC)
 add_custom_target(valgrind COMMAND "${VALGRIND}" --tool=memcheck
                                                  --leak-check=yes
                                                  --show-reachable=yes
                                                  --num-callers=20
                                                  --track-fds=no
+                                                 --track-origins=yes
+                                                 --error-exitcode=1
                                                  $<TARGET_FILE:intelligent_vehicle_ut>)
+endif()
