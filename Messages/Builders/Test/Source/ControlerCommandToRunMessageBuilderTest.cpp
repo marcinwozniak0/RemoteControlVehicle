@@ -18,15 +18,25 @@ inline bool operator==(const PinsConfiguration& lhs, const google::protobuf::Map
 }
 }
 
-TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithCorrectPinsConfigurationGivenInCtor)
+TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithCorrectPinsConfiguration)
 {
     const PinsConfiguration pinsConfiguration = {{20, 1}, {13, 0}, {10, 123}};
-    ControlerCommandToRunMessageBuilder _sut(pinsConfiguration);
-
-    const auto message = _sut.buildMessage();
+    const auto message = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
+                             .build();
 
     Messages::ControlerCommandToRun payload;
     message.UnpackTo(&payload);
 
     ASSERT_EQ(pinsConfiguration, payload.pins_configuration());
+}
+
+TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithEmptyPinsConfiguration)
+{
+    const auto message = ControlerCommandToRunMessageBuilder{}.build();
+
+    Messages::ControlerCommandToRun payload;
+    message.UnpackTo(&payload);
+
+    const PinsConfiguration emptyPinsConfiguration = {};
+    ASSERT_EQ(emptyPinsConfiguration, payload.pins_configuration());
 }

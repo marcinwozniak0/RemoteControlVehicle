@@ -6,9 +6,9 @@
 class ControlerCommandToRunMessageBuilder : public MessageBuilder
 {
 public:
-    ControlerCommandToRunMessageBuilder(const PinsConfiguration&);
-    google::protobuf::Any buildMessage() const override;
+    google::protobuf::Any build() const override;
+    ControlerCommandToRunMessageBuilder pinsConfiguration(const PinsConfiguration&);
 
 private:
-    const PinsConfiguration& _pinsConfigurationToSend;
+    PinsConfiguration _pinsConfiguration;
 };

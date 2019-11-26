@@ -2,18 +2,20 @@
 
 #include "ControlerCommandToRunMessageBuilder.hpp"
 
-ControlerCommandToRunMessageBuilder::ControlerCommandToRunMessageBuilder(const PinsConfiguration& pinsConfigurationToSend)
-    : _pinsConfigurationToSend(pinsConfigurationToSend)
-{}
+ControlerCommandToRunMessageBuilder ControlerCommandToRunMessageBuilder::pinsConfiguration(const PinsConfiguration& configuration)
+{
+    _pinsConfiguration = configuration;
+    return *this;
+}
 
-google::protobuf::Any ControlerCommandToRunMessageBuilder::buildMessage() const
+google::protobuf::Any ControlerCommandToRunMessageBuilder::build() const
 {
     Messages::ControlerCommandToRun controlerCommandToStart;
-    auto& pinsConfigurationToSend = *controlerCommandToStart.mutable_pins_configuration();
+    auto& pinsConfiguration = *controlerCommandToStart.mutable_pins_configuration();
 
-    for(const auto& [pinNumber, pinValue] : _pinsConfigurationToSend)
+    for(const auto& [pinNumber, pinValue] : _pinsConfiguration)
     {
-        pinsConfigurationToSend.insert({pinNumber, pinValue});
+        pinsConfiguration.insert({pinNumber, pinValue});
     }
 
     google::protobuf::Any topLevelMessage;
