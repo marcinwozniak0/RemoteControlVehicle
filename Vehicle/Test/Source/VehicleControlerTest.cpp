@@ -2,8 +2,10 @@
 #include <UserCommandToStop.pb.h>
 #include <UserCommandToStart.pb.h>
 #include <UserCommandToRun.pb.h>
+#include <ControlerCommandToRun.pb.h>
 
 #include "VehicleControlerTest.hpp"
+#include "ControlerCommandToRunMessageBuilder.hpp"
 
 namespace
 {
@@ -62,6 +64,19 @@ const std::string createSerializedUserCommandToRun()
 }
 }//namespace
 
+namespace google::protobuf
+{
+inline bool operator==(const google::protobuf::Map<int, int>& lhs, const google::protobuf::Map<int, int>& rhs)
+{
+
+    return lhs.size() == rhs.size() &&
+           std::is_permutation(lhs.begin(),
+                               lhs.end(),
+                               rhs.begin(),
+                               [](const auto a, const auto b){return a.first == b.first;});
+}
+}
+
 namespace Messages
 {
   struct CoordinateSystem;
@@ -70,8 +85,32 @@ namespace Messages
       return lhs.x_coordinate() == rhs.x_coordinate() &&
           lhs.y_coordinate() == rhs.y_coordinate();
   }
+
+  struct UserCommandToRun;
+  inline bool operator==(const Messages::ControlerCommandToRun& lhs, const Messages::ControlerCommandToRun& rhs)
+  {
+      return lhs.pins_configuration() == rhs.pins_configuration();
+  }
 }
 
+namespace google::protobuf
+{
+struct Any;
+inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf::Any& rhs)
+{
+    if(lhs.Is<Messages::ControlerCommandToRun>() and rhs.Is<Messages::ControlerCommandToRun>())
+    {
+        Messages::ControlerCommandToRun lhsPayload;
+        Messages::ControlerCommandToRun rhsPayload;
+        lhs.UnpackTo(&lhsPayload);
+        rhs.UnpackTo(&rhsPayload);
+
+        return lhsPayload == rhsPayload;
+    }
+
+    return false;
+}
+}
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
@@ -94,7 +133,7 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
     _sut.controlVehicle();
 }
 
-TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldApplyNewVehicleConfiguration)
+TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
     EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
             .WillOnce(Return(createSerializedUserCommandToRun()))
@@ -104,7 +143,13 @@ TEST_F(VehicleControlerTest, afterReceiveDriveCommandShouldApplyNewVehicleConfig
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 
+    PinsConfiguration configuration = {{1, 1}, {2, 0}};
+    auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(configuration)
+                                                              .build();
+
     EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
+    EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
+    EXPECT_CALL(_communicationSocketMock, sendMessage(messageToSend));
 
     _sut.controlVehicle();
 

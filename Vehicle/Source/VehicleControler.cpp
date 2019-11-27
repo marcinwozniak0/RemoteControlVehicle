@@ -54,6 +54,11 @@ void VehicleControler::executeMessage(const std::string& message)
         incommingMessage.UnpackTo(&payload);
 
         _vehicle.applyNewConfiguration(payload.coordinate_system());
+        const auto newPinsConfiguration = _vehicle.getCurrentPinsConfiguration();
+        auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
+                                                                  .build();
+
+        _communicationSocket.sendMessage(messageToSend);
 
     }
     else if(incommingMessage.Is<Messages::Deactivate>())

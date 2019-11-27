@@ -13,6 +13,7 @@ public:
     TcpCommunicationSocket(const int port, std::string_view ipAddress);
 
     void receiveMessage() override;
+    void sendMessage(const google::protobuf::Any) const override;
     std::optional<const std::string> takeMessageFromQueue() override;
 
 private:

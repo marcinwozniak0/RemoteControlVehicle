@@ -19,6 +19,11 @@ void TcpCommunicationSocket::receiveMessage()
     //TODO
 }
 
+void TcpCommunicationSocket::sendMessage(const google::protobuf::Any messageToSend) const
+{
+    //TODO
+}
+
 std::optional<const std::string> TcpCommunicationSocket::takeMessageFromQueue()
 {
     if (not _commandsQueue.empty())
