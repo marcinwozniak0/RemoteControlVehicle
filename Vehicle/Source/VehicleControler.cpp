@@ -58,7 +58,9 @@ void VehicleControler::executeMessage(const std::string& message)
         auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
                                                                   .build();
 
-        _communicationSocket.sendMessage(messageToSend);
+        std::string serializedMessage;
+        messageToSend.SerializeToString(&serializedMessage);
+        _communicationSocket.sendMessage(serializedMessage);
 
     }
     else if(incommingMessage.Is<Messages::Deactivate>())
