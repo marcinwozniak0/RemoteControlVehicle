@@ -18,7 +18,9 @@ public:
 
 private:
     bool connectToSocket();
-    std::vector<std::string> getSerialziedMessagesFormBuffer(const std::string&);
+    void quqeueReceivedCommands(const streambuf&);
+    void queueCommandsFormBuffer(const std::string&);
+    void saveIncompleteCommandFromBuffer(const std::string&);
 
     std::queue<std::string> _commandsQueue;
 

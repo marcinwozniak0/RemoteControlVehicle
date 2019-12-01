@@ -24,7 +24,7 @@ void VehicleControler::controlVehicle()
         _communicationSocket.receiveMessage();
         if (const auto command = _communicationSocket.takeMessageFromQueue())
         {
-            executeMessage(command.value());
+            handleMessage(command.value());
         }
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
@@ -35,7 +35,7 @@ void VehicleControler::vehicleEmergencyStop()
     //TODO execute emergency command
 }
 
-void VehicleControler::executeMessage(const std::string& message)
+void VehicleControler::handleMessage(const std::string& message)
 {
     google::protobuf::Any incommingMessage;
     incommingMessage.ParseFromString(message);
@@ -50,21 +50,25 @@ void VehicleControler::executeMessage(const std::string& message)
     }
     else if(incommingMessage.Is<Messages::UserCommandToRun>())
     {
-        Messages::UserCommandToRun payload;
-        incommingMessage.UnpackTo(&payload);
-
-        _vehicle.applyNewConfiguration(payload.coordinate_system());
-        const auto newPinsConfiguration = _vehicle.getCurrentPinsConfiguration();
-        auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
-                                                                  .build();
-
-        std::string serializedMessage;
-        messageToSend.SerializeToString(&serializedMessage);
-        _communicationSocket.sendMessage(serializedMessage);
-
+        handleUserCommandToRun(incommingMessage);
     }
     else if(incommingMessage.Is<Messages::Deactivate>())
     {
         _isControlerActive = false;
     }
+}
+
+void VehicleControler::handleUserCommandToRun(const google::protobuf::Any& command) const
+{
+    Messages::UserCommandToRun payload;
+    command.UnpackTo(&payload);
+
+    _vehicle.applyNewConfiguration(payload.coordinate_system());
+    const auto newPinsConfiguration = _vehicle.getCurrentPinsConfiguration();
+    auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
+                                                              .build();
+
+    std::string serializedMessage;
+    messageToSend.SerializeToString(&serializedMessage);
+    _communicationSocket.sendMessage(serializedMessage);
 }

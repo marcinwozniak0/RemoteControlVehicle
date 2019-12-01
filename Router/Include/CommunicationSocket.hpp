@@ -3,8 +3,6 @@
 #include <string>
 #include <optional>
 
-#include <google/protobuf/any.pb.h>
-
 class CommunicationSocket
 {
 public:

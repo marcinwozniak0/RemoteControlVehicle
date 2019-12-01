@@ -1,8 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <queue>
-#include <optional>
+#include <google/protobuf/any.pb.h>
 
 #include "TcpCommunicationSocket.hpp"
 #include "Vehicle.hpp"
@@ -19,7 +17,8 @@ public:
 
 private:
     std::optional<std::string> getMessageToExecute();
-    void executeMessage(const std::string&);
+    void handleMessage(const std::string&);
+    void handleUserCommandToRun(const google::protobuf::Any&) const;
 
     CommunicationSocket& _communicationSocket;
     Vehicle& _vehicle;
