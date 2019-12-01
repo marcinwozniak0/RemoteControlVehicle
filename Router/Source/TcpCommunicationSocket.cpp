@@ -1,5 +1,6 @@
 #include "TcpCommunicationSocket.hpp"
 #include "VehicleConfiguration.hpp"
+#include "CommunicationSocketException.hpp"
 
 TcpCommunicationSocket::TcpCommunicationSocket(const int port, std::string_view ipAddress)
     : _port(port)
@@ -20,7 +21,7 @@ void TcpCommunicationSocket::receiveMessage()
 
     if(errorCode and errorCode not_eq error::eof)
     {
-        //TODO throw receivingFailed
+        throw CommunicationSocketException{"Receiving command from tcp/ip socket failed"};
     }
     else
     {
@@ -42,7 +43,7 @@ void TcpCommunicationSocket::sendMessage(const std::string& messageToSend)
 
     if(error)
     {
-       //TODO throw sendingFailed
+       throw CommunicationSocketException{"Sending command to tcp/ip socket failed"};
     }
 }
 

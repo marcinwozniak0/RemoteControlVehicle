@@ -35,8 +35,9 @@ int main()
     {
         vehicleControler.controlVehicle();
     }
-    catch(...)
+    catch(const std::exception& exception)
     {
+        std::cerr << exception.what() << std::endl;
         vehicleControler.vehicleEmergencyStop();
     }
 
