@@ -10,14 +10,14 @@ TEST_F(DISABLED_TcpCommunicationSocketTest, takeMessageShouldReturnFirstMessageI
     addMessageToPort("firstMessage");
     addMessageToPort("secondMessage");
 
-    _sut->receiveMessage();
+    _sut->receiveCommand();
 
     ASSERT_EQ(_sut->takeMessageFromQueue().value(), "firstMessage");
 }
 
 TEST_F(DISABLED_TcpCommunicationSocketTest, takeMessageShouldReturnNulloptWhenMessagesQueueIsEmpty)
 {
-    _sut->receiveMessage();
+    _sut->receiveCommand();
 
     ASSERT_EQ(_sut->takeMessageFromQueue(), std::nullopt);
 }
@@ -26,24 +26,24 @@ TEST_F(DISABLED_TcpCommunicationSocketTest, takeMessageShouldRemoveFirstMessageI
 {
     addMessageToPort("firstMessage");
 
-    _sut->receiveMessage();
+    _sut->receiveCommand();
     _sut->takeMessageFromQueue();
 
     ASSERT_EQ(_sut->takeMessageFromQueue().has_value(), queueIsEmpty);
 }
 
-TEST_F(DISABLED_TcpCommunicationSocketTest, receiveMessageShouldNotQueueAnyMessagesIfPortIsEmpty)
+TEST_F(DISABLED_TcpCommunicationSocketTest, receiveCommandShouldNotQueueAnyMessagesIfPortIsEmpty)
 {
-    _sut->receiveMessage();
+    _sut->receiveCommand();
 
     ASSERT_EQ(_sut->takeMessageFromQueue().has_value(), queueIsEmpty);
 }
 
-TEST_F(DISABLED_TcpCommunicationSocketTest, receiveMessageShouldQueueMessageFromPort)
+TEST_F(DISABLED_TcpCommunicationSocketTest, receiveCommandShouldQueueMessageFromPort)
 {
     addMessageToPort("firstMessage");
 
-    _sut->receiveMessage();
+    _sut->receiveCommand();
 
     ASSERT_EQ(_sut->takeMessageFromQueue().has_value(), not queueIsEmpty);
 }
@@ -52,10 +52,10 @@ TEST_F(DISABLED_TcpCommunicationSocketTest, portShouldBeEmptyAfterReceivedAllMes
 {
     addMessageToPort("firstMessage");
 
-    _sut->receiveMessage();
+    _sut->receiveCommand();
     _sut->takeMessageFromQueue();
 
-    _sut->receiveMessage();
+    _sut->receiveCommand();
 
     ASSERT_EQ(_sut->takeMessageFromQueue().has_value(), queueIsEmpty);
 

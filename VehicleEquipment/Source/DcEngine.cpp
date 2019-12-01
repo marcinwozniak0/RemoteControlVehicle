@@ -1,5 +1,4 @@
 #include "DcEngine.hpp"
-#include "PinValueSetter.hpp"
 
 namespace
 {

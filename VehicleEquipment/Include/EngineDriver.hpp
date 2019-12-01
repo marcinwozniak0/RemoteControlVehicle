@@ -4,7 +4,6 @@
 
 #include <UserCommandToRun.pb.h>
 
-#include "VehicleConfiguration.hpp"
 #include "VehicleTypes.hpp"
 
 class EngineDriver

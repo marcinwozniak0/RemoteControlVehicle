@@ -13,7 +13,7 @@ TcpCommunicationSocket::TcpCommunicationSocket(const int port, std::string_view 
     }
 }
 
-void TcpCommunicationSocket::receiveMessage()
+void TcpCommunicationSocket::receiveCommand()
 {
     streambuf receivedBuffer;
     boost::system::error_code errorCode;
@@ -36,7 +36,7 @@ void TcpCommunicationSocket::quqeueReceivedCommands(const streambuf& receivedBuf
     saveIncompleteCommandFromBuffer(receivedData);
 }
 
-void TcpCommunicationSocket::sendMessage(const std::string& messageToSend)
+void TcpCommunicationSocket::sendCommand(const std::string& messageToSend)
 {
     boost::system::error_code error;
     write( _socket, buffer(messageToSend), error);

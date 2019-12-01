@@ -113,7 +113,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
 
     EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_communicationSocketMock, sendMessage(serializedMessage));
+    EXPECT_CALL(_communicationSocketMock, sendCommand(serializedMessage));
 
     _sut.controlVehicle();
 

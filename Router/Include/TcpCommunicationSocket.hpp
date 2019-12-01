@@ -12,8 +12,8 @@ class TcpCommunicationSocket : public CommunicationSocket
 public:
     TcpCommunicationSocket(const int port, std::string_view ipAddress);
 
-    void receiveMessage() override;
-    void sendMessage(const std::string&) override;
+    void receiveCommand() override;
+    void sendCommand(const std::string&) override;
     std::optional<const std::string> takeMessageFromQueue() override;
 
 private:

@@ -2,8 +2,6 @@
 
 #include "Engine.hpp"
 
-class PinValueSetter;
-
 class DcEngine : public Engine
 {
 public:

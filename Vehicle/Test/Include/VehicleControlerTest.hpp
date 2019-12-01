@@ -7,7 +7,6 @@
 #include "CommunicationSocketMock.hpp"
 #include "PropulsionSystemMock.hpp"
 #include "SteeringSystemMock.hpp"
-#include "PinValueSetterMock.hpp"
 #include "VehicleMock.hpp"
 
 using namespace ::testing;

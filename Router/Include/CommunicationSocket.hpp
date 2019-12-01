@@ -6,8 +6,8 @@
 class CommunicationSocket
 {
 public:
-    virtual void receiveMessage() = 0;
-    virtual void sendMessage(const std::string&) = 0;
+    virtual void receiveCommand() = 0;
+    virtual void sendCommand(const std::string&) = 0;
     virtual std::optional<const std::string> takeMessageFromQueue() = 0;
 
     virtual ~CommunicationSocket() = default;

@@ -8,6 +8,8 @@
 
 #include "VehicleControler.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
+#include "CommunicationSocket.hpp"
+#include "Vehicle.hpp"
 
 VehicleControler::VehicleControler(CommunicationSocket& communicationSocket,
                                    Vehicle& vehicle)
@@ -21,7 +23,7 @@ void VehicleControler::controlVehicle()
 {
     while(_isControlerActive)
     {
-        _communicationSocket.receiveMessage();
+        _communicationSocket.receiveCommand();
         if (const auto command = _communicationSocket.takeMessageFromQueue())
         {
             handleMessage(command.value());
@@ -70,5 +72,5 @@ void VehicleControler::handleUserCommandToRun(const google::protobuf::Any& comma
 
     std::string serializedMessage;
     messageToSend.SerializeToString(&serializedMessage);
-    _communicationSocket.sendMessage(serializedMessage);
+    _communicationSocket.sendCommand(serializedMessage);
 }

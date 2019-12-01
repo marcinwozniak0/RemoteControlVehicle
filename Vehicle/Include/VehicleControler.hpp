@@ -2,10 +2,8 @@
 
 #include <google/protobuf/any.pb.h>
 
-#include "TcpCommunicationSocket.hpp"
-#include "Vehicle.hpp"
-
-class PinValueSetter;
+class CommunicationSocket;
+class Vehicle;
 
 class VehicleControler
 {

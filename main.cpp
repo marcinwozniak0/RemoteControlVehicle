@@ -8,6 +8,7 @@
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
+#include "TcpCommunicationSocket.hpp"
 
 int main()
 {
