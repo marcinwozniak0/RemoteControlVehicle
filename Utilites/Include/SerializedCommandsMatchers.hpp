@@ -2,26 +2,26 @@
 
 #include <gmock/gmock.h>
 
+#include "CommandsComparator.hpp"
+#include "ProtobufStructuresComparator.hpp"
+
 MATCHER_P(SerializedControlerCommandToRunMatcher, command, "")
 {
-  google::protobuf::Any commandToMatch;
-  commandToMatch.ParseFromString(command);
+  google::protobuf::Any expectedCommad;
+  expectedCommad.ParseFromString(command);
 
-  google::protobuf::Any commandInArgument;
-  commandInArgument.ParseFromString(arg);
+  google::protobuf::Any givenCommand;
+  givenCommand.ParseFromString(arg);
 
-  if(commandToMatch.Is<Messages::ControlerCommandToRun>() and commandInArgument.Is<Messages::ControlerCommandToRun>())
+  if(expectedCommad.Is<Messages::ControlerCommandToRun>() and givenCommand.Is<Messages::ControlerCommandToRun>())
   {
-      Messages::ControlerCommandToRun x;
-      Messages::ControlerCommandToRun y;
+      Messages::ControlerCommandToRun lhs;
+      Messages::ControlerCommandToRun rhs;
 
-      commandToMatch.UnpackTo(&x);
-      commandInArgument.UnpackTo(&y);
+      expectedCommad.UnpackTo(&lhs);
+      givenCommand.UnpackTo(&rhs);
 
-      return std::is_permutation(x.pins_configuration().begin(),
-                                 x.pins_configuration().end(),
-                                 y.pins_configuration().begin(),
-                                 [](const auto a, const auto b){return a.first == b.first;});
+      return lhs.pins_configuration() == rhs.pins_configuration();
   }
 
   return false;
