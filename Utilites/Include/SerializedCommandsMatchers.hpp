@@ -2,7 +2,6 @@
 
 #include <gmock/gmock.h>
 
-#include "CommandsComparator.hpp"
 #include "ProtobufStructuresComparator.hpp"
 
 MATCHER_P(SerializedControlerCommandToRunMatcher, command, "")

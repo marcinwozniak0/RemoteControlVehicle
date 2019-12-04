@@ -1,13 +1,5 @@
 #include "SingleAxisPropulsionSystemTest.hpp"
-
-namespace Messages {
-  struct CoordinateSystem;
-  inline bool operator==(const Messages::CoordinateSystem& lhs, const Messages::CoordinateSystem& rhs)
-  {
-      return lhs.x_coordinate() == rhs.x_coordinate() &&
-          lhs.y_coordinate() == rhs.y_coordinate();
-  }
-}
+#include "ProtobufStructuresComparator.hpp"
 
 TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 {

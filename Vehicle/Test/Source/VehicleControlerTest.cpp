@@ -7,7 +7,9 @@
 #include "VehicleControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "SerializedCommandsMatchers.hpp"
+#include "ProtobufStructuresComparator.hpp"
 
+using namespace Comparators;
 namespace
 {
 constexpr int32_t xCoordinate = 700;
@@ -64,16 +66,6 @@ const std::string createSerializedUserCommandToRun()
     return serializedMessage;
 }
 }//namespace
-
-namespace Messages
-{
-  struct CoordinateSystem;
-  inline bool operator==(const Messages::CoordinateSystem& lhs, const Messages::CoordinateSystem& rhs)
-  {
-      return lhs.x_coordinate() == rhs.x_coordinate() &&
-          lhs.y_coordinate() == rhs.y_coordinate();
-  }
-}
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {

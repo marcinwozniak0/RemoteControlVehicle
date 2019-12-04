@@ -4,19 +4,7 @@
 
 #include "VehicleTypes.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
-
-namespace google::protobuf
-{
-inline bool operator==(const PinsConfiguration& lhs, const google::protobuf::Map<int, int>& rhs)
-{
-
-    return lhs.size() == rhs.size() &&
-           std::is_permutation(lhs.begin(),
-                               lhs.end(),
-                               rhs.begin(),
-                               [](const auto a, const auto b){return a.first == b.first;});
-}
-}
+#include "ProtobufStructuresComparator.hpp"
 
 TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithCorrectPinsConfiguration)
 {
@@ -38,5 +26,6 @@ TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithEmptyPinsCon
     message.UnpackTo(&payload);
 
     const PinsConfiguration emptyPinsConfiguration = {};
+
     ASSERT_EQ(emptyPinsConfiguration, payload.pins_configuration());
 }
