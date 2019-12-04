@@ -6,6 +6,7 @@
 
 #include "VehicleControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
+#include "SerializedCommandsMatchers.hpp"
 
 namespace
 {
@@ -113,7 +114,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
 
     EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_communicationSocketMock, sendCommand(serializedMessage));
+    EXPECT_CALL(_communicationSocketMock, sendCommand(SerializedControlerCommandToRunMatcher(serializedMessage)));
 
     _sut.controlVehicle();
 

@@ -22,7 +22,6 @@ set(BINARY_OUTPUT_PATH build/)
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 include(External_GTest.cmake)
-#find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(Protobuf REQUIRED)
 find_program(Valgrind REQUIRED)
 
@@ -36,11 +35,13 @@ include_directories(Router/Include)
 include_directories(VehicleEquipment/Include)
 include_directories(VehicleSystems/Include)
 include_directories(Messages/Builders/Include)
+include_directories(Utilites/Include)
 add_subdirectory(Vehicle/Source)
 add_subdirectory(Router/Source)
 add_subdirectory(VehicleEquipment/Source)
 add_subdirectory(VehicleSystems/Source)
 add_subdirectory(Messages/Builders/Source)
+add_subdirectory(Utilites/Source)
 
 # TEST
 include_directories(VehicleSystems/Test/Mock)
@@ -53,11 +54,13 @@ include_directories(Router/Test/Mock)
 include_directories(Router/Test/Include)
 include_directories(Messages/Builders/Test/Mock)
 include_directories(Messages/Builders/Test/Include)
+include_directories(Utilites/Test)
 add_subdirectory(VehicleSystems/Test)
 add_subdirectory(VehicleEquipment/Test)
 add_subdirectory(Vehicle/Test)
 add_subdirectory(Router/Test)
 add_subdirectory(Messages/Builders/Test)
+add_subdirectory(Utilites/Test)
 
 # SRC LIB
 add_library(source_objects_lib OBJECT ${SOURCES})
@@ -66,17 +69,16 @@ add_library(source_objects_lib OBJECT ${SOURCES})
 add_executable(intelligent_vehicle $<TARGET_OBJECTS:source_objects_lib> "main.cpp")
 target_link_libraries(intelligent_vehicle messages)
 
-
 # UT
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
                       "MainTest.cpp")
 add_executable(intelligent_vehicle_ut ${TEST_BINARY_FILES})
 target_link_libraries(intelligent_vehicle_ut ${GTEST_MAIN_LIBRARY}
-                                          ${GTEST_LIBRARY}
-                                          ${GMOCK_MAIN_LIBRARY}
-                                          ${GMOCK_LIBRARY}
-                                          messages)
+                                             ${GTEST_LIBRARY}
+                                             ${GMOCK_MAIN_LIBRARY}
+                                             ${GMOCK_LIBRARY}
+                                             messages)
 # DEPENDENCIES
 add_dependencies(source_objects_lib messages)
 add_dependencies(messages googletest)
