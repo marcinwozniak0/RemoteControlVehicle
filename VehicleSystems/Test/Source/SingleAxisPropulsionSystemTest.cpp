@@ -1,5 +1,5 @@
 #include "SingleAxisPropulsionSystemTest.hpp"
-#include "ProtobufStructuresComparator.hpp"
+#include "ProtobufStructuresComparators.hpp"
 
 TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 {

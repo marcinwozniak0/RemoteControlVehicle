@@ -4,7 +4,7 @@
 
 #include "VehicleTypes.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
-#include "ProtobufStructuresComparator.hpp"
+#include "ProtobufStructuresComparators.hpp"
 
 TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithCorrectPinsConfiguration)
 {
