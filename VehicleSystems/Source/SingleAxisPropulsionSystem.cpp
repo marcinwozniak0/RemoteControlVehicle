@@ -13,9 +13,11 @@ SingleAxisPropulsionSystem::SingleAxisPropulsionSystem(Engine& rightEngine,
 void SingleAxisPropulsionSystem::applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem& coordinates)
 {
     const auto pinConfiguration = _engineDriver.calculatePinsConfiguration(coordinates);
-    //TODO ^^optional or if isEmpty
-    _leftEngine.setPinsConfiguration(pinConfiguration);
-    _rightEngine.setPinsConfiguration(pinConfiguration);
+    if (not pinConfiguration.empty())
+    {
+        _leftEngine.setPinsConfiguration(pinConfiguration);
+        _rightEngine.setPinsConfiguration(pinConfiguration);
+    }
 }
 
 const PinsConfiguration SingleAxisPropulsionSystem::getPinsConfiguration() const
