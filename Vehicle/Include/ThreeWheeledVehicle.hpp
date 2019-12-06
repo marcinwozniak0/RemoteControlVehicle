@@ -17,7 +17,7 @@ public:
     void switchToAutomaticMode() override;
 
     void applyNewConfiguration(const Messages::CoordinateSystem&) override;
-    const PinsConfiguration getCurrentPinsConfiguration() const override;
+    PinsConfiguration getCurrentPinsConfiguration() const override;
 
     VehicleState getVehicleState() override;
 
