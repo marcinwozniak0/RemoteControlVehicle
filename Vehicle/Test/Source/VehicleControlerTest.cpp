@@ -17,6 +17,8 @@ namespace
 {
 constexpr int32_t xCoordinate = 700;
 constexpr int32_t yCoordinate = 5500;
+const PinsConfiguration configuration = {{1, 1}, {2, 11}};
+const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 }
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
@@ -50,7 +52,6 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 
-    PinsConfiguration configuration = {{1, 1}, {2, 0}};
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(configuration)
                                                               .build();
     std::string serializedMessage;
@@ -61,5 +62,18 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     EXPECT_CALL(_communicationSocketMock, sendCommand(SerializedControlerCommandToRunMatcher(serializedMessage)));
 
     _sut.controlVehicle();
+}
 
+TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPinsConfiguration)
+{
+    auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(zeroedConfiguration)
+                                                              .build();
+    EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
+
+    std::string serializedMessage;
+    messageToSend.SerializeToString(&serializedMessage);
+
+    EXPECT_CALL(_communicationSocketMock, sendCommand(SerializedControlerCommandToRunMatcher(serializedMessage)));
+
+    _sut.vehicleEmergencyStop();
 }

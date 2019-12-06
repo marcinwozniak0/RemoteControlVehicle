@@ -34,7 +34,31 @@ void VehicleControler::controlVehicle()
 
 void VehicleControler::vehicleEmergencyStop()
 {
-    //TODO execute emergency command
+    auto pinsConfiguration = _vehicle.getCurrentPinsConfiguration();
+
+    clearPinsValues(pinsConfiguration);
+
+    auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
+                                                              .build();
+
+    sendCommand(commandToSend);
+}
+
+void VehicleControler::clearPinsValues(PinsConfiguration& pinsConfiguration) const
+{
+    for (auto& [pin, value] : pinsConfiguration)
+    {
+        value = 0;
+    }
+}
+
+template <typename Command>
+void VehicleControler::sendCommand(const Command& command) const
+{
+    std::string serializedMessage;
+    command.SerializeToString(&serializedMessage);
+
+    _communicationSocket.sendCommand(serializedMessage);
 }
 
 void VehicleControler::handleMessage(const std::string& message)
@@ -70,7 +94,5 @@ void VehicleControler::handleUserCommandToRun(const google::protobuf::Any& comma
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
                                                               .build();
 
-    std::string serializedMessage;
-    messageToSend.SerializeToString(&serializedMessage);
-    _communicationSocket.sendCommand(serializedMessage);
+    sendCommand(messageToSend);
 }
