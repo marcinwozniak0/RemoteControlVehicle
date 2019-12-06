@@ -7,35 +7,14 @@
 #include "HandlingUserCommandToRunTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "SerializedCommandsMatchers.hpp"
+#include "SerializedCommandsBuilders.hpp"
+
+using namespace UTHelpers;
 
 namespace
 {
-const std::string createSerializedDeactivateMessage()
-{
-    Messages::Deactivate deactivateMessage;
-    google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
-
-    topLevelMessage.PackFrom(deactivateMessage);
-    topLevelMessage.SerializeToString(&serializedMessage);
-
-    return serializedMessage;
-}
-
-const std::string createSerializedUserCommandToRun(const int32_t xCoordinate, const int32_t yCoordinate)
-{
-    Messages::UserCommandToRun userCommandToRun;
-    google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
-
-    userCommandToRun.mutable_coordinate_system()->set_x_coordinate(xCoordinate);
-    userCommandToRun.mutable_coordinate_system()->set_y_coordinate(yCoordinate);
-
-    topLevelMessage.PackFrom(userCommandToRun);
-    topLevelMessage.SerializeToString(&serializedMessage);
-
-    return serializedMessage;
-}
+constexpr int32_t zeroXCoordinate = 0;
+constexpr int32_t zeroYCoordinate = 0;
 }//namespace
 
 HandlingUserCommandToRunTest::HandlingUserCommandToRunTest()
@@ -55,23 +34,23 @@ HandlingUserCommandToRunTest::HandlingUserCommandToRunTest()
 TEST_F(HandlingUserCommandToRunTest, ZeroZeroCoordinates)
 {
     EXPECT_CALL(commandReceiverMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createSerializedUserCommandToRun(0,0)))
+            .WillOnce(Return(createSerializedUserCommandToRun(zeroXCoordinate, zeroYCoordinate)))
             .WillOnce(Return(createSerializedDeactivateMessage()));
 
-    const PinsConfiguration pinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT, 1},
-                                                 {PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT, 1},
-                                                 {PIN_NUMBERS::FIRST_ENGINE_PWM, 0},
-                                                 {PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT, 1},
-                                                 {PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT, 1},
-                                                 {PIN_NUMBERS::SECOND_ENGINE_PWM, 0},
-                                                 {PIN_NUMBERS::STEERING_WHEEL_PWM, 19}};
+    const PinsConfiguration expectedNewPinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT, 1},
+                                                            {PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT, 1},
+                                                            {PIN_NUMBERS::FIRST_ENGINE_PWM, 0},
+                                                            {PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT, 1},
+                                                            {PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT, 1},
+                                                            {PIN_NUMBERS::SECOND_ENGINE_PWM, 0},
+                                                            {PIN_NUMBERS::STEERING_WHEEL_PWM, 19}};
 
-    const auto message = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
-                             .build();
-    std::string serializedMessage;
-    message.SerializeToString(&serializedMessage);
+    const auto expectedMessage = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(expectedNewPinsConfiguration)
+                                                              .build();
+    std::string expectedSerializedMessage;
+    expectedMessage.SerializeToString(&expectedSerializedMessage);
 
-    EXPECT_CALL(commandReceiverMock, sendCommand(SerializedControlerCommandToRunMatcher(serializedMessage)));
+    EXPECT_CALL(commandReceiverMock, sendCommand(SerializedControlerCommandToRunMatcher(expectedSerializedMessage)));
 
     vehicleControler.controlVehicle();
 }

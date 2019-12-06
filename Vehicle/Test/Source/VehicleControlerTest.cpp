@@ -7,65 +7,17 @@
 #include "VehicleControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "SerializedCommandsMatchers.hpp"
-#include "ProtobufStructuresComparator.hpp"
+#include "ProtobufStructuresComparators.hpp"
+#include "SerializedCommandsBuilders.hpp"
 
 using namespace Comparators;
+using namespace UTHelpers;
+
 namespace
 {
 constexpr int32_t xCoordinate = 700;
 constexpr int32_t yCoordinate = 5500;
-
-const std::string createSerializedDeactivateMessage()
-{
-    Messages::Deactivate deactivateMessage;
-    google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
-
-    topLevelMessage.PackFrom(deactivateMessage);
-    topLevelMessage.SerializeToString(&serializedMessage);
-
-    return serializedMessage;
 }
-
-const std::string createSerializedUserCommandToStart()
-{
-    Messages::UserCommandToStart userCommandToStart;
-    google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
-
-    topLevelMessage.PackFrom(userCommandToStart);
-    topLevelMessage.SerializeToString(&serializedMessage);
-
-    return serializedMessage;
-}
-
-const std::string createSerializedUserCommandToStop()
-{
-    Messages::UserCommandToStop userCommandToStop;
-    google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
-
-    topLevelMessage.PackFrom(userCommandToStop);
-    topLevelMessage.SerializeToString(&serializedMessage);
-
-    return serializedMessage;
-}
-
-const std::string createSerializedUserCommandToRun()
-{
-    Messages::UserCommandToRun userCommandToRun;
-    google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
-
-    userCommandToRun.mutable_coordinate_system()->set_x_coordinate(xCoordinate);
-    userCommandToRun.mutable_coordinate_system()->set_y_coordinate(yCoordinate);
-
-    topLevelMessage.PackFrom(userCommandToRun);
-    topLevelMessage.SerializeToString(&serializedMessage);
-
-    return serializedMessage;
-}
-}//namespace
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
@@ -91,7 +43,7 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
     EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createSerializedUserCommandToRun()))
+            .WillOnce(Return(createSerializedUserCommandToRun(xCoordinate, yCoordinate)))
             .WillOnce(Return(createSerializedDeactivateMessage()));
 
     Messages::CoordinateSystem coordinates;
