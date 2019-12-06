@@ -25,4 +25,3 @@ MATCHER_P(SerializedControlerCommandToRunMatcher, command, "")
 
   return false;
 }
-
