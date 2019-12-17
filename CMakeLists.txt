@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(IntelligentVehicle)
+project(RemoteControlVehicle)
 
 if (CMAKE_VERSION VERSION_LESS "3.12")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a")
@@ -66,19 +66,19 @@ add_subdirectory(SystemTest/Test/Source)
 add_library(source_objects_lib OBJECT ${SOURCES})
 
 # BIN
-add_executable(intelligent_vehicle $<TARGET_OBJECTS:source_objects_lib> "main.cpp")
-target_link_libraries(intelligent_vehicle messages)
+add_executable(remote_control_vehicle $<TARGET_OBJECTS:source_objects_lib> "main.cpp")
+target_link_libraries(remote_control_vehicle messages)
 
 # UT
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
                       "MainTest.cpp")
-add_executable(intelligent_vehicle_ut ${TEST_BINARY_FILES})
-target_link_libraries(intelligent_vehicle_ut ${GTEST_MAIN_LIBRARY}
-                                             ${GTEST_LIBRARY}
-                                             ${GMOCK_MAIN_LIBRARY}
-                                             ${GMOCK_LIBRARY}
-                                             messages)
+add_executable(remote_control_vehicle_ut ${TEST_BINARY_FILES})
+target_link_libraries(remote_control_vehicle_ut ${GTEST_MAIN_LIBRARY}
+                                                ${GTEST_LIBRARY}
+                                                ${GMOCK_MAIN_LIBRARY}
+                                                ${GMOCK_LIBRARY}
+                                                messages)
 # DEPENDENCIES
 add_dependencies(source_objects_lib messages)
 add_dependencies(messages googletest)
@@ -87,7 +87,7 @@ add_dependencies(messages googletest)
 # Valgrind
 find_program(VALGRIND "valgrind")
 if(VALGRIND)
-target_link_libraries(intelligent_vehicle_ut LINK_PUBLIC)
+target_link_libraries(remote_control_vehicle_ut LINK_PUBLIC)
 add_custom_target(valgrind COMMAND "${VALGRIND}" --tool=memcheck
                                                  --leak-check=yes
                                                  --show-reachable=yes
@@ -95,5 +95,5 @@ add_custom_target(valgrind COMMAND "${VALGRIND}" --tool=memcheck
                                                  --track-fds=no
                                                  --track-origins=yes
                                                  --error-exitcode=1
-                                                 $<TARGET_FILE:intelligent_vehicle_ut>)
+                                                 $<TARGET_FILE:remote_control_vehicle_ut>)
 endif()
