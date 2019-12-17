@@ -67,7 +67,7 @@ add_library(source_objects_lib OBJECT ${SOURCES})
 
 # BIN
 add_executable(remote_control_vehicle $<TARGET_OBJECTS:source_objects_lib> "main.cpp")
-target_link_libraries(remote_control_vehicle messages)
+target_link_libraries(remote_control_vehicle commands)
 
 # UT
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
@@ -78,10 +78,10 @@ target_link_libraries(remote_control_vehicle_ut ${GTEST_MAIN_LIBRARY}
                                                 ${GTEST_LIBRARY}
                                                 ${GMOCK_MAIN_LIBRARY}
                                                 ${GMOCK_LIBRARY}
-                                                messages)
+                                                commands)
 # DEPENDENCIES
-add_dependencies(source_objects_lib messages)
-add_dependencies(messages googletest)
+add_dependencies(source_objects_lib commands)
+add_dependencies(commands googletest)
 
 
 # Valgrind
