@@ -18,7 +18,7 @@ MASTER_UT:
     - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
     - ./compile_project_ci.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/build/bin/
-    - ./intelligent_vehicle_ut
+    - ./remote_control_vehicle_ut
 
 MASTER_VALGRIND:
   only:
