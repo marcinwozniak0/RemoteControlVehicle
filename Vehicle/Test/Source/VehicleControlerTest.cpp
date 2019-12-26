@@ -77,3 +77,13 @@ TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPins
 
     _sut.vehicleEmergencyStop();
 }
+
+TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)
+{
+    const std::string unknownSerializedCommad = "UnknownSerializedCommad";
+    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
+            .WillOnce(Return(unknownSerializedCommad))
+            .WillOnce(Return(createSerializedDeactivateMessage()));
+
+    _sut.controlVehicle();
+}

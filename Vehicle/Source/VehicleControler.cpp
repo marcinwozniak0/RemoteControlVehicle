@@ -6,6 +6,7 @@
 #include <UserCommandToRun.pb.h>
 #include <Deactivate.pb.h>
 
+#include "Logger.hpp"
 #include "VehicleControler.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "CommunicationSocket.hpp"
@@ -82,6 +83,11 @@ void VehicleControler::handleMessage(const std::string& message)
     {
         _isControlerActive = false;
     }
+    else
+    {
+        ERROR("Handle unexpected message. Message = " + message);
+    }
+    
 }
 
 void VehicleControler::handleUserCommandToRun(const google::protobuf::Any& command) const

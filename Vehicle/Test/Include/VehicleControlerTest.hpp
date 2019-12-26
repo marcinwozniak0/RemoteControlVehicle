@@ -22,7 +22,5 @@ public:
 
     NiceMock<CommunicationSocketMock> _communicationSocketMock;
     NiceMock<VehicleMock> _vehicleMock;
-    NiceMock<PropulsionSystemMock> _propulsionSystemMock;
-    NiceMock<SteeringSystemMock> _steeringSystemMock;
 };
 
