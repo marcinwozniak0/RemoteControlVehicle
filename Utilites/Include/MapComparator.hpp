@@ -12,4 +12,4 @@ bool mapComparator(const LhsMap& lhs, const RhsMap& rhs)
                                     [](const auto a, const auto b){return a.first == b.first
                                                                       and a.second == b.second;});
 }
-}//namespace
+}//Comparators

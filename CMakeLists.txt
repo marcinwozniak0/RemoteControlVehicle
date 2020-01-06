@@ -60,6 +60,7 @@ add_subdirectory(Vehicle/Test/Source)
 add_subdirectory(Router/Test/Source)
 add_subdirectory(Commands/Builders/Test/Source)
 add_subdirectory(SystemTest/Test/Source)
+add_subdirectory(Utilites/Test/Source)
 
 # SRC LIB
 add_library(source_objects_lib OBJECT ${SOURCES})
