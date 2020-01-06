@@ -7,6 +7,7 @@
 #include <Deactivate.pb.h>
 
 #include "Logger.hpp"
+#include "CommandDebuger.hpp"
 #include "VehicleControler.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "CommunicationSocket.hpp"
@@ -67,6 +68,8 @@ void VehicleControler::handleMessage(const std::string& message)
     google::protobuf::Any incommingMessage;
     incommingMessage.ParseFromString(message);
 
+    INFO("Handle command : " + CommandDebuger::getCommandName(incommingMessage));
+
     if (incommingMessage.Is<Messages::UserCommandToStart>())
     {
         _vehicle.startVehicle();
@@ -85,7 +88,7 @@ void VehicleControler::handleMessage(const std::string& message)
     }
     else
     {
-        ERROR("Handle unexpected message. Message = " + message);
+        ERROR("Handling of this command is not implemented.");
     }
     
 }
