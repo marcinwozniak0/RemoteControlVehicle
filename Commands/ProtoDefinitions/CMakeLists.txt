@@ -1,4 +1,6 @@
 file(GLOB PROTO_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.proto)
+set(PROTO_FILES_GRPC Deactivate.proto)
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${PROTO_FILES})
-add_library(commands STATIC ${ProtoSources} ${ProtoHeaders})
+PROTOBUF_GENERATE_GRPC_CPP(ProtoGRPCSources ProtoGRPCHeaders ${PROTO_FILES_GRPC})
+add_library(commands STATIC ${ProtoSources} ${ProtoHeaders} ${ProtoGRPCSources} ${ProtoGRPCHeaders})
 target_link_libraries(commands ${PROTOBUF_LIBRARY})

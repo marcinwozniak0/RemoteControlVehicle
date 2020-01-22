@@ -1,4 +1,5 @@
 #include <google/protobuf/stubs/common.h>
+#include <grpc++/grpc++.h>
 
 #include "VehicleControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
@@ -9,6 +10,9 @@
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
 #include "TcpCommunicationSocket.hpp"
+
+#include "Deactivate.pb.h"
+#include "Deactivate.grpc.pb.h"
 
 int main()
 {
@@ -31,6 +35,10 @@ int main()
     TcpCommunicationSocket commandReceiver(PORT, IP_ADDRESS);
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle);
+
+    auto channel = grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials());
+
+    auto stub = Messages::Greeter::NewStub(channel);
 
     try
     {
