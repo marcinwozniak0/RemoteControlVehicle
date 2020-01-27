@@ -67,22 +67,14 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForStopEngine)
     ASSERT_EQ(_sut.calculatePinsConfiguration(stopEngineCharacteristic), expectedPinsConfiguration);
 }
 
-#pragma GCC diagnostic ignored "-Wclass-memaccess"
 struct UnknownCoordinates
 {
     UnknownCoordinates(const Messages::CoordinateSystem& coordinateSystem)
         : _coordinateSystem(coordinateSystem)
     {}
 
-    UnknownCoordinates(const UnknownCoordinates& obj)
-    {
-        memset(this, 0, sizeof(*this));
-        this->_coordinateSystem = obj._coordinateSystem;
-    }
-
     Messages::CoordinateSystem _coordinateSystem;
 };
-#pragma GCC diagnostic pop
 
 class UnknownCoordinatesTest : public L293DEngineDriverTest,
                                public WithParamInterface<UnknownCoordinates>

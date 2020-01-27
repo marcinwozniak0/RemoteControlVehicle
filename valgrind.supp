@@ -1,0 +1,31 @@
+{
+   GTEST printers #1
+   Memcheck:Cond
+   fun:_itoa_word
+   fun:*vfprintf*
+   fun:*vsnprintf*
+   fun:snprintf
+   fun:_ZN7testing12_GLOBAL__N_126PrintByteSegmentInObjectToEPKhmmPSo
+   fun:_ZN7testing12_GLOBAL__N_124PrintBytesInObjectToImplEPKhmPSo
+}
+
+{
+   GTEST printers #2
+   Memcheck:Value8
+   fun:_itoa_word
+   fun:*vfprintf*
+   fun:*vsnprintf*
+   fun:snprintf
+   fun:_ZN7testing12_GLOBAL__N_126PrintByteSegmentInObjectToEPKhmmPSo
+   fun:_ZN7testing12_GLOBAL__N_124PrintBytesInObjectToImplEPKhmPSo
+}
+
+{
+   GTEST printers #3
+   Memcheck:Cond
+   fun:*vfprintf*
+   fun:*vsnprintf*
+   fun:snprintf
+   fun:_ZN7testing12_GLOBAL__N_126PrintByteSegmentInObjectToEPKhmmPSo
+   fun:_ZN7testing12_GLOBAL__N_124PrintBytesInObjectToImplEPKhmPSo
+}
