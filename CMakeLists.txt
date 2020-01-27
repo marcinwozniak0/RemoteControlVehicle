@@ -95,5 +95,7 @@ add_custom_target(valgrind COMMAND "${VALGRIND}" --tool=memcheck
                                                  --track-fds=no
                                                  --track-origins=yes
                                                  --error-exitcode=1
+                                                 --gen-suppressions=all
+                                                 --suppressions=../valgrind.supp
                                                  $<TARGET_FILE:remote_control_vehicle_ut>)
 endif()
