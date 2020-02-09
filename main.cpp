@@ -12,7 +12,8 @@
 #include "TcpCommunicationSocket.hpp"
 
 #include "Deactivate.pb.h"
-#include "Deactivate.grpc.pb.h"
+#include "Client.grpc.pb.h"
+
 
 int main()
 {
@@ -38,7 +39,7 @@ int main()
 
     auto channel = grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials());
 
-    auto stub = Messages::Greeter::NewStub(channel);
+    //auto stub = Messages::Greeter::NewStub(channel);
 
     try
     {

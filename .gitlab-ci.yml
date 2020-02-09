@@ -6,14 +6,14 @@ before_script:
 
 MASTER_BUILD:
   only:
-    - master
+    - server
   script:
     - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
     - ./compile_project_ci.sh
 
 MASTER_UT:
   only:
-    - master
+    - server
   script:
     - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
     - ./compile_project_ci.sh
@@ -22,7 +22,7 @@ MASTER_UT:
 
 MASTER_VALGRIND:
   only:
-    - master
+    - server
   script:
     - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
     - ./compile_project_ci.sh
