@@ -2,15 +2,9 @@ syntax = "proto3";
 
 package Messages;
 
+import "UserCommandToRun.proto";
+
 service Greeter {
     // Sends a greeting
-    rpc SayHello (HelloRequest) returns (HelloReply) {}
-  }
-  message HelloRequest {
-    string name = 1;
-  }
-  
-  // The response message containing the greetings
-  message HelloReply {
-    string message = 1;
+    rpc SayHello (UserCommandToRun) returns (UserCommandToRun) {}
   }

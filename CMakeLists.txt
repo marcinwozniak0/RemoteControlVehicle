@@ -19,10 +19,9 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
 
 include(External_GTest.cmake)
+
 find_package(Protobuf REQUIRED)
-find_program(Valgrind REQUIRED)
-find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
-find_package(PkgConfig REQUIRED)
+
 
 include(FetchContent)
 FetchContent_Declare(
@@ -30,6 +29,10 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/grpc/grpc.git
   GIT_TAG        v1.26.0)
 FetchContent_MakeAvailable(grpc)
+
+find_program(Valgrind REQUIRED)
+find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
+find_package(PkgConfig REQUIRED)
 
 set(_PROTOBUF_LIBPROTOBUF libprotobuf)
 set(_PROTOBUF_PROTOC $<TARGET_FILE:protoc>)
