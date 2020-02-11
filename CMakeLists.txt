@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.15)
 
 project(RemoteControlVehicle)
 
@@ -6,11 +6,14 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lboost_system")
+
+#TODO
+#Back to CXX_STANDARD 20 and below CMAKE_CXX_FLAGS after grpc cmake improvement
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
 
 set(LIBRARY_OUTPUT_PATH build/)
 set(BINARY_OUTPUT_PATH build/)
@@ -19,19 +22,18 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
 
 include(External_GTest.cmake)
-
-find_package(Protobuf REQUIRED)
-
 include(FetchContent)
+
+find_package(PkgConfig REQUIRED)
+find_package(Protobuf REQUIRED)
+find_program(Valgrind REQUIRED)
+find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
+
 FetchContent_Declare(
   grpc
   GIT_REPOSITORY https://github.com/grpc/grpc.git
   GIT_TAG        v1.26.0)
 FetchContent_MakeAvailable(grpc)
-
-find_program(Valgrind REQUIRED)
-find_program(GRPC_CPP_PLUGIN grpc_cpp_plugin REQUIRED)
-find_package(PkgConfig REQUIRED)
 
 set(_PROTOBUF_LIBPROTOBUF libprotobuf)
 set(_PROTOBUF_PROTOC $<TARGET_FILE:protoc>)
@@ -48,7 +50,7 @@ set(hw_grpc_hdrs "${CMAKE_BINARY_DIR}/Commands/ProtoDefinitions/Client.grpc.pb.h
 add_custom_command(
       OUTPUT "${hw_grpc_srcs}" "${hw_grpc_hdrs}"
       COMMAND ${_PROTOBUF_PROTOC}
-      ARGS --grpc_out "${CMAKE_BINARY_DIR}/Commands/ProtoDefinitions"
+      ARGS --grpc_out=generate_mock_code=true:"${CMAKE_BINARY_DIR}/Commands/ProtoDefinitions"
         --cpp_out "${CMAKE_BINARY_DIR}/Commands/ProtoDefinitions"
         -I "${hw_proto_path}"
         --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
@@ -126,7 +128,6 @@ add_dependencies(source_objects_lib commands)
 add_dependencies(grpc_lib commands)
 add_dependencies(source_objects_lib grpc_lib)
 add_dependencies(commands googletest)
-
 
 # Valgrind
 find_program(VALGRIND "valgrind")

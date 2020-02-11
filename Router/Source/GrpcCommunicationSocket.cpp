@@ -1,22 +1,24 @@
 #include <HelloMessages.pb.h>
 
-#include "TcpCommunicationSocket.hpp"
+#include "GrpcCommunicationSocket.hpp"
 #include "VehicleConfiguration.hpp"
 #include "CommunicationSocketException.hpp"
 
-TcpCommunicationSocket::TcpCommunicationSocket(std::shared_ptr<grpc::Channel> channel)
-    : _stub(Router::NewStub(channel))
+#include <iostream>
+
+GrpcCommunicationSocket::GrpcCommunicationSocket(std::shared_ptr<Router::StubInterface> stub) 
+    : _stub(stub)
+{
+    const auto connectionResult = connectWithServer();
+    if ("RPC failed" == connectionResult)
     {
-        const auto connectionResult = connectWithServer();
-        if ("RPC failed" == connectionResult)
-        {
-            throw CommunicationSocketException{"RPC failed"};
+        throw CommunicationSocketException{"RPC failed"};
 
-            //retry czy co robimy ?
-        }
+        //retry czy co robimy ?
     }
+}
 
-std::string TcpCommunicationSocket::connectWithServer() const
+std::string GrpcCommunicationSocket::connectWithServer() const
 {
     HelloRequest request;
     request.set_name("CONTROLER");
@@ -39,22 +41,22 @@ std::string TcpCommunicationSocket::connectWithServer() const
 }
 
 
-void TcpCommunicationSocket::receiveCommand()
+void GrpcCommunicationSocket::receiveCommand()
 {
     //zamienic tam w serwerze na any::mesage
 }
 
-void TcpCommunicationSocket::quqeueReceivedCommands()
+void GrpcCommunicationSocket::quqeueReceivedCommands()
 {
 
 }
 
-void TcpCommunicationSocket::sendCommand(const std::string& messageToSend)
+void GrpcCommunicationSocket::sendCommand(const std::string& messageToSend)
 {
 
 }
 
-std::optional<const std::string> TcpCommunicationSocket::takeMessageFromQueue()
+std::optional<const std::string> GrpcCommunicationSocket::takeMessageFromQueue()
 {
     // if (not _commandsQueue.empty())
     // {

@@ -8,10 +8,11 @@
 
 #include "CommunicationSocket.hpp"
 
-class TcpCommunicationSocket : public CommunicationSocket
+class GrpcCommunicationSocket : public CommunicationSocket
 {
 public:
-    TcpCommunicationSocket(std::shared_ptr<grpc::Channel>);
+    //GrpcCommunicationSocket(std::shared_ptr<grpc::Channel>);
+    GrpcCommunicationSocket(std::shared_ptr<Router::StubInterface>);// : _stub(stub){}
 
     void receiveCommand() override;
     void sendCommand(const std::string&) override;
@@ -21,7 +22,7 @@ private:
     std::string connectWithServer() const;
     void quqeueReceivedCommands();
 
-    std::unique_ptr<Router::Stub> _stub;
+    std::shared_ptr<Router::StubInterface> _stub;
     std::queue<std::string> _commandsQueue;
 
 };
