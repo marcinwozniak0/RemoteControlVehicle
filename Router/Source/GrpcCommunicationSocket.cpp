@@ -13,8 +13,6 @@ GrpcCommunicationSocket::GrpcCommunicationSocket(std::shared_ptr<Router::StubInt
     if ("RPC failed" == connectionResult)
     {
         throw CommunicationSocketException{"RPC failed"};
-
-        //retry czy co robimy ?
     }
 }
 
@@ -43,7 +41,7 @@ std::string GrpcCommunicationSocket::connectWithServer() const
 
 void GrpcCommunicationSocket::receiveCommand()
 {
-    //zamienic tam w serwerze na any::mesage
+    //TODO receive Any::Message, change Client.proto
 }
 
 void GrpcCommunicationSocket::quqeueReceivedCommands()

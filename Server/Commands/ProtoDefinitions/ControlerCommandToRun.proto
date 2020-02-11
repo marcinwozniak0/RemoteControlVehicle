@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package Messages;
-
-message ControlerCommandToRun
-{
-    map<int32, int32> pins_configuration = 1;
-}

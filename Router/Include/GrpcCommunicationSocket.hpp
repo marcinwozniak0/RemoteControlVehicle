@@ -11,8 +11,7 @@
 class GrpcCommunicationSocket : public CommunicationSocket
 {
 public:
-    //GrpcCommunicationSocket(std::shared_ptr<grpc::Channel>);
-    GrpcCommunicationSocket(std::shared_ptr<Router::StubInterface>);// : _stub(stub){}
+    GrpcCommunicationSocket(std::shared_ptr<Router::StubInterface>);
 
     void receiveCommand() override;
     void sendCommand(const std::string&) override;
