@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "UserCommandToRun.proto";
+import "EmptyAcknowledge.proto";
+import "HelloMessages.proto";
+
+service Router
+{
+    rpc SayHello (HelloRequest) returns (HelloReply) {}
+    rpc SendUserCommandToRun (Messages.UserCommandToRun) returns (Messages.EmptyAcknowledge) {}
+}

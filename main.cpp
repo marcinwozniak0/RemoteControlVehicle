@@ -1,4 +1,5 @@
 #include <google/protobuf/stubs/common.h>
+#include <grpc++/grpc++.h>
 
 #include "VehicleControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
@@ -8,7 +9,7 @@
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
-#include "TcpCommunicationSocket.hpp"
+#include "GrpcCommunicationSocket.hpp"
 
 int main()
 {
@@ -28,7 +29,10 @@ int main()
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
-    TcpCommunicationSocket commandReceiver(PORT, IP_ADDRESS);
+
+    GrpcCommunicationSocket commandReceiver(std::make_shared<Router::Stub>(
+        grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials())));
+        
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle);
 
