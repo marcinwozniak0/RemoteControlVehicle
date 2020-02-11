@@ -1,32 +1,27 @@
 #pragma once
 
 #include <queue>
-#include <boost/asio.hpp>
+#include <grpc++/grpc++.h>
+#include <memory>
+
+#include <Client.grpc.pb.h>
 
 #include "CommunicationSocket.hpp"
-
-using namespace boost::asio;
 
 class TcpCommunicationSocket : public CommunicationSocket
 {
 public:
-    TcpCommunicationSocket(const int port, std::string_view ipAddress);
+    TcpCommunicationSocket(std::shared_ptr<grpc::Channel>);
 
     void receiveCommand() override;
     void sendCommand(const std::string&) override;
     std::optional<const std::string> takeMessageFromQueue() override;
 
 private:
-    bool connectToSocket();
-    void quqeueReceivedCommands(const streambuf&);
-    void queueCommandsFormBuffer(const std::string&);
-    void saveIncompleteCommandFromBuffer(const std::string&);
+    std::string connectWithServer() const;
+    void quqeueReceivedCommands();
 
+    std::unique_ptr<Router::Stub> _stub;
     std::queue<std::string> _commandsQueue;
 
-    const int _port;
-    const std::string _ipAddress;
-    io_service _ioService;
-    ip::tcp::socket _socket;
-    std::string _restOfDataFromPreviousReceivedBuffer;
 };

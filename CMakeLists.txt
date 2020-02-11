@@ -22,7 +22,6 @@ include(External_GTest.cmake)
 
 find_package(Protobuf REQUIRED)
 
-
 include(FetchContent)
 FetchContent_Declare(
   grpc
@@ -97,17 +96,20 @@ add_subdirectory(Utilites/Test/Source)
 
 # SRC LIB
 add_library(source_objects_lib OBJECT ${SOURCES})
+add_library(grpc_lib OBJECT ${hw_grpc_srcs})
 
 # BIN
 add_executable(remote_control_vehicle $<TARGET_OBJECTS:source_objects_lib> 
-                                      ${hw_grpc_srcs} 
+                                      $<TARGET_OBJECTS:grpc_lib>
                                       "main.cpp")
-target_link_libraries(remote_control_vehicle commands
+target_link_libraries(remote_control_vehicle
+                     commands
                      ${_GRPC_GRPCPP_UNSECURE}
                      ${_PROTOBUF_LIBPROTOBUF})
 
 # UT
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
+                      $<TARGET_OBJECTS:grpc_lib>
                       ${TEST_FILES}
                       "MainTest.cpp")
 add_executable(remote_control_vehicle_ut ${TEST_BINARY_FILES})
@@ -115,10 +117,14 @@ target_link_libraries(remote_control_vehicle_ut ${GTEST_MAIN_LIBRARY}
                                                 ${GTEST_LIBRARY}
                                                 ${GMOCK_MAIN_LIBRARY}
                                                 ${GMOCK_LIBRARY}
-                                                commands)
+                                                commands                             
+                                                ${_GRPC_GRPCPP_UNSECURE}
+                                                ${_PROTOBUF_LIBPROTOBUF})
 
 # DEPENDENCIES
 add_dependencies(source_objects_lib commands)
+add_dependencies(grpc_lib commands)
+add_dependencies(source_objects_lib grpc_lib)
 add_dependencies(commands googletest)
 
 

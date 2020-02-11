@@ -11,10 +11,6 @@
 #include "ThreeWheeledVehicle.hpp"
 #include "TcpCommunicationSocket.hpp"
 
-#include "Deactivate.pb.h"
-#include "Client.grpc.pb.h"
-
-
 int main()
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -33,13 +29,10 @@ int main()
     FrontAxialSteeringSystem steeringSystem(steeringWheel);
 
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
-    TcpCommunicationSocket commandReceiver(PORT, IP_ADDRESS);
+
+    TcpCommunicationSocket commandReceiver(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
     VehicleControler vehicleControler(commandReceiver,
                                       vehicle);
-
-    auto channel = grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials());
-
-    //auto stub = Messages::Greeter::NewStub(channel);
 
     try
     {

@@ -11,9 +11,6 @@ static constexpr auto port = 35271;
 static constexpr auto ipAddress = "127.0.0.1";
 }
 
-using ip::tcp;
-using std::string;
-
 class DISABLED_TcpCommunicationSocketTest : public ::testing::Test
 {
 public:
