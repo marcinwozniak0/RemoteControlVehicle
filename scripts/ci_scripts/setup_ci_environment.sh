@@ -12,6 +12,7 @@ apt-get install --yes golang
 apt-get install --yes curl
 apt-get install --yes zip 
 apt-get install --yes unzip
+apt-get install --yes libssl-dev
 
 ###NEEDED 'FROM SOURCE' PACKAGES ###
 #CMAKE

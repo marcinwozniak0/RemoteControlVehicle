@@ -33,3 +33,8 @@
 
 # Build directory
 build/
+CMake/build/
+CMake/CMakeFile/
+CMake/googletest-prefixs/
+CMake/grpc/
+CMake/_deps/
