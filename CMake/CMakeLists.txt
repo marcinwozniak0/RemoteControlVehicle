@@ -33,6 +33,9 @@ include(ExternalProject)
 
 # Builds absl project from the git submodule.
 
+set(LIBRARY_OUTPUT_PATH build/)
+set(BINARY_OUTPUT_PATH build/)
+
 #include(FetchContent)
 #FetchContent_Declare(
 #  gRPC
@@ -43,7 +46,7 @@ include(ExternalProject)
 
 ExternalProject_Add(absl
   PREFIX absl
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/grpc/third_party/abseil-cpp"
+  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/grpc/third_party/abseil-cpp"
   CMAKE_CACHE_ARGS
         -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE
         -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/absl
@@ -52,7 +55,7 @@ ExternalProject_Add(absl
 # Builds c-ares project from the git submodule.
 ExternalProject_Add(c-ares
   PREFIX c-ares
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/grpc/third_party/cares/cares"
+  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/grpc/third_party/cares/cares"
   CMAKE_CACHE_ARGS
         -DCARES_SHARED:BOOL=OFF
         -DCARES_STATIC:BOOL=ON
@@ -63,7 +66,7 @@ ExternalProject_Add(c-ares
 # Builds protobuf project from the git submodule.
 ExternalProject_Add(protobuf
   PREFIX protobuf
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/grpc/third_party/protobuf/cmake"
+  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/grpc/third_party/protobuf/cmake"
   CMAKE_CACHE_ARGS
         -Dprotobuf_BUILD_TESTS:BOOL=OFF
         -Dprotobuf_WITH_ZLIB:BOOL=OFF
@@ -74,7 +77,7 @@ ExternalProject_Add(protobuf
 # Builds zlib project from the git submodule.
 ExternalProject_Add(zlib
   PREFIX zlib
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/grpc/third_party/zlib"
+  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/grpc/third_party/zlib"
   CMAKE_CACHE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/zlib
 )
@@ -96,7 +99,7 @@ endif()
 # are correctly located.
 ExternalProject_Add(grpc
   PREFIX grpc
-  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/grpc"
+  SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/grpc"
   CMAKE_CACHE_ARGS
         -DgRPC_INSTALL:BOOL=ON
         -DgRPC_BUILD_TESTS:BOOL=OFF
@@ -122,10 +125,10 @@ ExternalProject_Add(grpc
 # to locate all the dependencies (if we were building helloworld directly in this build we,
 # we would have needed to manually import the libraries as opposed to reusing targets exported by
 # gRPC and protobuf).
-ExternalProject_Add(helloworld
+ExternalProject_Add(RemoteControlVehicle
   PREFIX helloworld
   SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.."
-  BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/helloworld"
+  BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/remote_control_vehicle"
   INSTALL_COMMAND ""
   CMAKE_CACHE_ARGS
         -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}
