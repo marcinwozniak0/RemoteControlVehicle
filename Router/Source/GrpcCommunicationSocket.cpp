@@ -66,4 +66,6 @@ std::optional<const std::string> GrpcCommunicationSocket::takeMessageFromQueue()
     // {
     //     return {};
     // }
+
+    return {};
 }
