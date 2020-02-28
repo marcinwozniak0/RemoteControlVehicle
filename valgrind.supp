@@ -29,3 +29,26 @@
    fun:_ZN7testing12_GLOBAL__N_126PrintByteSegmentInObjectToEPKhmmPSo
    fun:_ZN7testing12_GLOBAL__N_124PrintBytesInObjectToImplEPKhmPSo
 }
+
+{
+   GRPC #1
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:_Znwm
+   fun:_Z41__static_initialization_and_destruction_0ii
+   fun:_GLOBAL__sub_I_client_context.cc
+   fun:__libc_csu_init
+   fun:(below main)
+}
+
+{
+   GRPC
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:_Znwm
+   fun:_ZN4grpc8internal22GrpcLibraryInitializerC1Ev
+   fun:_Z41__static_initialization_and_destruction_0ii
+   fun:_GLOBAL__sub_I_client_context.cc
+   fun:__libc_csu_init
+   fun:(below main)
+}
