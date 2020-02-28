@@ -42,7 +42,7 @@
 }
 
 {
-   GRPC
+   GRPC #2
    Memcheck:Leak
    match-leak-kinds: reachable
    fun:_Znwm
