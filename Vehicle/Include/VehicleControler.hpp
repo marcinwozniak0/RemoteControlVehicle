@@ -19,7 +19,7 @@ private:
     std::optional<std::string> getMessageToExecute();
     void handleMessage(const std::string&);
     void handleUserCommandToRun(const google::protobuf::Any&) const;
-    template <typename Command> void sendCommand(const Command&) const;
+    template <typename Command> void sendCommand(Command&&) const;
     void clearPinsValues(PinsConfiguration&) const;
 
     CommunicationSocket& _communicationSocket;

@@ -43,7 +43,7 @@ void VehicleControler::vehicleEmergencyStop()
     auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
                                                               .build();
 
-    sendCommand(commandToSend);
+    sendCommand(std::move(commandToSend));
 }
 
 void VehicleControler::clearPinsValues(PinsConfiguration& pinsConfiguration) const
@@ -55,12 +55,9 @@ void VehicleControler::clearPinsValues(PinsConfiguration& pinsConfiguration) con
 }
 
 template <typename Command>
-void VehicleControler::sendCommand(const Command& command) const
+void VehicleControler::sendCommand(Command&& command) const
 {
-    std::string serializedMessage;
-    command.SerializeToString(&serializedMessage);
-
-    _communicationSocket.sendCommand(serializedMessage);
+    _communicationSocket.sendCommand(std::move(command));
 }
 
 void VehicleControler::handleMessage(const std::string& message)
@@ -103,5 +100,5 @@ void VehicleControler::handleUserCommandToRun(const google::protobuf::Any& comma
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
                                                               .build();
 
-    sendCommand(messageToSend);
+    sendCommand(std::move(messageToSend));
 }

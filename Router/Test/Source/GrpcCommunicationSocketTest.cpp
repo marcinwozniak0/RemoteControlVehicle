@@ -1,12 +1,5 @@
 #include "GrpcCommunicationSocketTest.hpp"
-
-namespace google::protobuf
-{
-    bool operator==(const HelloRequest& rhs, const HelloRequest& lhs)
-    {
-        return rhs.name() == lhs.name();
-    }    
-}
+#include "ProtobufStructuresComparators.hpp"
 
 TEST_F(GrpcCommunicationSocketTest, shouldNotThrowInCtorWhenConnectionToServerFinishedWithSuccess)
 {
@@ -18,4 +11,13 @@ TEST_F(GrpcCommunicationSocketTest, shouldThrowInCtorWhenConnectionToServerFinis
 {
     EXPECT_CALL(*_stubMock, SayHello(_, helloRequest, _)).WillOnce(Return(notOkStatus));
     EXPECT_THROW(_sut = std::make_unique<GrpcCommunicationSocket>(_stubMock), CommunicationSocketException);
+}
+
+TEST_F(GrpcCommunicationSocketTest, sendCommandShouldSendThisCommandThroughtGrpc)
+{
+    google::protobuf::Any messageToSend;
+    
+    EXPECT_CALL(*_stubMock, SendCommand(_, _, _)).WillOnce(Return(okStatus));
+    
+    _sut->sendCommand(std::move(messageToSend));
 }

@@ -14,7 +14,7 @@ public:
     GrpcCommunicationSocket(std::shared_ptr<Router::StubInterface>);
 
     void receiveCommand() override;
-    void sendCommand(const std::string&) override;
+    void sendCommand(google::protobuf::Any&&) override;
     std::optional<const std::string> takeMessageFromQueue() override;
 
 private:

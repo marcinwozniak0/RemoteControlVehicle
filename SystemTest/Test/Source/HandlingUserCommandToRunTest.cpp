@@ -6,8 +6,8 @@
 
 #include "HandlingUserCommandToRunTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
-#include "SerializedCommandsMatchers.hpp"
 #include "SerializedCommandsBuilders.hpp"
+#include "ProtobufStructuresComparators.hpp"
 
 using namespace UTHelpers;
 
@@ -45,12 +45,10 @@ TEST_F(HandlingUserCommandToRunTest, ZeroZeroCoordinates)
                                                             {PIN_NUMBERS::SECOND_ENGINE_PWM, 0},
                                                             {PIN_NUMBERS::STEERING_WHEEL_PWM, 19}};
 
-    const auto expectedMessage = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(expectedNewPinsConfiguration)
-                                                              .build();
-    std::string expectedSerializedMessage;
-    expectedMessage.SerializeToString(&expectedSerializedMessage);
+    auto expectedMessage = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(expectedNewPinsConfiguration)
+                                                                .build();
 
-    EXPECT_CALL(commandReceiverMock, sendCommand(SerializedControlerCommandToRunMatcher(expectedSerializedMessage)));
+    EXPECT_CALL(commandReceiverMock, sendCommand(std::move(expectedMessage)));
 
     vehicleControler.controlVehicle();
 }

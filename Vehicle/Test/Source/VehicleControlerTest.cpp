@@ -6,7 +6,6 @@
 
 #include "VehicleControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
-#include "SerializedCommandsMatchers.hpp"
 #include "ProtobufStructuresComparators.hpp"
 #include "SerializedCommandsBuilders.hpp"
 
@@ -54,12 +53,10 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
 
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(configuration)
                                                               .build();
-    std::string serializedMessage;
-    messageToSend.SerializeToString(&serializedMessage);
 
     EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_communicationSocketMock, sendCommand(SerializedControlerCommandToRunMatcher(serializedMessage)));
+    EXPECT_CALL(_communicationSocketMock, sendCommand(std::move(messageToSend)));
 
     _sut.controlVehicle();
 }
@@ -70,10 +67,7 @@ TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPins
                                                               .build();
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
 
-    std::string serializedMessage;
-    messageToSend.SerializeToString(&serializedMessage);
-
-    EXPECT_CALL(_communicationSocketMock, sendCommand(SerializedControlerCommandToRunMatcher(serializedMessage)));
+    EXPECT_CALL(_communicationSocketMock, sendCommand(std::move(messageToSend)));
 
     _sut.vehicleEmergencyStop();
 }
