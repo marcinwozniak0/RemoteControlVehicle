@@ -9,7 +9,8 @@
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
-#include "GrpcCommunicationSocket.hpp"
+#include "GrpcCommandSender.hpp"
+#include "GrpcCommandReceiver.hpp"
 
 int main()
 {
@@ -30,10 +31,13 @@ int main()
 
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
 
-    GrpcCommunicationSocket commandReceiver(std::make_shared<Router::Stub>(
+    GrpcCommandSender commandSender(std::make_shared<Router::Stub>(
         grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials())));
-        
+
+    GrpcCommandReceiver commandReceiver("PortAddress");
+
     VehicleControler vehicleControler(commandReceiver,
+                                      commandSender,
                                       vehicle);
 
     try

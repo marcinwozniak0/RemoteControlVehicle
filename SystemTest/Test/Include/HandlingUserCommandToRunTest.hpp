@@ -10,7 +10,8 @@
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
-#include "CommunicationSocketMock.hpp"
+#include "CommandSenderMock.hpp"
+#include "CommandReceiverMock.hpp"
 
 using namespace ::testing;
 
@@ -19,7 +20,8 @@ class HandlingUserCommandToRunTest : public Test
 public:
     HandlingUserCommandToRunTest();
 
-    NiceMock<CommunicationSocketMock> commandReceiverMock;
+    NiceMock<CommandSenderMock> commandSenderMock;
+    NiceMock<CommandReceiverMock> commandReceiverMock;
 
 private:
     L293DEngineDriver engineDriver;

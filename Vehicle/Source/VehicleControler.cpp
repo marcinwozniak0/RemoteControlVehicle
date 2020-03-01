@@ -10,12 +10,15 @@
 #include "CommandDebuger.hpp"
 #include "VehicleControler.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
-#include "CommunicationSocket.hpp"
+#include "CommandReceiver.hpp"
+#include "CommandSender.hpp"
 #include "Vehicle.hpp"
 
-VehicleControler::VehicleControler(CommunicationSocket& communicationSocket,
+VehicleControler::VehicleControler(CommandReceiver& commandReceiver,
+                                   CommandSender& commandSender,
                                    Vehicle& vehicle)
-    : _communicationSocket(communicationSocket)
+    : _commandReceiver(commandReceiver)
+    , _commandSender(commandSender)
     , _vehicle(vehicle)
 {
     _isControlerActive = true;
@@ -25,10 +28,9 @@ void VehicleControler::controlVehicle()
 {
     while(_isControlerActive)
     {
-        _communicationSocket.receiveCommand();
-        if (const auto command = _communicationSocket.takeMessageFromQueue())
+        if (const auto command = _commandReceiver.takeMessageFromQueue())
         {
-            handleMessage(command.value());
+            handleCommand(command.value());
         }
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
@@ -57,29 +59,26 @@ void VehicleControler::clearPinsValues(PinsConfiguration& pinsConfiguration) con
 template <typename Command>
 void VehicleControler::sendCommand(Command&& command) const
 {
-    _communicationSocket.sendCommand(std::move(command));
+    _commandSender.sendCommand(std::move(command));
 }
 
-void VehicleControler::handleMessage(const std::string& message)
+void VehicleControler::handleCommand(const google::protobuf::Any& command)
 {
-    google::protobuf::Any incommingMessage;
-    incommingMessage.ParseFromString(message);
+    INFO("Handle command : " + CommandDebuger::getCommandName(command));
 
-    INFO("Handle command : " + CommandDebuger::getCommandName(incommingMessage));
-
-    if (incommingMessage.Is<Messages::UserCommandToStart>())
+    if (command.Is<Messages::UserCommandToStart>())
     {
         _vehicle.startVehicle();
     }
-    else if (incommingMessage.Is<Messages::UserCommandToStop>())
+    else if (command.Is<Messages::UserCommandToStop>())
     {
         _vehicle.stopVehicle();
     }
-    else if(incommingMessage.Is<Messages::UserCommandToRun>())
+    else if(command.Is<Messages::UserCommandToRun>())
     {
-        handleUserCommandToRun(incommingMessage);
+        handleUserCommandToRun(command);
     }
-    else if(incommingMessage.Is<Messages::Deactivate>())
+    else if(command.Is<Messages::Deactivate>())
     {
         _isControlerActive = false;
     }

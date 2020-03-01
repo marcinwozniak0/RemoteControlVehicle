@@ -6,7 +6,7 @@
 
 #include "HandlingUserCommandToRunTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
-#include "SerializedCommandsBuilders.hpp"
+#include "UtCommandsBuilders.hpp"
 #include "ProtobufStructuresComparators.hpp"
 
 using namespace UTHelpers;
@@ -28,14 +28,14 @@ HandlingUserCommandToRunTest::HandlingUserCommandToRunTest()
         , steeringWheel(PIN_NUMBERS::STEERING_WHEEL_PWM)
         , steeringSystem(steeringWheel)
         , vehicle(propulsionSystem, steeringSystem)
-        , vehicleControler(commandReceiverMock, vehicle)
+        , vehicleControler(commandReceiverMock, commandSenderMock, vehicle)
     {}
 
 TEST_F(HandlingUserCommandToRunTest, ZeroZeroCoordinates)
 {
     EXPECT_CALL(commandReceiverMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createSerializedUserCommandToRun(zeroXCoordinate, zeroYCoordinate)))
-            .WillOnce(Return(createSerializedDeactivateMessage()));
+            .WillOnce(Return(createUserCommandToRun(zeroXCoordinate, zeroYCoordinate)))
+            .WillOnce(Return(createDeactivateCommand()));
 
     const PinsConfiguration expectedNewPinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT, 1},
                                                             {PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT, 1},
@@ -48,7 +48,7 @@ TEST_F(HandlingUserCommandToRunTest, ZeroZeroCoordinates)
     auto expectedMessage = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(expectedNewPinsConfiguration)
                                                                 .build();
 
-    EXPECT_CALL(commandReceiverMock, sendCommand(std::move(expectedMessage)));
+    EXPECT_CALL(commandSenderMock, sendCommand(std::move(expectedMessage)));
 
     vehicleControler.controlVehicle();
 }

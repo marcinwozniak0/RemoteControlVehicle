@@ -4,58 +4,59 @@
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
 
-#include "SerializedCommandsBuilders.hpp"
+#include "UtCommandsBuilders.hpp"
 
 namespace UTHelpers
 {
-const std::string createSerializedDeactivateMessage()
+const google::protobuf::Any createDeactivateCommand()
 {
     Messages::Deactivate deactivateMessage;
     google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
 
     topLevelMessage.PackFrom(deactivateMessage);
-    topLevelMessage.SerializeToString(&serializedMessage);
 
-    return serializedMessage;
+    return topLevelMessage;
 }
 
-const std::string createSerializedUserCommandToStart()
+const google::protobuf::Any createUserCommandToStart()
 {
     Messages::UserCommandToStart userCommandToStart;
     google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
 
     topLevelMessage.PackFrom(userCommandToStart);
-    topLevelMessage.SerializeToString(&serializedMessage);
 
-    return serializedMessage;
+    return topLevelMessage;
 }
 
-const std::string createSerializedUserCommandToStop()
+const google::protobuf::Any createUserCommandToStop()
 {
     Messages::UserCommandToStop userCommandToStop;
     google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
 
     topLevelMessage.PackFrom(userCommandToStop);
-    topLevelMessage.SerializeToString(&serializedMessage);
 
-    return serializedMessage;
+    return topLevelMessage;
 }
 
-const std::string createSerializedUserCommandToRun(const int32_t xCoordinate, const int32_t yCoordinate)
+const google::protobuf::Any createUserCommandToRun(const int32_t xCoordinate, const int32_t yCoordinate)
 {
     Messages::UserCommandToRun userCommandToRun;
     google::protobuf::Any topLevelMessage;
-    std::string serializedMessage;
 
     userCommandToRun.mutable_coordinate_system()->set_x_coordinate(xCoordinate);
     userCommandToRun.mutable_coordinate_system()->set_y_coordinate(yCoordinate);
 
     topLevelMessage.PackFrom(userCommandToRun);
-    topLevelMessage.SerializeToString(&serializedMessage);
 
-    return serializedMessage;
+    return topLevelMessage;
 }
+
+const google::protobuf::Any createUnknownCommand()
+{
+    google::protobuf::Any topLevelMessage;
+    topLevelMessage.ParseFromString("UnknownCommand");
+
+    return topLevelMessage;
+}
+
 }//UTHelpers

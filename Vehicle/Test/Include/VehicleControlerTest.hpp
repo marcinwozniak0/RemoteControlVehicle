@@ -4,7 +4,8 @@
 #include <gmock/gmock.h>
 
 #include "VehicleControler.hpp"
-#include "CommunicationSocketMock.hpp"
+#include "CommandSenderMock.hpp"
+#include "CommandReceiverMock.hpp"
 #include "PropulsionSystemMock.hpp"
 #include "SteeringSystemMock.hpp"
 #include "VehicleMock.hpp"
@@ -15,12 +16,13 @@ class VehicleControlerTest : public Test
 {
 public:
     VehicleControlerTest()
-        : _sut(_communicationSocketMock, _vehicleMock)
+        : _sut(_commandReceiverMock, _commandSenderMock, _vehicleMock)
     {}
 
     VehicleControler _sut;
 
-    NiceMock<CommunicationSocketMock> _communicationSocketMock;
+    NiceMock<CommandReceiverMock> _commandReceiverMock;
+    NiceMock<CommandSenderMock> _commandSenderMock;
     NiceMock<VehicleMock> _vehicleMock;
 };
 

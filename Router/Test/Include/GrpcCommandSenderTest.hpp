@@ -6,7 +6,7 @@
 #include <Client.grpc.pb.h>
 #include <Client_mock.grpc.pb.h>
 
-#include "GrpcCommunicationSocket.hpp"
+#include "GrpcCommandSender.hpp"
 #include "CommunicationSocketException.hpp"
 
 using namespace ::testing;
@@ -25,16 +25,16 @@ HelloRequest buildHelloRequest()
 HelloRequest helloRequest = buildHelloRequest();
 }
 
-class GrpcCommunicationSocketTest : public Test
+class GrpcCommandSenderTest : public Test
 {
 public:
-    GrpcCommunicationSocketTest()
+    GrpcCommandSenderTest()
     {   
         EXPECT_CALL(*_stubMock, SayHello(_, helloRequest, _)).WillOnce(Return(okStatus));
 
-        _sut = std::make_unique<GrpcCommunicationSocket>(_stubMock);
+        _sut = std::make_unique<GrpcCommandSender>(_stubMock);
     }
 
-    std::unique_ptr<GrpcCommunicationSocket> _sut;
+    std::unique_ptr<GrpcCommandSender> _sut;
     std::shared_ptr<StrictMock<MockRouterStub>> _stubMock = std::make_shared<StrictMock<MockRouterStub>>();
 };

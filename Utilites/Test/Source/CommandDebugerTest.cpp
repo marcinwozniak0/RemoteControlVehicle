@@ -4,7 +4,7 @@
 #include <Deactivate.pb.h>
 
 #include "CommandDebuger.hpp"
-#include "SerializedCommandsBuilders.hpp"
+#include "UtCommandsBuilders.hpp"
 
 using namespace CommandDebuger;
 
@@ -18,13 +18,11 @@ TEST(CommandDebugerTest, getNameOfNotTopLevelCommandShouldReturnTypeOfThisComman
 
 TEST(CommandDebugerTest, getNameOfTopLevelCommandShouldReturnTypeOfInnerCommand)
 {
-    const auto command = UTHelpers::createSerializedDeactivateMessage();
-    google::protobuf::Any incommingCommand;
-    incommingCommand.ParseFromString(command);
+    const auto command = UTHelpers::createDeactivateCommand();
 
     constexpr auto expectedCommandName = "Messages.Deactivate";
 
-    ASSERT_EQ(expectedCommandName, getCommandName(incommingCommand));
+    ASSERT_EQ(expectedCommandName, getCommandName(command));
 }
 
 TEST(CommandDebugerTest, getNameOfTopLevelCommandWithUnknownInnerCommandShouldReturnNotificationAboutUnknownCommand)

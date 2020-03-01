@@ -7,7 +7,7 @@
 #include "VehicleControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "ProtobufStructuresComparators.hpp"
-#include "SerializedCommandsBuilders.hpp"
+#include "UtCommandsBuilders.hpp"
 
 using namespace Comparators;
 using namespace UTHelpers;
@@ -23,9 +23,9 @@ const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
     EXPECT_CALL(_vehicleMock, startVehicle());
-    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createSerializedUserCommandToStart()))
-            .WillOnce(Return(createSerializedDeactivateMessage()));
+    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+            .WillOnce(Return(createUserCommandToStart()))
+            .WillOnce(Return(createDeactivateCommand()));
 
     _sut.controlVehicle();
 }
@@ -33,19 +33,19 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
     EXPECT_CALL(_vehicleMock, stopVehicle());
-    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(3)
-            .WillOnce(Return(createSerializedUserCommandToStart()))
-            .WillOnce(Return(createSerializedUserCommandToStop()))
-            .WillOnce(Return(createSerializedDeactivateMessage()));
+    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(3)
+            .WillOnce(Return(createUserCommandToStart()))
+            .WillOnce(Return(createUserCommandToStop()))
+            .WillOnce(Return(createDeactivateCommand()));
 
     _sut.controlVehicle();
 }
 
 TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
-    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createSerializedUserCommandToRun(xCoordinate, yCoordinate)))
-            .WillOnce(Return(createSerializedDeactivateMessage()));
+    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+            .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate)))
+            .WillOnce(Return(createDeactivateCommand()));
 
     Messages::CoordinateSystem coordinates;
     coordinates.set_x_coordinate(xCoordinate);
@@ -56,7 +56,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
 
     EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_communicationSocketMock, sendCommand(std::move(messageToSend)));
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
 
     _sut.controlVehicle();
 }
@@ -67,17 +67,16 @@ TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPins
                                                               .build();
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
 
-    EXPECT_CALL(_communicationSocketMock, sendCommand(std::move(messageToSend)));
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
 
     _sut.vehicleEmergencyStop();
 }
 
 TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)
 {
-    const std::string unknownSerializedCommad = "UnknownSerializedCommad";
-    EXPECT_CALL(_communicationSocketMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(unknownSerializedCommad))
-            .WillOnce(Return(createSerializedDeactivateMessage()));
+    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+            .WillOnce(Return(createUnknownCommand()))
+            .WillOnce(Return(createDeactivateCommand()));
 
     _sut.controlVehicle();
 }
