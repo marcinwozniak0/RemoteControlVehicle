@@ -20,21 +20,29 @@ std::optional<const google::protobuf::Any> GrpcCommandReceiver::takeMessageFromQ
     }
 }
 
-grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Messages::EmptyAcknowledge* response) 
+grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Messages::EmptyAcknowledge* response)
 {
+    INFO("Command received. Command will be queued");
     _commandsQueue.push(*request);
+    return grpc::Status::OK;
+}
+
+grpc::Status GrpcCommandReceiver::SayHello(grpc::ServerContext* context, const HelloRequest* request, HelloReply* response)
+{
+    INFO("Received HelloMessage from " + request->name());
+
+    response->set_message("Successfully conected with server");
+
     return grpc::Status::OK;
 }
 
 void GrpcCommandReceiver::startListeningOnPort(const std::string& portAddress)
 {
     grpc::ServerBuilder builder;
-
     builder.AddListeningPort(portAddress, grpc::InsecureServerCredentials());
     builder.RegisterService(this);
 
-    std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
+    _server = builder.BuildAndStart();
+    
     INFO("Server listening on port: " + portAddress);
-
-    server->Wait();
 }

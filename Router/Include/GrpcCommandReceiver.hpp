@@ -14,7 +14,9 @@ public:
 
 private:
     grpc::Status SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Messages::EmptyAcknowledge* response) override;
+    grpc::Status SayHello(grpc::ServerContext* context, const HelloRequest* request, HelloReply* response) override;
     void startListeningOnPort(const std::string& portAddress);
 
     std::queue<google::protobuf::Any> _commandsQueue;
+    std::unique_ptr<grpc::Server> _server;
 };

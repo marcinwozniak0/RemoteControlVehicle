@@ -10,9 +10,10 @@ GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub
     : _stub(stub)
 {
     const auto connectionResult = connectWithServer();
-    if ("RPC failed" == connectionResult)
+    if (connectionResult.starts_with("RPC failed"))
     {
-        throw CommunicationSocketException{"RPC failed"};
+        ERROR(connectionResult);
+        throw CommunicationSocketException{connectionResult};
     }
 }
 
@@ -25,16 +26,19 @@ std::string GrpcCommandSender::connectWithServer() const
 
     grpc::ClientContext context;
 
+    INFO("Send HelloMessage to server");
+
     grpc::Status status = _stub->SayHello(&context, request, &reply);
 
     if (status.ok())
     {
+        INFO("Connection with server is established");
         return reply.message();
     } 
     else 
     {
         std::cout << status.error_code() << ": " << status.error_message() << std::endl;
-        return "RPC failed";
+        return "RPC failed. " + status.error_message();
     }
 }
 
