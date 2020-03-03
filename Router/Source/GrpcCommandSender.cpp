@@ -10,7 +10,7 @@ GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub
     : _stub(stub)
 {
     const auto connectionResult = connectWithServer();
-    if (connectionResult.starts_with("RPC failed"))
+    if (std::string::npos != connectionResult.find("RPC failed"))
     {
         ERROR(connectionResult);
         throw CommunicationSocketException{connectionResult};
