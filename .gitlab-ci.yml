@@ -2,29 +2,29 @@ image: debian:10
 before_script:
  - export TERM=xterm-256color
  - export CXX=/usr/bin/g++
- - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/setup_ci_environment.sh
+ - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh
 
 MASTER_BUILD:
   only:
     - master
   script:
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
     - ./compile_project_ci.sh
 
 MASTER_UT:
   only:
     - master
   script:
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
     - ./compile_project_ci.sh
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/CMake/build/remote_control_vehicle/bin
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle/bin
     - ./remote_control_vehicle_ut
 
 MASTER_VALGRIND:
   only:
     - master
   script:
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
     - ./compile_project_ci.sh
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/CMake/build/remote_control_vehicle
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle
     - make valgrind

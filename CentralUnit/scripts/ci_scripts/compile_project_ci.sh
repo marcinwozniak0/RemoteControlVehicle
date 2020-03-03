@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /builds/marcinwozniak0/RemoteControlVehicle/CMake
+cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake
 mkdir build
 cd build
 git clone -b v1.25.0 https://github.com/grpc/grpc
