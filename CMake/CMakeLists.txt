@@ -1,49 +1,14 @@
-# Copyright 2018 gRPC authors.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# cmake "superbuild" file for C++ helloworld example.
-# This build file demonstrates how to build the helloworld project
-# and all its dependencies in a single cmake build (hence "superbuild")
-# that is easy to build and maintain.
-# cmake's ExternalProject_Add() is used to import all the sub-projects,
-# including the "helloworld" project itself.
-# See https://blog.kitware.com/cmake-superbuilds-git-submodules/
-
 cmake_minimum_required(VERSION 3.5.1)
 
 # Project
-project(HelloWorld-SuperBuild C CXX)
+project(RemoteControlVehicleSuperBuild C CXX)
 
 include(ExternalProject)
-
-# Note: For all external projects, instead of using checked-out code, one could
-# specify GIT_REPOSITORY and GIT_TAG to have cmake download the dependency directly,
-# without needing to add a submodule to your project.
-
-# Builds absl project from the git submodule.
 
 set(LIBRARY_OUTPUT_PATH build/)
 set(BINARY_OUTPUT_PATH build/)
 
-#include(FetchContent)
-#FetchContent_Declare(
-#  gRPC
-#  GIT_REPOSITORY https://github.com/grpc/grpc
-#  GIT_TAG        v1.25.0
-#)
-#FetchContent_MakeAvailable(gRPC)
-
+# Builds absl project from the git submodule.
 ExternalProject_Add(absl
   PREFIX absl
   SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/build/grpc/third_party/abseil-cpp"
@@ -118,15 +83,11 @@ ExternalProject_Add(grpc
   DEPENDS c-ares protobuf zlib absl
 )
 
-# Build the helloworld projects itself using a CMakeLists.txt that assumes all the dependencies
+# Build the RemoteControlVehicle project itself using a CMakeLists.txt that assumes all the dependencies
 # have already been installed.
-# Even though helloworld is not really an "external project" from perspective of this build,
-# we are still importing it using ExternalProject_Add because that allows us to use find_package()
-# to locate all the dependencies (if we were building helloworld directly in this build we,
-# we would have needed to manually import the libraries as opposed to reusing targets exported by
-# gRPC and protobuf).
+
 ExternalProject_Add(RemoteControlVehicle
-  PREFIX helloworld
+  PREFIX remote_control_vehicle_super_build
   SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.."
   BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/remote_control_vehicle"
   INSTALL_COMMAND ""
