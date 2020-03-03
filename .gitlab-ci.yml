@@ -2,6 +2,8 @@ image: debian:10
 
 MASTER_BUILD_CPP_CENTRAL_UNIT:
   only:
+    changes:
+      - "CentralUnit/**/*"
     refs:
       - master
   script:
@@ -13,6 +15,8 @@ MASTER_BUILD_CPP_CENTRAL_UNIT:
 
 MASTER_UT_CPP_CENTRAL_UNIT:
   only:
+    changes:
+      - "CentralUnit/**/*"
     refs:
       - master
   script:
@@ -26,6 +30,8 @@ MASTER_UT_CPP_CENTRAL_UNIT:
 
 MASTER_VALGRIND_CPP_CENTRAL_UNIT:
   only:
+    changes:
+      - "CentralUnit/**/*"
     refs:
       - master
   script:
@@ -39,6 +45,8 @@ MASTER_VALGRIND_CPP_CENTRAL_UNIT:
 
 MASTER_BUILD_JAVA_CENTRAL_UNIT:
   only:
+    changes:
+      - "ControlPanel/**/*"
     refs:
       - master
   script:
