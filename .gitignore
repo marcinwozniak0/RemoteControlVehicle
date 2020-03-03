@@ -34,3 +34,7 @@
 # Build directory
 CMake/build/
 build/
+ControlPanel/build
+
+# Gradle files
+ControlPanel/.gradle
