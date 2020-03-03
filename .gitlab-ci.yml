@@ -1,30 +1,50 @@
 image: debian:10
-before_script:
- - export TERM=xterm-256color
- - export CXX=/usr/bin/g++
- - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh
 
-MASTER_BUILD:
+MASTER_BUILD_CPP_CENTRAL_UNIT:
   only:
-    - master
+    refs:
+      - master
   script:
+    - export TERM=xterm-256color
+    - export CXX=/usr/bin/g++
+    - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh	
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
     - ./compile_project_ci.sh
 
-MASTER_UT:
+MASTER_UT_CPP_CENTRAL_UNIT:
   only:
-    - master
+    refs:
+      - master
   script:
+    - export TERM=xterm-256color
+    - export CXX=/usr/bin/g++
+    - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
     - ./compile_project_ci.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle/bin
     - ./remote_control_vehicle_ut
 
-MASTER_VALGRIND:
+MASTER_VALGRIND_CPP_CENTRAL_UNIT:
   only:
-    - master
+    refs:
+      - master
   script:
+    - export TERM=xterm-256color
+    - export CXX=/usr/bin/g++
+    - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
     - ./compile_project_ci.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle
     - make valgrind
+
+MASTER_BUILD_JAVA_CENTRAL_UNIT:
+  only:
+    refs:
+      - master
+  script:
+    - apt-get update  --yes
+    - apt-get install --yes build-essential
+    - apt-get install --yes gradle
+    - apt-get install --yes openjdk-11-jdk
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/ControlPanel
+    - gradle build
