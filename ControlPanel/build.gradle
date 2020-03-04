@@ -19,6 +19,9 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/protobuf'
         }
+        proto {
+            srcDir "${project.projectDir}/../Interfaces/Protobuf/"
+        }
     }
 }
 
