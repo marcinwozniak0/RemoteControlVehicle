@@ -46,7 +46,7 @@ MASTER_VALGRIND_CPP_CENTRAL_UNIT:
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle
     - make valgrind
 
-MASTER_BUILD_JAVA_CENTRAL_UNIT:
+MASTER_BUILD_JAVA_CONTROL_PANEL:
   only:
     changes:
       - "ControlPanel/**/*"
@@ -58,4 +58,4 @@ MASTER_BUILD_JAVA_CENTRAL_UNIT:
   script:
     - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/prepare_java_environment.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/ControlPanel
-    - gradle build
+    - ./gradlew clean build
