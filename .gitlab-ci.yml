@@ -4,27 +4,27 @@ MASTER_BUILD_CPP_CENTRAL_UNIT:
   only:
     changes:
       - "CentralUnit/**/*"
+      - "scripts/ci_scripts/**/*"
+      - ".gitlab-ci.yml"
     refs:
       - master
   script:
-    - export TERM=xterm-256color
-    - export CXX=/usr/bin/g++
-    - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh	
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
-    - ./compile_project_ci.sh
+    - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/prepare_cpp_environment.sh	
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
+    - ./compile_cpp_project.sh
 
 MASTER_UT_CPP_CENTRAL_UNIT:
   only:
     changes:
       - "CentralUnit/**/*"
+      - "scripts/ci_scripts/**/*"
+      - ".gitlab-ci.yml"
     refs:
       - master
   script:
-    - export TERM=xterm-256color
-    - export CXX=/usr/bin/g++
-    - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
-    - ./compile_project_ci.sh
+    - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/prepare_cpp_environment.sh
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
+    - ./compile_cpp_project.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle/bin
     - ./remote_control_vehicle_ut
 
@@ -32,14 +32,14 @@ MASTER_VALGRIND_CPP_CENTRAL_UNIT:
   only:
     changes:
       - "CentralUnit/**/*"
+      - "scripts/ci_scripts/**/*"
+      - ".gitlab-ci.yml"
     refs:
       - master
   script:
-    - export TERM=xterm-256color
-    - export CXX=/usr/bin/g++
-    - /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts/setup_ci_environment.sh
-    - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/scripts/ci_scripts
-    - ./compile_project_ci.sh
+    - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/prepare_cpp_environment.sh
+    - cd /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts
+    - ./compile_cpp_project.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake/build/remote_control_vehicle
     - make valgrind
 
@@ -47,12 +47,11 @@ MASTER_BUILD_JAVA_CENTRAL_UNIT:
   only:
     changes:
       - "ControlPanel/**/*"
+      - "scripts/ci_scripts/**/*"
+      - ".gitlab-ci.yml"
     refs:
       - master
   script:
-    - apt-get update  --yes
-    - apt-get install --yes build-essential
-    - apt-get install --yes gradle
-    - apt-get install --yes openjdk-11-jdk
+    - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/prepare_java_environment.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/ControlPanel
     - gradle build

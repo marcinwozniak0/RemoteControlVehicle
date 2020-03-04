@@ -35,4 +35,7 @@ make -j8
 make install
 ldconfig
 
+# EXPORTS
+export TERM=xterm-256color
+export CXX=/usr/bin/g++
 
