@@ -5,6 +5,7 @@ MASTER_BUILD_CPP_CENTRAL_UNIT:
     changes:
       - "CentralUnit/**/*"
       - "scripts/ci_scripts/**/*"
+      - "Interfaces/**/*"
       - ".gitlab-ci.yml"
     refs:
       - master
@@ -18,6 +19,7 @@ MASTER_UT_CPP_CENTRAL_UNIT:
     changes:
       - "CentralUnit/**/*"
       - "scripts/ci_scripts/**/*"
+      - "Interfaces/**/*"
       - ".gitlab-ci.yml"
     refs:
       - master
@@ -33,6 +35,7 @@ MASTER_VALGRIND_CPP_CENTRAL_UNIT:
     changes:
       - "CentralUnit/**/*"
       - "scripts/ci_scripts/**/*"
+      - "Interfaces/**/*"
       - ".gitlab-ci.yml"
     refs:
       - master
@@ -48,6 +51,7 @@ MASTER_BUILD_JAVA_CENTRAL_UNIT:
     changes:
       - "ControlPanel/**/*"
       - "scripts/ci_scripts/**/*"
+      - "Interfaces/**/*"
       - ".gitlab-ci.yml"
     refs:
       - master

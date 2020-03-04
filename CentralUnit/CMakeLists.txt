@@ -25,27 +25,25 @@ message(STATUS "Using gRPC ${gRPC_VERSION}")
 set(_GRPC_GRPCPP_UNSECURE gRPC::grpc++_unsecure)
 set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
 
-
 # GRPC GENERATED
-get_filename_component(hw_proto "Commands/ProtoDefinitions/Client.proto" ABSOLUTE)
+get_filename_component(hw_proto "../Interfaces/Protobuf/Client.proto" ABSOLUTE)
 get_filename_component(hw_proto_path "${hw_proto}" PATH)
 
-set(hw_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/Client.grpc.pb.cc")
-set(hw_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/Client.grpc.pb.h")
+set(hw_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/Interfaces/Protobuf/Client.grpc.pb.cc")
+set(hw_grpc_hdrs "${CMAKE_CURRENT_BINARY_DIR}/Interfaces/Protobuf/Client.grpc.pb.h")
 
 add_custom_command(
       OUTPUT "${hw_grpc_srcs}" "${hw_grpc_hdrs}"
       COMMAND ${_PROTOBUF_PROTOC}
-      ARGS --grpc_out=generate_mock_code=true:"${CMAKE_CURRENT_BINARY_DIR}"
-        --cpp_out "${CMAKE_CURRENT_BINARY_DIR}"
+      ARGS --grpc_out=generate_mock_code=true:"${CMAKE_CURRENT_BINARY_DIR}/Interfaces/Protobuf"
+        --cpp_out "${CMAKE_CURRENT_BINARY_DIR}/Interfaces/Protobuf"
         -I "${hw_proto_path}"
         --plugin=protoc-gen-grpc="${_GRPC_CPP_PLUGIN_EXECUTABLE}"
         "${hw_proto}"
       DEPENDS "${hw_proto}")
 
-add_subdirectory(Commands/ProtoDefinitions)
-include_directories(${CMAKE_BINARY_DIR}/Commands/ProtoDefinitions)
-include_directories("${CMAKE_CURRENT_BINARY_DIR}")
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Interfaces/Protobuf ${CMAKE_CURRENT_BINARY_DIR}/Interfaces/Protobuf)
+include_directories(${CMAKE_BINARY_DIR}/Interfaces/Protobuf)
 
 # GRPC INCLUDE FILES
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/CMake/build/grpc/include/)
@@ -55,14 +53,14 @@ include_directories(Vehicle/Include)
 include_directories(Router/Include)
 include_directories(VehicleEquipment/Include)
 include_directories(VehicleSystems/Include)
-include_directories(Commands/Builders/Include)
+include_directories(CommandsBuilders/Include)
 include_directories(Utilites/Include)
 include_directories(Logger/Include)
 add_subdirectory(Vehicle/Source)
 add_subdirectory(Router/Source)
 add_subdirectory(VehicleEquipment/Source)
 add_subdirectory(VehicleSystems/Source)
-add_subdirectory(Commands/Builders/Source)
+add_subdirectory(CommandsBuilders/Source)
 add_subdirectory(Utilites/Source)
 add_subdirectory(Logger/Source)
 
@@ -75,14 +73,14 @@ include_directories(Vehicle/Test/Mock)
 include_directories(Vehicle/Test/Include)
 include_directories(Router/Test/Mock)
 include_directories(Router/Test/Include)
-include_directories(Commands/Builders/Test/Mock)
-include_directories(Commands/Builders/Test/Include)
+include_directories(CommandsBuilders/Test/Mock)
+include_directories(CommandsBuilders/Test/Include)
 include_directories(SystemTest/Test/Include)
 add_subdirectory(VehicleSystems/Test/Source)
 add_subdirectory(VehicleEquipment/Test/Source)
 add_subdirectory(Vehicle/Test/Source)
 add_subdirectory(Router/Test/Source)
-add_subdirectory(Commands/Builders/Test/Source)
+add_subdirectory(CommandsBuilders/Test/Source)
 add_subdirectory(SystemTest/Test/Source)
 add_subdirectory(Utilites/Test/Source)
 
