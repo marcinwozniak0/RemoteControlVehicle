@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package InitCommands;
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "InitCommandsProto";
+
+message HelloRequest
+{
+    string name = 1;
+}
+  
+message HelloReply
+{
+    string message = 1;
+}

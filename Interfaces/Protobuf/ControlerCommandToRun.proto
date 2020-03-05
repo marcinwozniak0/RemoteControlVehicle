@@ -1,6 +1,9 @@
 syntax = "proto3";
 
-package Messages;
+package Commands;
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "ControlerCommandToRunProto";
 
 message ControlerCommandToRun
 {

@@ -1,11 +1,14 @@
 syntax = "proto3";
 
 import "EmptyAcknowledge.proto";
-import "HelloMessages.proto";
+import "InitCommands.proto";
 import "google/protobuf/any.proto";
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "RouterProto";
 
 service Router
 {
-    rpc SayHello (HelloRequest) returns (HelloReply) {}
-    rpc SendCommand (google.protobuf.Any) returns (Messages.EmptyAcknowledge) {}
+    rpc SayHello (InitCommands.HelloRequest) returns (InitCommands.HelloReply) {}
+    rpc SendCommand (google.protobuf.Any) returns (Commands.EmptyAcknowledge) {}
 }
