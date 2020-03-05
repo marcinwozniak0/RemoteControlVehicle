@@ -7,16 +7,16 @@ TEST_F(GrpcCommandReceiverTest, commandsQueueShouldBeEmptyAfterClassInitializati
 
 TEST_F(GrpcCommandReceiverTest, receivedCommandShouldBeQueued)
 {
-    sendCommandToSut(Messages::EmptyAcknowledge{});
+    sendCommandToSut(Commands::EmptyAcknowledge{});
 
-    ASSERT_TRUE(_sut->takeMessageFromQueue().value().Is<Messages::EmptyAcknowledge>());
+    ASSERT_TRUE(_sut->takeMessageFromQueue().value().Is<Commands::EmptyAcknowledge>());
 }
 
 TEST_F(GrpcCommandReceiverTest, commandsQueueShouldBeEmptyIfCommandHasBeenTaken)
 {
-    sendCommandToSut(Messages::EmptyAcknowledge{});
+    sendCommandToSut(Commands::EmptyAcknowledge{});
 
-    _sut->takeMessageFromQueue().value().Is<Messages::EmptyAcknowledge>();
+    _sut->takeMessageFromQueue().value().Is<Commands::EmptyAcknowledge>();
 
     ASSERT_EQ(std::nullopt, _sut->takeMessageFromQueue());
 }

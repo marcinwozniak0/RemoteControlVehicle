@@ -12,7 +12,7 @@ class SingleAxisPropulsionSystem : public PropulsionSystem
 public:
     SingleAxisPropulsionSystem(Engine&, Engine&, const EngineDriver&);
 
-    void applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem&) override;
+    void applyNewConfigurationBasedOnCoordinates(const Commands::CoordinateSystem&) override;
     const PinsConfiguration getPinsConfiguration() const override;
 
 private:

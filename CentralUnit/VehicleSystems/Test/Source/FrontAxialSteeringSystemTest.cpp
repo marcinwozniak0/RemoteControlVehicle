@@ -16,7 +16,7 @@ static constexpr int steeringWheelPwmValueInMinus30DegreesPosition = pwmMaxRange
 
 auto buildCoordinates(int x, int y)
 {
-    Messages::CoordinateSystem coordinateSystem;
+    Commands::CoordinateSystem coordinateSystem;
     coordinateSystem.set_x_coordinate(x);
     coordinateSystem.set_y_coordinate(y);
 
@@ -35,13 +35,13 @@ TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFro
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
 struct PwmValueTest
 {
-    PwmValueTest(PinsConfiguration x, Messages::CoordinateSystem y)
+    PwmValueTest(PinsConfiguration x, Commands::CoordinateSystem y)
         : expectedConfiguration(x)
         , givenCoordinates(y)
     {}
 
     PinsConfiguration expectedConfiguration;
-    Messages::CoordinateSystem givenCoordinates;
+    Commands::CoordinateSystem givenCoordinates;
 
     PwmValueTest(const PwmValueTest& a)
     {

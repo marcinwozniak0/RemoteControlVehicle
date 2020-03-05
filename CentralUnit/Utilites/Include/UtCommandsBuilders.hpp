@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <google/protobuf/any.pb.h>
 
 namespace UTHelpers
 {

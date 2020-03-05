@@ -10,8 +10,8 @@ using namespace CommandDebuger;
 
 TEST(CommandDebugerTest, getNameOfNotTopLevelCommandShouldReturnTypeOfThisCommand) 
 {
-    Messages::Deactivate command;
-    constexpr auto expectedCommandName = "Messages.Deactivate";
+    Commands::Deactivate command;
+    constexpr auto expectedCommandName = "Commands.Deactivate";
 
     ASSERT_EQ(expectedCommandName, getCommandName(command));
 }
@@ -20,7 +20,7 @@ TEST(CommandDebugerTest, getNameOfTopLevelCommandShouldReturnTypeOfInnerCommand)
 {
     const auto command = UTHelpers::createDeactivateCommand();
 
-    constexpr auto expectedCommandName = "Messages.Deactivate";
+    constexpr auto expectedCommandName = "Commands.Deactivate";
 
     ASSERT_EQ(expectedCommandName, getCommandName(command));
 }

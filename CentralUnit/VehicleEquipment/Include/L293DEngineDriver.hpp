@@ -6,12 +6,12 @@
 class L293DEngineDriver : public EngineDriver
 {
 public:
-    const PinsConfiguration calculatePinsConfiguration(const Messages::CoordinateSystem&) const override;
+    const PinsConfiguration calculatePinsConfiguration(const Commands::CoordinateSystem&) const override;
 
 private:
     using PinStatesConfiguration = std::array<std::array<uint8_t, NUMBER_OF_ENGINES>, NUMBER_OF_INPUT_PIN_IN_ENGINE>;
 
-    bool areCoordinatesInRange(const Messages::CoordinateSystem&) const;
+    bool areCoordinatesInRange(const Commands::CoordinateSystem&) const;
     const PinsConfiguration createPinsConfiguration(const PinStatesConfiguration&, const int) const;
 
     const PinStatesConfiguration _drivingForward {{{PIN_STATE::HIGH, PIN_STATE::LOW},

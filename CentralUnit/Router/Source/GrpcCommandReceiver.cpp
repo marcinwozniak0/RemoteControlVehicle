@@ -20,14 +20,14 @@ std::optional<const google::protobuf::Any> GrpcCommandReceiver::takeMessageFromQ
     }
 }
 
-grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Messages::EmptyAcknowledge* response)
+grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Commands::EmptyAcknowledge* response)
 {
     INFO("Command received. Command will be queued");
     _commandsQueue.push(*request);
     return grpc::Status::OK;
 }
 
-grpc::Status GrpcCommandReceiver::SayHello(grpc::ServerContext* context, const HelloRequest* request, HelloReply* response)
+grpc::Status GrpcCommandReceiver::SayHello(grpc::ServerContext* context, const InitCommands::HelloRequest* request, InitCommands::HelloReply* response)
 {
     INFO("Received HelloMessage from " + request->name());
 

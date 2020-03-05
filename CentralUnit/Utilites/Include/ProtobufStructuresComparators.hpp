@@ -4,24 +4,24 @@
 
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
-#include <HelloMessages.pb.h>
+#include <InitCommands.pb.h>
 
 #include "MapComparator.hpp"
 #include "VehicleTypes.hpp"
 
-namespace Messages
+namespace Commands
 {
-inline bool operator==(const Messages::CoordinateSystem& lhs, const Messages::CoordinateSystem& rhs)
+inline bool operator==(const Commands::CoordinateSystem& lhs, const Commands::CoordinateSystem& rhs)
 {
     return lhs.x_coordinate() == rhs.x_coordinate()
             and lhs.y_coordinate() == rhs.y_coordinate();
 }
 
-inline bool operator==(const Messages::ControlerCommandToRun& lhs, const Messages::ControlerCommandToRun& rhs)
+inline bool operator==(const Commands::ControlerCommandToRun& lhs, const Commands::ControlerCommandToRun& rhs)
 {
     return Comparators::mapComparator(lhs.pins_configuration(), rhs.pins_configuration());
 }
-}//Messages
+}//Commands
 
 namespace google::protobuf
 {
@@ -37,10 +37,10 @@ inline bool operator==(const google::protobuf::Map<int, int>& lhs, const google:
 
 inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf::Any& rhs)
 {
-    if(lhs.Is<Messages::ControlerCommandToRun>() and rhs.Is<Messages::ControlerCommandToRun>())
+    if(lhs.Is<Commands::ControlerCommandToRun>() and rhs.Is<Commands::ControlerCommandToRun>())
     {
-        Messages::ControlerCommandToRun lhsCommand;
-        Messages::ControlerCommandToRun rhsCommand;
+        Commands::ControlerCommandToRun lhsCommand;
+        Commands::ControlerCommandToRun rhsCommand;
 
         lhs.UnpackTo(&lhsCommand);
         rhs.UnpackTo(&rhsCommand);
@@ -51,7 +51,7 @@ inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf:
     return false;
 }
 
-inline bool operator==(const HelloRequest& rhs, const HelloRequest& lhs)
+inline bool operator==(const InitCommands::HelloRequest& rhs, const InitCommands::HelloRequest& lhs)
 {
     return rhs.name() == lhs.name();
 }    

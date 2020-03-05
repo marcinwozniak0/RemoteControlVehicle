@@ -10,7 +10,7 @@ constexpr auto outOfRangeYCoordinate = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RE
 
 auto createCoordinates(const int32_t xCoordinate, const int32_t yCoordinate)
 {
-    Messages::CoordinateSystem coordinates;
+    Commands::CoordinateSystem coordinates;
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 

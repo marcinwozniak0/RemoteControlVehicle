@@ -66,19 +66,19 @@ void VehicleControler::handleCommand(const google::protobuf::Any& command)
 {
     INFO("Handle command : " + CommandDebuger::getCommandName(command));
 
-    if (command.Is<Messages::UserCommandToStart>())
+    if (command.Is<Commands::UserCommandToStart>())
     {
         _vehicle.startVehicle();
     }
-    else if (command.Is<Messages::UserCommandToStop>())
+    else if (command.Is<Commands::UserCommandToStop>())
     {
         _vehicle.stopVehicle();
     }
-    else if(command.Is<Messages::UserCommandToRun>())
+    else if(command.Is<Commands::UserCommandToRun>())
     {
         handleUserCommandToRun(command);
     }
-    else if(command.Is<Messages::Deactivate>())
+    else if(command.Is<Commands::Deactivate>())
     {
         _isControlerActive = false;
     }
@@ -91,7 +91,7 @@ void VehicleControler::handleCommand(const google::protobuf::Any& command)
 
 void VehicleControler::handleUserCommandToRun(const google::protobuf::Any& command) const
 {
-    Messages::UserCommandToRun payload;
+    Commands::UserCommandToRun payload;
     command.UnpackTo(&payload);
 
     _vehicle.applyNewConfiguration(payload.coordinate_system());

@@ -1,4 +1,4 @@
-#include <HelloMessages.pb.h>
+#include <InitCommands.pb.h>
 #include <EmptyAcknowledge.pb.h>
 
 #include "GrpcCommandSender.hpp"
@@ -19,10 +19,10 @@ GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub
 
 std::string GrpcCommandSender::connectWithServer() const
 {
-    HelloRequest request;
+    InitCommands::HelloRequest request;
     request.set_name("CONTROLER");
 
-    HelloReply reply;
+    InitCommands::HelloReply reply;
 
     grpc::ClientContext context;
 
@@ -44,7 +44,7 @@ std::string GrpcCommandSender::connectWithServer() const
 
 void GrpcCommandSender::sendCommand(google::protobuf::Any&& commandToSend)
 {
-    Messages::EmptyAcknowledge acknowledge;
+    Commands::EmptyAcknowledge acknowledge;
 
     grpc::ClientContext context;
 

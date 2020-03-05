@@ -9,7 +9,7 @@ constexpr auto firstInput = 0u;
 constexpr auto secondInput = 1u;
 }
 
-const PinsConfiguration L293DEngineDriver::calculatePinsConfiguration(const Messages::CoordinateSystem& coordinates) const
+const PinsConfiguration L293DEngineDriver::calculatePinsConfiguration(const Commands::CoordinateSystem& coordinates) const
 {
     const auto pwmValue = PWM_MAX_RANGE * coordinates.y_coordinate() / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
     constexpr auto directionChangeTreshold = 0;
@@ -30,7 +30,7 @@ const PinsConfiguration L293DEngineDriver::calculatePinsConfiguration(const Mess
     return {};
 }
 
-bool L293DEngineDriver::areCoordinatesInRange(const Messages::CoordinateSystem& coordinates) const
+bool L293DEngineDriver::areCoordinatesInRange(const Commands::CoordinateSystem& coordinates) const
 {
     return coordinates.x_coordinate() <= EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and
            coordinates.y_coordinate() <= EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and

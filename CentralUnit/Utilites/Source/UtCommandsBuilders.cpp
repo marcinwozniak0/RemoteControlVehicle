@@ -10,7 +10,7 @@ namespace UTHelpers
 {
 const google::protobuf::Any createDeactivateCommand()
 {
-    Messages::Deactivate deactivateMessage;
+    Commands::Deactivate deactivateMessage;
     google::protobuf::Any topLevelMessage;
 
     topLevelMessage.PackFrom(deactivateMessage);
@@ -20,7 +20,7 @@ const google::protobuf::Any createDeactivateCommand()
 
 const google::protobuf::Any createUserCommandToStart()
 {
-    Messages::UserCommandToStart userCommandToStart;
+    Commands::UserCommandToStart userCommandToStart;
     google::protobuf::Any topLevelMessage;
 
     topLevelMessage.PackFrom(userCommandToStart);
@@ -30,7 +30,7 @@ const google::protobuf::Any createUserCommandToStart()
 
 const google::protobuf::Any createUserCommandToStop()
 {
-    Messages::UserCommandToStop userCommandToStop;
+    Commands::UserCommandToStop userCommandToStop;
     google::protobuf::Any topLevelMessage;
 
     topLevelMessage.PackFrom(userCommandToStop);
@@ -40,7 +40,7 @@ const google::protobuf::Any createUserCommandToStop()
 
 const google::protobuf::Any createUserCommandToRun(const int32_t xCoordinate, const int32_t yCoordinate)
 {
-    Messages::UserCommandToRun userCommandToRun;
+    Commands::UserCommandToRun userCommandToRun;
     google::protobuf::Any topLevelMessage;
 
     userCommandToRun.mutable_coordinate_system()->set_x_coordinate(xCoordinate);

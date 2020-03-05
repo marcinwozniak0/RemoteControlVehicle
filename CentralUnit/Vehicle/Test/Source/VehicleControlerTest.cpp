@@ -47,7 +47,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
             .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate)))
             .WillOnce(Return(createDeactivateCommand()));
 
-    Messages::CoordinateSystem coordinates;
+    Commands::CoordinateSystem coordinates;
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 

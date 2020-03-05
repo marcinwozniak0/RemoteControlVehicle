@@ -16,13 +16,13 @@ namespace
 const grpc::Status notOkStatus {grpc::StatusCode::CANCELLED, grpc::string{}};
 const grpc::Status okStatus {grpc::StatusCode::OK, grpc::string{}};
 
-HelloRequest buildHelloRequest()
+InitCommands::HelloRequest buildHelloRequest()
 {
-    HelloRequest helloRequest;
+    InitCommands::HelloRequest helloRequest;
     helloRequest.set_name("CONTROLER");
     return helloRequest;
 }
-HelloRequest helloRequest = buildHelloRequest();
+InitCommands::HelloRequest helloRequest = buildHelloRequest();
 }
 
 class GrpcCommandSenderTest : public Test

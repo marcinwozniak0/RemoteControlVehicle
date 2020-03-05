@@ -10,7 +10,7 @@ ControlerCommandToRunMessageBuilder ControlerCommandToRunMessageBuilder::pinsCon
 
 google::protobuf::Any ControlerCommandToRunMessageBuilder::build() const
 {
-    Messages::ControlerCommandToRun controlerCommandToStart;
+    Commands::ControlerCommandToRun controlerCommandToStart;
     auto& pinsConfiguration = *controlerCommandToStart.mutable_pins_configuration();
 
     for(const auto& [pinNumber, pinValue] : _pinsConfiguration)

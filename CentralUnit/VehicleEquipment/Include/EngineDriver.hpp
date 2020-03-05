@@ -9,7 +9,7 @@
 class EngineDriver
 {
 public:
-    virtual const PinsConfiguration calculatePinsConfiguration(const Messages::CoordinateSystem&) const = 0;
+    virtual const PinsConfiguration calculatePinsConfiguration(const Commands::CoordinateSystem&) const = 0;
 
     virtual ~EngineDriver() = default;
 };

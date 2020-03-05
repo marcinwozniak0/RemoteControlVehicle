@@ -7,7 +7,7 @@
 class SteeringSystem
 {
 public:
-    virtual void applyNewConfigurationBasedOnCoordinates(const Messages::CoordinateSystem&) = 0;
+    virtual void applyNewConfigurationBasedOnCoordinates(const Commands::CoordinateSystem&) = 0;
     virtual const PinsConfiguration& getPinsConfiguration() const = 0;
 
     virtual ~SteeringSystem() = default;

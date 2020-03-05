@@ -12,7 +12,7 @@ TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithCorrectPinsC
     const auto message = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
                              .build();
 
-    Messages::ControlerCommandToRun payload;
+    Commands::ControlerCommandToRun payload;
     message.UnpackTo(&payload);
 
     ASSERT_EQ(pinsConfiguration, payload.pins_configuration());
@@ -22,7 +22,7 @@ TEST(ControlerCommandToRunMessageBuilderTest, shouldBuildMessageWithEmptyPinsCon
 {
     const auto message = ControlerCommandToRunMessageBuilder{}.build();
 
-    Messages::ControlerCommandToRun payload;
+    Commands::ControlerCommandToRun payload;
     message.UnpackTo(&payload);
 
     const PinsConfiguration emptyPinsConfiguration = {};

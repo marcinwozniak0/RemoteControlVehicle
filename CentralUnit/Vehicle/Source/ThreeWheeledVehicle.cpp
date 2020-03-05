@@ -29,7 +29,7 @@ VehicleState ThreeWheeledVehicle::getVehicleState()
     return _vehicleState;
 }
 
-void ThreeWheeledVehicle::applyNewConfiguration(const Messages::CoordinateSystem& coordinateSystem)
+void ThreeWheeledVehicle::applyNewConfiguration(const Commands::CoordinateSystem& coordinateSystem)
 {
     _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
     _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);

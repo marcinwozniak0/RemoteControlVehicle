@@ -8,9 +8,9 @@ constexpr int16_t yCoordinateForBackwardDirection = -1000;
 constexpr int16_t yCoordinateForStopEngine = 0;
 constexpr int16_t overRangeCoordinate = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION + 15;
 
-const Messages::CoordinateSystem buildCoordinates(int xCoordinate, int yCoordinate)
+const Commands::CoordinateSystem buildCoordinates(int xCoordinate, int yCoordinate)
 {
-    Messages::CoordinateSystem coordinates;
+    Commands::CoordinateSystem coordinates;
     coordinates.set_x_coordinate(xCoordinate);
     coordinates.set_y_coordinate(yCoordinate);
 
@@ -69,11 +69,11 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForStopEngine)
 
 struct UnknownCoordinates
 {
-    UnknownCoordinates(const Messages::CoordinateSystem& coordinateSystem)
+    UnknownCoordinates(const Commands::CoordinateSystem& coordinateSystem)
         : _coordinateSystem(coordinateSystem)
     {}
 
-    Messages::CoordinateSystem _coordinateSystem;
+    Commands::CoordinateSystem _coordinateSystem;
 };
 
 class UnknownCoordinatesTest : public L293DEngineDriverTest,
