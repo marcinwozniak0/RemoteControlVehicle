@@ -37,4 +37,4 @@ build/
 ControlPanel/build
 
 # Gradle files
-ControlPanel/.gradle
+ControlPanel/*/.gradle
