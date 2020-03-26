@@ -58,4 +58,4 @@ MASTER_BUILD_JAVA_CONTROL_PANEL:
   script:
     - /builds/marcinwozniak0/RemoteControlVehicle/scripts/ci_scripts/prepare_java_environment.sh
     - cd /builds/marcinwozniak0/RemoteControlVehicle/ControlPanel
-    - ./gradlew clean build
+    - ./gradlew clean build --info

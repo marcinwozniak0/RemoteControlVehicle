@@ -5,4 +5,5 @@ apt-get update  --yes
 apt-get install --yes build-essential
 apt-get install --yes gradle
 apt-get install --yes openjdk-11-jdk
+apt-get install --yes nodejs
 
