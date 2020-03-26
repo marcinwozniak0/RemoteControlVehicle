@@ -1,0 +1,19 @@
+plugins {
+  id("com.github.node-gradle.node") version "2.2.0"
+  id 'java'
+}
+
+node {
+
+    version = '10.15.2'
+
+    npmVersion = '6.14.2'    
+    
+    download = false
+}
+
+jar.dependsOn 'npm_run_build'
+
+jar {
+  from 'dist/frontend' into 'public'
+}

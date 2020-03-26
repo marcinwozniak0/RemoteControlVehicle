@@ -1,6 +1,19 @@
+
+buildscript {
+	ext {
+		springBootVersion = '2.0.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.2.2.RELEASE'
+    id 'org.springframework.boot' version '2.0.5.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id "com.google.protobuf" version "0.8.8"
 }
@@ -17,6 +30,7 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+    implementation(project(':frontend'))
 }
 
 sourceSets {
@@ -24,6 +38,7 @@ sourceSets {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/protobuf'
+            srcDirs 'backend/src/main/java/com/example/springboot'
         }
         proto {
             srcDir "${project.projectDir}/../Interfaces/Protobuf/"

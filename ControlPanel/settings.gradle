@@ -1,3 +1,3 @@
-include 'backend'
-
 rootProject.name = 'ControlPanel'
+
+include 'backend', 'frontend'

@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class Application {
+public class AngularbootApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(AngularbootApplication.class, args);
 	}
 
 	@Bean
@@ -31,3 +31,4 @@ public class Application {
 	}
 
 }
+
