@@ -38,3 +38,6 @@ ControlPanel/build
 
 # Gradle files
 ControlPanel/*/.gradle
+
+# Bin output
+ControlPanel/*/bin/*
