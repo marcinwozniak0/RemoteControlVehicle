@@ -43,4 +43,4 @@ ControlPanel/*/.gradle
 ControlPanel/*/bin/*
 
 # Node modules
-ControlPanel/*/node_modules/*
+ControlPanel/node_modules/*

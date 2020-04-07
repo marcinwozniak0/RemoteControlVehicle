@@ -1,3 +1,4 @@
+
 buildscript {
 	ext {
 		springBootVersion = '2.0.5.RELEASE'
@@ -36,11 +37,11 @@ sourceSets {
     main {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/protobuf'
-            srcDirs 'backend/src/main/java/'
+            srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'backend/src/main/java'
         }
         proto {
-            srcDir "${project.projectDir}/../Interfaces/Protobuf/"
+            srcDir "${project.projectDir}/../../Interfaces/Protobuf/"
         }
     }
 }
