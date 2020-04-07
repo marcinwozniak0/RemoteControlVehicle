@@ -41,3 +41,6 @@ ControlPanel/*/.gradle
 
 # Bin output
 ControlPanel/*/bin/*
+
+# Node modules
+ControlPanel/*/node_modules/*
