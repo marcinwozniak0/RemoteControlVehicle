@@ -1,14 +1,6 @@
-package com.example.springboot;
-// import javax.persistence.Entity;
-// import javax.persistence.GeneratedValue;
-// import javax.persistence.GenerationType;
-// import javax.persistence.Id;
+package user;
 
-//@Entity
 public class User {
-     
-    //@Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
     private String username;
     private final int vehicleId;
     private final int vehicleKey;
@@ -19,16 +11,15 @@ public class User {
         this.vehicleKey = vehicleKey;
     }
 
-    String getUsername(){
+    public String getUsername(){
         return this.username;
     }
 
-    int getVehicleId(){
+    public int getVehicleId(){
         return this.vehicleId;
     }
 
-    int getVehicleKey(){
+    public int getVehicleKey(){
         return this.vehicleKey;
     }
-    // standard constructors / setters / getters / toString
 }
