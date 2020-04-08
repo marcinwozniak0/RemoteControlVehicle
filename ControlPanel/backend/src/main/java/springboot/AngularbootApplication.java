@@ -8,11 +8,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import router.CommandReceiver;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import java.io.IOException;
+
 @SpringBootApplication
 public class AngularbootApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, InterruptedException {
+		
+		Server server = ServerBuilder
+          .forPort(3000)
+		  .addService(new CommandReceiver()).build();
+		  
+		server.start();
+		
 		SpringApplication.run(AngularbootApplication.class, args);
+
+		server.awaitTermination();
 	}
 
 	@Bean
