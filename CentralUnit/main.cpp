@@ -32,9 +32,9 @@ int main()
     ThreeWheeledVehicle vehicle(propulsionSystem, steeringSystem);
 
     GrpcCommandSender commandSender(std::make_shared<Router::Stub>(
-        grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials())));
+        grpc::CreateChannel("127.0.0.1:3000", grpc::InsecureChannelCredentials())));
 
-    GrpcCommandReceiver commandReceiver("PortAddress");
+    GrpcCommandReceiver commandReceiver("127.0.0.1:5000");
 
     VehicleControler vehicleControler(commandReceiver,
                                       commandSender,

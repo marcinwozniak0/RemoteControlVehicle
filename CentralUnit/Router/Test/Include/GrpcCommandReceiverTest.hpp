@@ -16,7 +16,7 @@ using namespace ::testing;
 
 namespace
 {
-    const std::string portAddress = "0.0.0.0:50050";
+    const std::string portAddress = "127.0.0.1:3000";
 }
 
 using Client = std::unique_ptr<GrpcCommandSender>;

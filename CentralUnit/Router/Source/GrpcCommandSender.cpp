@@ -32,7 +32,7 @@ std::string GrpcCommandSender::connectWithServer() const
 
     if (status.ok())
     {
-        INFO("Connection with server is established");
+        INFO("Connection with server is established. Received init message = " + reply.message());
         return reply.message();
     } 
     else 
