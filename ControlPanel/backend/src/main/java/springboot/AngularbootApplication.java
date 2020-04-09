@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import router.CommandReceiver;
+import router.CommandSender;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
@@ -21,9 +22,11 @@ public class AngularbootApplication {
 		Server server = ServerBuilder
           .forPort(3000)
 		  .addService(new CommandReceiver()).build();
-		  
+		
 		server.start();
 		
+		CommandSender client = new CommandSender();  
+
 		SpringApplication.run(AngularbootApplication.class, args);
 
 		server.awaitTermination();
