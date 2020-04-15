@@ -1,22 +1,38 @@
 package router;
 
 import com.interfaces.proto.InitCommandsProto.*;
+import com.interfaces.proto.AcknowledgeProto.Acknowledge;
+import com.interfaces.proto.AcknowledgeStatus.Status;
 import com.interfaces.proto.RouterGrpc;
+import com.google.protobuf.Any;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 public class CommandSender {
+    private RouterGrpc.RouterBlockingStub stub;
+    private ManagedChannel channel;
+
     public CommandSender() {
-    ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 5000)
+    channel = ManagedChannelBuilder.forAddress("localhost", 3000)
     .usePlaintext()
     .build();
-    
-    RouterGrpc.RouterBlockingStub stub 
-        = RouterGrpc.newBlockingStub(channel);
+
+    stub = RouterGrpc.newBlockingStub(channel);
 
     HelloReply helloReply = stub.sayHello(HelloRequest.newBuilder()
         .setName("JAVA command sender")
         .build());
+    }
 
+    public boolean sendCommand(Any commandToSend){
+
+        Acknowledge acknowledge = stub.sendCommand(commandToSend);
+
+        if (Status.SUCCESS == acknowledge.getStatus()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

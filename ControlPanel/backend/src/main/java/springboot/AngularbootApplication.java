@@ -17,6 +17,11 @@ import java.io.IOException;
 @SpringBootApplication
 public class AngularbootApplication {
 
+	@Bean
+    public CommandSender commandSender() {
+        return new CommandSender();
+	}
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		
 		Server server = ServerBuilder
@@ -25,7 +30,7 @@ public class AngularbootApplication {
 		
 		server.start();
 		
-		CommandSender client = new CommandSender();  
+		//CommandSender client = new CommandSender();  
 
 		SpringApplication.run(AngularbootApplication.class, args);
 

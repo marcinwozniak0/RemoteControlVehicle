@@ -1,25 +1,25 @@
 package user;
 
 public class User {
-    private String username;
+    private final int userId;
     private final int vehicleId;
-    private final int vehicleKey;
+    private final String vehicleKey;
     
-    User(String username, int vehicleId, int vehicleKey){
-        this.username = username;
+    User(int userId, int vehicleId, String vehicleKey){
+        this.userId = userId;
         this.vehicleId = vehicleId;
         this.vehicleKey = vehicleKey;
     }
 
-    public String getUsername(){
-        return this.username;
+    public int getUserId(){
+        return this.userId;
     }
 
     public int getVehicleId(){
         return this.vehicleId;
     }
 
-    public int getVehicleKey(){
+    public String getVehicleKey(){
         return this.vehicleKey;
     }
 }
