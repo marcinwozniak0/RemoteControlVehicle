@@ -20,7 +20,7 @@ std::optional<const google::protobuf::Any> GrpcCommandReceiver::takeMessageFromQ
     }
 }
 
-grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Commands::EmptyAcknowledge* response)
+grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Commands::Acknowledge* response)
 {
     INFO("Command received. Command will be queued");
     _commandsQueue.push(*request);

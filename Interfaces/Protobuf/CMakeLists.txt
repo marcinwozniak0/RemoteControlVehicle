@@ -1,5 +1,6 @@
 set(PROTO_FILES ControlerCommandToRun.proto
-                EmptyAcknowledge.proto
+                Acknowledge.proto
+                AcknowledgeStatus.proto
                 Deactivate.proto
                 UserCommandToRun.proto
                 UserCommandToStart.proto

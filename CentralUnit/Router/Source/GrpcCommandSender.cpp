@@ -1,12 +1,12 @@
 #include <InitCommands.pb.h>
-#include <EmptyAcknowledge.pb.h>
+#include <Acknowledge.pb.h>
 
 #include "GrpcCommandSender.hpp"
 #include "VehicleConfiguration.hpp"
 #include "CommunicationSocketException.hpp"
 #include "Logger.hpp"
 
-GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub) 
+GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub)
     : _stub(stub)
 {
     const auto connectionResult = connectWithServer();
@@ -44,7 +44,7 @@ std::string GrpcCommandSender::connectWithServer() const
 
 void GrpcCommandSender::sendCommand(google::protobuf::Any&& commandToSend)
 {
-    Commands::EmptyAcknowledge acknowledge;
+    Commands::Acknowledge acknowledge;
 
     grpc::ClientContext context;
 

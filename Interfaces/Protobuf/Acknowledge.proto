@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "AcknowledgeStatus.proto";
+
+package Commands;
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "AcknowledgeProto";
+
+message Acknowledge
+{
+    Status status = 1;    
+}
