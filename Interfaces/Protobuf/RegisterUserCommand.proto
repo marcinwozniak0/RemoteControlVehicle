@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package Commands;
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "RegisterUserCommandProto";
+
+message RegisterUserCommand
+{
+    int32 user_id = 1;
+    string vehicle_id = 2;
+    string vehicle_key = 3;
+}
