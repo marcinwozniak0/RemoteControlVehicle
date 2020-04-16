@@ -5,6 +5,7 @@
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
 #include <InitCommands.pb.h>
+#include <RegisterVehicle.pb.h>
 
 #include "MapComparator.hpp"
 #include "VehicleTypes.hpp"
@@ -21,6 +22,12 @@ inline bool operator==(const Commands::ControlerCommandToRun& lhs, const Command
 {
     return Comparators::mapComparator(lhs.pins_configuration(), rhs.pins_configuration());
 }
+
+inline bool operator==(const Commands::RegisterVehicle& lhs, const Commands::RegisterVehicle& rhs)
+{
+    return lhs.vehicle_id() == rhs.vehicle_id();
+}
+
 }//Commands
 
 namespace google::protobuf

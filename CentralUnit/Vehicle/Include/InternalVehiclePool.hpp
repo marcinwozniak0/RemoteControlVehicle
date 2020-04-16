@@ -10,7 +10,7 @@ class InternalVehiclePool : public VehiclePool
 public:
     std::optional<std::shared_ptr<Vehicle>> getVehicle(int vehicleId) override;
     bool rentVehicle(int vehicleId) override;
-    bool registerVehicle(int vehicleId) override;
+    bool registerVehicle(Commands::RegisterVehicle&&) override;
     
 private:
     bool isVehicleReqistered(int vehicleId) const;

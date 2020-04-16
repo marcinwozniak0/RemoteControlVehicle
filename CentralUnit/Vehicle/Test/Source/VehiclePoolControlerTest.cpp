@@ -81,3 +81,19 @@ TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)
 
     _sut.controlVehiclePool();
 }
+
+TEST_F(VehicleControlerTest, registerVehicleCommandShouldTriggerVehicleRegistrationInVehiclePoolControler)
+{
+    Commands::RegisterVehicle registerVehicleCommand;
+    const auto packedRegisterVehicleCommand = createRegisterVehicleCommand(vehicleId);
+    packedRegisterVehicleCommand.UnpackTo(&registerVehicleCommand);
+
+    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+            .WillOnce(Return(packedRegisterVehicleCommand))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(registerVehicleCommand)));
+
+
+    _sut.controlVehiclePool();
+}

@@ -5,6 +5,7 @@
 #include <UserCommandToStop.pb.h>
 #include <UserCommandToRun.pb.h>
 #include <RegisterUserCommand.pb.h>
+#include <RegisterVehicle.pb.h>
 #include <Deactivate.pb.h>
 
 #include "Logger.hpp"
@@ -75,6 +76,13 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     {
         handleRegisterUserCommand(command);
     }
+    else if (command.Is<Commands::RegisterVehicle>())
+    {
+        Commands::RegisterVehicle payload;
+        command.UnpackTo(&payload);
+        
+        _vehiclePool.registerVehicle(std::move(payload));
+    }
     else if (command.Is<Commands::UserCommandToStart>())
     {
         Commands::UserCommandToStart payload;
@@ -126,6 +134,7 @@ void VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any
     Commands::RegisterUserCommand payload;
     command.UnpackTo(&payload);
 
+    //TODO UT
     //registerUSer
         //check is possible
         

@@ -3,6 +3,7 @@
 #include <UserCommandToStart.pb.h>
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
+#include <RegisterVehicle.pb.h>
 
 #include "UtCommandsBuilders.hpp"
 
@@ -59,6 +60,18 @@ const google::protobuf::Any createUnknownCommand()
 {
     google::protobuf::Any topLevelMessage;
     topLevelMessage.ParseFromString("UnknownCommand");
+
+    return topLevelMessage;
+}
+
+const google::protobuf::Any createRegisterVehicleCommand(const int vehicleId)
+{
+    Commands::RegisterVehicle registerVehicleCommand;
+    google::protobuf::Any topLevelMessage;
+
+    registerVehicleCommand.set_vehicle_id(vehicleId);
+
+    topLevelMessage.PackFrom(registerVehicleCommand);
 
     return topLevelMessage;
 }

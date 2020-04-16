@@ -46,9 +46,9 @@ bool InternalVehiclePool::rentVehicle(int vehicleId)
     }
 }
 
-bool InternalVehiclePool::registerVehicle(int vehicleId)
+bool InternalVehiclePool::registerVehicle(Commands::RegisterVehicle&& registerVehicleCommand)
 {
-    if (not isVehicleReqistered(vehicleId))
+    if (const auto vehicleId = registerVehicleCommand.vehicle_id(); not isVehicleReqistered(vehicleId))
     {
         _registeredVehicles.push_back(vehicleId);
         //TODO _vehiclePool.push_back(Vehicle)
