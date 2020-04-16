@@ -42,8 +42,8 @@ void VehiclePoolControler::controlVehiclePool()
 void VehiclePoolControler::vehicleEmergencyStop()
 {
     //TODO co z ta metoda, teraz nie ma sensu
-     auto& vehicle = _vehiclePool.getVehicle(0);
-    auto pinsConfiguration = vehicle.getCurrentPinsConfiguration();
+    auto vehicle = _vehiclePool.getVehicle(0);
+    auto pinsConfiguration = vehicle.value()->getCurrentPinsConfiguration();
 
     clearPinsValues(pinsConfiguration);
 
@@ -79,15 +79,15 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     {
         Commands::UserCommandToStart payload;
         command.UnpackTo(&payload);
-        auto& vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-        vehicle.startVehicle();
+        auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
+        vehicle.value()->startVehicle();
     }
     else if (command.Is<Commands::UserCommandToStop>())
     {
         Commands::UserCommandToStop payload;
         command.UnpackTo(&payload);
-        auto& vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-        vehicle.stopVehicle();
+        auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
+        vehicle.value()->stopVehicle();
     }
     else if(command.Is<Commands::UserCommandToRun>())
     {
@@ -110,10 +110,10 @@ void VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& c
     command.UnpackTo(&payload);
 
     const auto vehicleId = payload.vehicle_id();
-    auto& vehicle = _vehiclePool.getVehicle(vehicleId);
+    auto vehicle = _vehiclePool.getVehicle(vehicleId);
 
-    vehicle.applyNewConfiguration(payload.coordinate_system());
-    const auto newPinsConfiguration = vehicle.getCurrentPinsConfiguration();
+    vehicle.value()->applyNewConfiguration(payload.coordinate_system());
+    const auto newPinsConfiguration = vehicle.value()->getCurrentPinsConfiguration();
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
                                                               .vehicleId(vehicleId)  
                                                               .build();

@@ -23,7 +23,7 @@ const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
-    EXPECT_CALL(_vehicleMock, startVehicle());
+    EXPECT_CALL(*_vehicleMock, startVehicle());
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
             .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
@@ -33,7 +33,7 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 
 TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
-    EXPECT_CALL(_vehicleMock, stopVehicle());
+    EXPECT_CALL(*_vehicleMock, stopVehicle());
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(3)
             .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createUserCommandToStop(vehicleId)))
@@ -55,8 +55,8 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(configuration)
                                                               .build();
 
-    EXPECT_CALL(_vehicleMock, applyNewConfiguration(coordinates));
-    EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
+    EXPECT_CALL(*_vehicleMock, applyNewConfiguration(coordinates));
+    EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
     EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
 
     _sut.controlVehiclePool();
@@ -66,7 +66,7 @@ TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPins
 {
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(zeroedConfiguration)
                                                               .build();
-    EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
+    EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
 
     EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
 
