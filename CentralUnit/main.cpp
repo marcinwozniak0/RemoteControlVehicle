@@ -1,7 +1,7 @@
 #include <google/protobuf/stubs/common.h>
 #include <grpc++/grpc++.h>
 
-#include "VehicleControler.hpp"
+#include "VehiclePoolControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
 #include "DcEngine.hpp"
 #include "VehicleConfiguration.hpp"
@@ -11,6 +11,7 @@
 #include "ThreeWheeledVehicle.hpp"
 #include "GrpcCommandSender.hpp"
 #include "GrpcCommandReceiver.hpp"
+#include "InternalVehiclePool.hpp"
 
 int main()
 {
@@ -36,18 +37,20 @@ int main()
     GrpcCommandSender commandSender(std::make_shared<Router::Stub>(
         grpc::CreateChannel("127.0.0.1:3000", grpc::InsecureChannelCredentials())));
 
-    VehicleControler vehicleControler(commandReceiver,
-                                      commandSender,
-                                      vehicle);
+    InternalVehiclePool vehiclePool;
+
+    VehiclePoolControler vehiclePoolControler(commandReceiver,
+                                              commandSender,
+                                              vehiclePool);
 
     try
     {
-        vehicleControler.controlVehicle();
+        vehiclePoolControler.controlVehiclePool();
     }
     catch(const std::exception& exception)
     {
         std::cerr << exception.what() << std::endl;
-        vehicleControler.vehicleEmergencyStop();
+        vehiclePoolControler.vehicleEmergencyStop();
     }
 
     google::protobuf::ShutdownProtobufLibrary();

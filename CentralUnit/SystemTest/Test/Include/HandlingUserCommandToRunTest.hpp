@@ -2,7 +2,7 @@
 
 #include <gmock/gmock.h>
 
-#include "VehicleControler.hpp"
+#include "VehiclePoolControler.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
 #include "DcEngine.hpp"
 #include "VehicleConfiguration.hpp"
@@ -10,15 +10,16 @@
 #include "ThirtyDegreesSteeringWheel.hpp"
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
+#include "InternalVehiclePool.hpp"
 #include "CommandSenderMock.hpp"
 #include "CommandReceiverMock.hpp"
 
 using namespace ::testing;
 
-class HandlingUserCommandToRunTest : public Test
+class DISABLED_HandlingUserCommandToRunTest : public Test
 {
 public:
-    HandlingUserCommandToRunTest();
+    DISABLED_HandlingUserCommandToRunTest();
 
     NiceMock<CommandSenderMock> commandSenderMock;
     NiceMock<CommandReceiverMock> commandReceiverMock;
@@ -31,7 +32,8 @@ private:
     ThirtyDegreesSteeringWheel steeringWheel;
     FrontAxialSteeringSystem steeringSystem;
     ThreeWheeledVehicle vehicle;
+    InternalVehiclePool vehiclePool;
 
 public:
-    VehicleControler vehicleControler;
+    VehiclePoolControler vehiclePoolControler;
 };

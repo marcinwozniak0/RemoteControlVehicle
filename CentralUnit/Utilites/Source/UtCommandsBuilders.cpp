@@ -18,9 +18,11 @@ const google::protobuf::Any createDeactivateCommand()
     return topLevelMessage;
 }
 
-const google::protobuf::Any createUserCommandToStart()
+const google::protobuf::Any createUserCommandToStart(const int vehicleId)
 {
     Commands::UserCommandToStart userCommandToStart;
+    userCommandToStart.set_vehicle_id(vehicleId);
+
     google::protobuf::Any topLevelMessage;
 
     topLevelMessage.PackFrom(userCommandToStart);
@@ -28,9 +30,10 @@ const google::protobuf::Any createUserCommandToStart()
     return topLevelMessage;
 }
 
-const google::protobuf::Any createUserCommandToStop()
+const google::protobuf::Any createUserCommandToStop(const int vehicleId)
 {
     Commands::UserCommandToStop userCommandToStop;
+    userCommandToStop.set_vehicle_id(vehicleId);
     google::protobuf::Any topLevelMessage;
 
     topLevelMessage.PackFrom(userCommandToStop);
@@ -38,11 +41,12 @@ const google::protobuf::Any createUserCommandToStop()
     return topLevelMessage;
 }
 
-const google::protobuf::Any createUserCommandToRun(const int32_t xCoordinate, const int32_t yCoordinate)
+const google::protobuf::Any createUserCommandToRun(const int32_t xCoordinate, const int32_t yCoordinate, const int vehicleId)
 {
     Commands::UserCommandToRun userCommandToRun;
     google::protobuf::Any topLevelMessage;
 
+    userCommandToRun.set_vehicle_id(vehicleId);
     userCommandToRun.mutable_coordinate_system()->set_x_coordinate(xCoordinate);
     userCommandToRun.mutable_coordinate_system()->set_y_coordinate(yCoordinate);
 

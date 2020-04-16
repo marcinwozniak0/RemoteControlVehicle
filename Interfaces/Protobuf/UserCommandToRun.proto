@@ -7,7 +7,8 @@ option java_outer_classname = "UserCommandToRunProto";
 
 message UserCommandToRun
 {
-    CoordinateSystem coordinate_system = 1;
+    int32 vehicle_id = 1;
+    CoordinateSystem coordinate_system = 2;
 }
 
 message CoordinateSystem

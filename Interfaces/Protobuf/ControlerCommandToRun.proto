@@ -7,5 +7,6 @@ option java_outer_classname = "ControlerCommandToRunProto";
 
 message ControlerCommandToRun
 {
-    map<int32, int32> pins_configuration = 1;
+    int32 vehicle_id = 1;
+    map<int32, int32> pins_configuration = 2;
 }

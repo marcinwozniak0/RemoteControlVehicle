@@ -6,26 +6,27 @@
 
 class CommandReceiver;
 class CommandSender;
-class Vehicle;
+class VehiclePool;
 
-class VehicleControler
+class VehiclePoolControler
 {
 public:
-    VehicleControler(CommandReceiver&, CommandSender&, Vehicle&);
+    VehiclePoolControler(CommandReceiver&, CommandSender&, VehiclePool&);
 
-    void controlVehicle();
+    void controlVehiclePool();
     void vehicleEmergencyStop();  
 
 private:
     std::optional<std::string> getMessageToExecute();
     void handleCommand(const google::protobuf::Any&);
     void handleUserCommandToRun(const google::protobuf::Any&) const;
+    void handleRegisterUserCommand(const google::protobuf::Any&) const;
     template <typename Command> void sendCommand(Command&&) const;
     void clearPinsValues(PinsConfiguration&) const;
 
     CommandReceiver& _commandReceiver;
     CommandSender& _commandSender;
-    Vehicle& _vehicle;
+    VehiclePool& _vehiclePool;
 
     bool _isControlerActive = false;
 };

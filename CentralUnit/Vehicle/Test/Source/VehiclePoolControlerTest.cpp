@@ -4,7 +4,7 @@
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
 
-#include "VehicleControlerTest.hpp"
+#include "VehiclePoolControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "ProtobufStructuresComparators.hpp"
 #include "UtCommandsBuilders.hpp"
@@ -16,6 +16,7 @@ namespace
 {
 constexpr int32_t xCoordinate = 700;
 constexpr int32_t yCoordinate = 5500;
+constexpr auto vehicleId = 14u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 }
@@ -24,27 +25,27 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
     EXPECT_CALL(_vehicleMock, startVehicle());
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createUserCommandToStart()))
+            .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
-    _sut.controlVehicle();
+    _sut.controlVehiclePool();
 }
 
 TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
     EXPECT_CALL(_vehicleMock, stopVehicle());
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(3)
-            .WillOnce(Return(createUserCommandToStart()))
-            .WillOnce(Return(createUserCommandToStop()))
+            .WillOnce(Return(createUserCommandToStart(vehicleId)))
+            .WillOnce(Return(createUserCommandToStop(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
-    _sut.controlVehicle();
+    _sut.controlVehiclePool();
 }
 
 TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
-            .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate)))
+            .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate, vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
     Commands::CoordinateSystem coordinates;
@@ -58,7 +59,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     EXPECT_CALL(_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
     EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
 
-    _sut.controlVehicle();
+    _sut.controlVehiclePool();
 }
 
 TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPinsConfiguration)
@@ -78,5 +79,5 @@ TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)
             .WillOnce(Return(createUnknownCommand()))
             .WillOnce(Return(createDeactivateCommand()));
 
-    _sut.controlVehicle();
+    _sut.controlVehiclePool();
 }

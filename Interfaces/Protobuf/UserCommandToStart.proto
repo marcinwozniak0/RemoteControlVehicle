@@ -6,4 +6,6 @@ option java_package = "com.interfaces.proto";
 option java_outer_classname = "UserCommandToStartProto";
 
 message UserCommandToStart
-{}
+{
+    int32 vehicle_id = 1;
+}
