@@ -7,5 +7,5 @@ option java_outer_classname = "VehicleType";
 
 enum VehicleType
 {
-    BASE = 0;
+    THREE_WHEELED = 0;
 }
