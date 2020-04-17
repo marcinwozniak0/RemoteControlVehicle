@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include "InternalVehiclePool.hpp"
+#include "ThreeWheeledVehicleFactory.hpp"
 #include "Logger.hpp"
 
 std::optional<std::shared_ptr<Vehicle>> InternalVehiclePool::getVehicle(int vehicleId)
@@ -51,7 +52,7 @@ bool InternalVehiclePool::registerVehicle(Commands::RegisterVehicle&& registerVe
     if (const auto vehicleId = registerVehicleCommand.vehicle_id(); not isVehicleReqistered(vehicleId))
     {
         _registeredVehicles.push_back(vehicleId);
-        //TODO _vehiclePool.push_back(Vehicle)
+        _vehiclePool.push_back(ThreeWheeledVehicleFactory{std::move(registerVehicleCommand)}.create());
         return true;
     }
     else
@@ -79,3 +80,6 @@ bool InternalVehiclePool::isVehicleRented(int vehicleId) const
                         _rentedVehicles.end(),
                         [vehicleId](const auto elem){return elem == vehicleId;});
 }
+
+//TODO unregisterVehicle
+//TODO unrentVehicle
