@@ -13,6 +13,8 @@
 #include "InternalVehiclePool.hpp"
 #include "CommandSenderMock.hpp"
 #include "CommandReceiverMock.hpp"
+#include "VehicleFactoryFacade.hpp"
+#include "ThreeWheeledVehicleFactory.hpp"
 
 using namespace ::testing;
 
@@ -32,6 +34,8 @@ private:
     ThirtyDegreesSteeringWheel steeringWheel;
     FrontAxialSteeringSystem steeringSystem;
     ThreeWheeledVehicle vehicle;
+    ThreeWheeledVehicleFactory threeWheeledVehicleFactory;
+    VehicleFactoryFacade vehicleFactory;
     InternalVehiclePool vehiclePool;
 
 public:

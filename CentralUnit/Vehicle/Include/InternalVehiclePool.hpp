@@ -5,9 +5,13 @@
 
 #include "VehiclePool.hpp"
 
+class VehicleFactory;
+
 class InternalVehiclePool : public VehiclePool
 {
 public:
+    InternalVehiclePool(const VehicleFactory&);
+
     std::optional<std::shared_ptr<Vehicle>> getVehicle(int vehicleId) override;
     bool rentVehicle(int vehicleId) override;
     bool registerVehicle(Commands::RegisterVehicle&&) override;
@@ -21,4 +25,5 @@ private:
     std::vector<std::shared_ptr<Vehicle>> _vehiclePool;
     std::vector<int> _registeredVehicles;
     std::vector<int> _rentedVehicles;
+    const VehicleFactory& _vehicleFactory;
 };

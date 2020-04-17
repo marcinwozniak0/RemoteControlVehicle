@@ -2,10 +2,10 @@
 
 #include <gmock/gmock.h>
 
-#include "VehiclePool.hpp"
+#include "VehicleFactory.hpp"
 
-class VehiclePoolMock : public VehiclePool
+class VehicleFactoryMock : public VehicleFactory
 {
 public:
-    MOCK_METHOD(std::unique_ptr<Vehicle>, create, (), (const));
+    MOCK_METHOD(std::unique_ptr<Vehicle>, create, (Commands::RegisterVehicle&&), (const));
 };

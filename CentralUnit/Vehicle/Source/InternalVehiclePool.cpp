@@ -1,8 +1,12 @@
 #include <algorithm>
 
 #include "InternalVehiclePool.hpp"
-#include "ThreeWheeledVehicleFactory.hpp"
+#include "VehicleFactory.hpp"
 #include "Logger.hpp"
+
+InternalVehiclePool::InternalVehiclePool(const VehicleFactory& vehicleFacotry)
+    : _vehicleFactory(vehicleFacotry)
+{}
 
 std::optional<std::shared_ptr<Vehicle>> InternalVehiclePool::getVehicle(int vehicleId)
 {
@@ -51,9 +55,17 @@ bool InternalVehiclePool::registerVehicle(Commands::RegisterVehicle&& registerVe
 {
     if (const auto vehicleId = registerVehicleCommand.vehicle_id(); not isVehicleReqistered(vehicleId))
     {
-        _registeredVehicles.push_back(vehicleId);
-        _vehiclePool.push_back(ThreeWheeledVehicleFactory{std::move(registerVehicleCommand)}.create());
-        return true;
+        if (auto vehicle = _vehicleFactory.create(std::move(registerVehicleCommand)))
+        {
+            _vehiclePool.push_back(std::move(vehicle));
+            _registeredVehicles.push_back(vehicleId);
+            return true;
+        }
+        else
+        {
+            WARNING("Fail during creation of vehicle with id = " + std::to_string(vehicleId));
+            return false;
+        }
     }
     else
     {

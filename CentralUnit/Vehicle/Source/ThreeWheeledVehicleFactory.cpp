@@ -9,18 +9,10 @@
 #include "ThreeWheeledVehicle.hpp"
 #include "InternalVehiclePool.hpp"
 
-ThreeWheeledVehicleFactory::ThreeWheeledVehicleFactory(Commands::RegisterVehicle&& registerVehicleCommand)
-    : _registerVehicleCommand(std::move(registerVehicleCommand))
-{}
-
-std::unique_ptr<Vehicle> ThreeWheeledVehicleFactory::create() const
+std::unique_ptr<Vehicle> ThreeWheeledVehicleFactory::create(Commands::RegisterVehicle&& registerVehicleCommand) const
 {
-
-    //TODO check vehicle type
-    //fasade - one main facotry
     ThreeWheeledVehicleConfiguration vehicleConfiguration;
-    _registerVehicleCommand.vehicle_configuration().UnpackTo(&vehicleConfiguration);
-
+    registerVehicleCommand.vehicle_configuration().UnpackTo(&vehicleConfiguration);
 
     L293DEngineDriver engineDriver;
     DcEngine firstEngine(vehicleConfiguration.first_engine_first_output(),

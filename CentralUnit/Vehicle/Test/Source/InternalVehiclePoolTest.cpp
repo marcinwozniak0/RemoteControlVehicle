@@ -37,6 +37,24 @@ TEST_F(InternalVehiclePoolTest, registerVehicleShouldReturnFalseWhenVehicleIdWas
     ASSERT_FALSE(_sut.registerVehicle(createRegisterVehicleCommand()));
 }
 
+TEST_F(InternalVehiclePoolTest, registerVehicleShouldReturnFalseWhenVehicleObjectWasNotCreated)
+{
+    EXPECT_CALL(_vehicleFactoryMock, create(_)).WillRepeatedly(Return(ByMove(nullptr)));
+
+    ASSERT_FALSE(_sut.registerVehicle(createRegisterVehicleCommand()));
+}
+
+TEST_F(InternalVehiclePoolTest, registerVehicleShouldReturnTrueIfPreviousRegisterAttemptWasFailedDueToIncorrectVehicleObjectCreation)
+{
+    EXPECT_CALL(_vehicleFactoryMock, create(_)).WillOnce(Return(ByMove(nullptr)));
+
+    ASSERT_FALSE(_sut.registerVehicle(createRegisterVehicleCommand()));
+
+    EXPECT_CALL(_vehicleFactoryMock, create(_)).WillOnce(Return(ByMove(std::make_unique<ThreeWheeledVehicle>(_propulsionSystemMock, _steeringSystemMock))));
+
+    ASSERT_TRUE(_sut.registerVehicle(createRegisterVehicleCommand()));
+}
+
 TEST_F(InternalVehiclePoolTest, rentVehicleShouldReturnTrueWhenVehicleIdWasFoundInRegisteredVehiclesAndWasNotFoundInRentedVehicles)
 {
     registerVehicle(createRegisterVehicleCommand());

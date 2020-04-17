@@ -29,6 +29,8 @@ DISABLED_HandlingUserCommandToRunTest::DISABLED_HandlingUserCommandToRunTest()
         , steeringWheel(PIN_NUMBERS::STEERING_WHEEL_PWM)
         , steeringSystem(steeringWheel)
         , vehicle(propulsionSystem, steeringSystem)
+        , vehicleFactory(threeWheeledVehicleFactory)
+        , vehiclePool(vehicleFactory)
         , vehiclePoolControler(commandReceiverMock, commandSenderMock, vehiclePool)
     {}
 

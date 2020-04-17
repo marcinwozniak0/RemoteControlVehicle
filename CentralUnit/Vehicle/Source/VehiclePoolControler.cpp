@@ -80,7 +80,7 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     {
         Commands::RegisterVehicle payload;
         command.UnpackTo(&payload);
-        
+
         _vehiclePool.registerVehicle(std::move(payload));
     }
     else if (command.Is<Commands::UserCommandToStart>())

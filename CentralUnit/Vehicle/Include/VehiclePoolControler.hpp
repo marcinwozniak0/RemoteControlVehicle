@@ -7,6 +7,7 @@
 class CommandReceiver;
 class CommandSender;
 class VehiclePool;
+class VehicleFactory;
 
 class VehiclePoolControler
 {
