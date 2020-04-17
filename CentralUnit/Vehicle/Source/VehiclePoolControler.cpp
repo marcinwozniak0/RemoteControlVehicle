@@ -134,12 +134,6 @@ void VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any
     Commands::RegisterUserCommand payload;
     command.UnpackTo(&payload);
 
-    //TODO UT
-    //registerUSer
-        //check is possible
-        
-    //TODO
-    //1. Find vehicle in VehiclePool
-    //2. 
+    _vehiclePool.rentVehicle(payload.vehicle_id()); 
 }
 

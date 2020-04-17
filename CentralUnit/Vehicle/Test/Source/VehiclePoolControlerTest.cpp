@@ -3,6 +3,7 @@
 #include <UserCommandToStart.pb.h>
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
+#include <RegisterUserCommand.pb.h>
 
 #include "VehiclePoolControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
@@ -94,6 +95,21 @@ TEST_F(VehicleControlerTest, registerVehicleCommandShouldTriggerVehicleRegistrat
 
     EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(registerVehicleCommand)));
 
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehicleControlerTest, registerUserCommandShouldTriggerVehicleRentProcedureInVehiclePoolControler)
+{
+    Commands::RegisterUserCommand registerUserCommand;
+    const auto packedRegisterUserCommand = createRegisterUserCommand(vehicleId);
+    packedRegisterUserCommand.UnpackTo(&registerUserCommand);
+
+    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+            .WillOnce(Return(packedRegisterUserCommand))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId));
 
     _sut.controlVehiclePool();
 }

@@ -92,6 +92,3 @@ bool InternalVehiclePool::isVehicleRented(int vehicleId) const
                         _rentedVehicles.end(),
                         [vehicleId](const auto elem){return elem == vehicleId;});
 }
-
-//TODO unregisterVehicle
-//TODO unrentVehicle
