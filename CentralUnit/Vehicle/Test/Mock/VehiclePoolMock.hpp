@@ -10,4 +10,5 @@ public:
     MOCK_METHOD(bool, rentVehicle, (int), ());
     MOCK_METHOD(bool, registerVehicle, (Commands::RegisterVehicle&&), ());
     MOCK_METHOD(std::optional<std::shared_ptr<Vehicle>>, getVehicle, (int), ());
+    MOCK_METHOD(const std::vector<int>&, getRentedVehicleIds, (), (const));
 };

@@ -40,18 +40,22 @@ void VehiclePoolControler::controlVehiclePool()
     }
 }
 
-void VehiclePoolControler::vehicleEmergencyStop()
+void VehiclePoolControler::vehiclePoolEmergencyStop()
 {
-    //TODO co z ta metoda, teraz nie ma sensu
-    auto vehicle = _vehiclePool.getVehicle(0);
-    auto pinsConfiguration = vehicle.value()->getCurrentPinsConfiguration();
+    for (const auto vehicleId : _vehiclePool.getRentedVehicleIds())
+    {
+        auto vehicle = _vehiclePool.getVehicle(vehicleId);
 
-    clearPinsValues(pinsConfiguration);
+        auto pinsConfiguration = vehicle.value()->getCurrentPinsConfiguration();
 
-    auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
-                                                              .build();
+        clearPinsValues(pinsConfiguration);
 
-    sendCommand(std::move(commandToSend));
+        auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
+                                                                  .vehicleId(vehicleId)
+                                                                  .build();
+
+        sendCommand(std::move(commandToSend));
+    }
 }
 
 void VehiclePoolControler::clearPinsValues(PinsConfiguration& pinsConfiguration) const

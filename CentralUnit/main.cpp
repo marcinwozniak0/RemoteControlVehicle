@@ -32,10 +32,10 @@ int main()
     {
         vehiclePoolControler.controlVehiclePool();
     }
-    catch(const std::exception& exception)
+    catch(const std::exception& unhandledException)
     {
-        std::cerr << exception.what() << std::endl;
-        vehiclePoolControler.vehicleEmergencyStop();
+        std::cerr << unhandledException.what() << std::endl;
+        vehiclePoolControler.vehiclePoolEmergencyStop();
     }
 
     google::protobuf::ShutdownProtobufLibrary();

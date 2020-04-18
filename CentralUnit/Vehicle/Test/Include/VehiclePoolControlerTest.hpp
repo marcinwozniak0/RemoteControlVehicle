@@ -28,5 +28,6 @@ public:
     NiceMock<CommandSenderMock> _commandSenderMock;
     NiceMock<VehiclePoolMock> _vehiclePoolMock;
     std::shared_ptr<NiceMock<VehicleMock>> _vehicleMock = std::make_shared<NiceMock<VehicleMock>>();
+    std::shared_ptr<NiceMock<VehicleMock>> _secondVehicleMock = std::make_shared<NiceMock<VehicleMock>>();
 };
 

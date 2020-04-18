@@ -18,8 +18,34 @@ namespace
 constexpr int32_t xCoordinate = 700;
 constexpr int32_t yCoordinate = 5500;
 constexpr auto vehicleId = 14u;
+constexpr auto secondVehicleId = 2u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
+}
+
+#include "ProtobufStructuresComparators.hpp"
+
+
+MATCHER_P(AnyCommandMatcher, command, "")
+{
+//   google::protobuf::Any expectedCommad;
+//   expectedCommad.ParseFromString(command);
+
+//   google::protobuf::Any givenCommand;
+//   givenCommand.ParseFromString(arg);
+
+ // if(command.Is<Commands::ControlerCommandToRun>() and arg.Is<Commands::ControlerCommandToRun>())
+  //{
+      Commands::ControlerCommandToRun lhs;
+      Commands::ControlerCommandToRun rhs;
+
+      command.UnpackTo(&lhs);
+      arg.UnpackTo(&rhs);
+
+      return lhs.pins_configuration() == rhs.pins_configuration();
+//  }
+
+ // return false;
 }
 
 TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
@@ -54,6 +80,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     coordinates.set_y_coordinate(yCoordinate);
 
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(configuration)
+                                                              .vehicleId(vehicleId)
                                                               .build();
 
     EXPECT_CALL(*_vehicleMock, applyNewConfiguration(coordinates));
@@ -63,15 +90,31 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPinsConfiguration)
+TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPinsConfigurationForAllRentedVehicle)
 {
-    auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(zeroedConfiguration)
-                                                              .build();
+    auto firstMessageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(zeroedConfiguration)
+                                                                   .vehicleId(vehicleId)
+                                                                   .build();
+
+    auto secondMessageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(zeroedConfiguration)
+                                                                    .vehicleId(secondVehicleId)
+                                                                    .build();
+    const std::vector<int> vehicleIds {vehicleId, secondVehicleId};  
+    
+    EXPECT_CALL(_vehiclePoolMock, getRentedVehicleIds()).WillOnce(ReturnRef(vehicleIds));
+
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(vehicleId)).WillOnce(Return(_vehicleMock));
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(secondVehicleId)).WillOnce(Return(_secondVehicleMock));
+
     EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
+    EXPECT_CALL(*_secondVehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
 
-    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
+    Sequence s1;
 
-    _sut.vehicleEmergencyStop();
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(firstMessageToSend))).InSequence(s1);
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(secondMessageToSend))).InSequence(s1);
+
+    _sut.vehiclePoolEmergencyStop();
 }
 
 TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)

@@ -15,7 +15,7 @@ public:
     VehiclePoolControler(CommandReceiver&, CommandSender&, VehiclePool&);
 
     void controlVehiclePool();
-    void vehicleEmergencyStop();  
+    void vehiclePoolEmergencyStop();  
 
 private:
     std::optional<std::string> getMessageToExecute();

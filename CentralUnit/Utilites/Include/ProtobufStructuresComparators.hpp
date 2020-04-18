@@ -20,12 +20,14 @@ inline bool operator==(const Commands::CoordinateSystem& lhs, const Commands::Co
 
 inline bool operator==(const Commands::ControlerCommandToRun& lhs, const Commands::ControlerCommandToRun& rhs)
 {
-    return Comparators::mapComparator(lhs.pins_configuration(), rhs.pins_configuration());
+    return Comparators::mapComparator(lhs.pins_configuration(), rhs.pins_configuration()) and
+        lhs.vehicle_id() == lhs.vehicle_id();
 }
 
 inline bool operator==(const Commands::RegisterVehicle& lhs, const Commands::RegisterVehicle& rhs)
 {
     return lhs.vehicle_id() == rhs.vehicle_id();
+    //TODO extend
 }
 
 }//Commands

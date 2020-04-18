@@ -92,3 +92,8 @@ bool InternalVehiclePool::isVehicleRented(int vehicleId) const
                         _rentedVehicles.end(),
                         [vehicleId](const auto elem){return elem == vehicleId;});
 }
+
+const std::vector<int>& InternalVehiclePool::getRentedVehicleIds() const
+{
+    return _rentedVehicles;
+}
