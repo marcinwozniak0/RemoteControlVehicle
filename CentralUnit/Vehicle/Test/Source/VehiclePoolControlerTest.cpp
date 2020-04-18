@@ -19,36 +19,12 @@ constexpr int32_t xCoordinate = 700;
 constexpr int32_t yCoordinate = 5500;
 constexpr auto vehicleId = 14u;
 constexpr auto secondVehicleId = 2u;
+constexpr auto unknownVehicleId = 22u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 }
 
-#include "ProtobufStructuresComparators.hpp"
-
-
-MATCHER_P(AnyCommandMatcher, command, "")
-{
-//   google::protobuf::Any expectedCommad;
-//   expectedCommad.ParseFromString(command);
-
-//   google::protobuf::Any givenCommand;
-//   givenCommand.ParseFromString(arg);
-
- // if(command.Is<Commands::ControlerCommandToRun>() and arg.Is<Commands::ControlerCommandToRun>())
-  //{
-      Commands::ControlerCommandToRun lhs;
-      Commands::ControlerCommandToRun rhs;
-
-      command.UnpackTo(&lhs);
-      arg.UnpackTo(&rhs);
-
-      return lhs.pins_configuration() == rhs.pins_configuration();
-//  }
-
- // return false;
-}
-
-TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
+TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
     EXPECT_CALL(*_vehicleMock, startVehicle());
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
@@ -58,7 +34,7 @@ TEST_F(VehicleControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
+TEST_F(VehiclePoolControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
     EXPECT_CALL(*_vehicleMock, stopVehicle());
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(3)
@@ -69,7 +45,7 @@ TEST_F(VehicleControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
+TEST_F(VehiclePoolControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
             .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate, vehicleId)))
@@ -90,7 +66,7 @@ TEST_F(VehicleControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVe
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPinsConfigurationForAllRentedVehicle)
+TEST_F(VehiclePoolControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPinsConfigurationForAllRentedVehicle)
 {
     auto firstMessageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(zeroedConfiguration)
                                                                    .vehicleId(vehicleId)
@@ -117,7 +93,18 @@ TEST_F(VehicleControlerTest, onEmergencyStopShouldSendCommandToRunWithZeroedPins
     _sut.vehiclePoolEmergencyStop();
 }
 
-TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)
+TEST_F(VehiclePoolControlerTest, onEmergencyStopShouldNotSendCommandToRunWhenVehicleWithGivenIdWasNotFound)
+{ 
+    const std::vector<int> vehicleIds {unknownVehicleId};  
+    
+    EXPECT_CALL(_vehiclePoolMock, getRentedVehicleIds()).WillOnce(ReturnRef(vehicleIds));
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(_commandSenderMock, sendCommand(_)).Times(0);
+
+    _sut.vehiclePoolEmergencyStop();
+}
+
+TEST_F(VehiclePoolControlerTest, unknownCommandShouldBeIngored)
 {
     EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
             .WillOnce(Return(createUnknownCommand()))
@@ -126,7 +113,7 @@ TEST_F(VehicleControlerTest, unknownCommandShouldBeIngored)
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehicleControlerTest, registerVehicleCommandShouldTriggerVehicleRegistrationInVehiclePoolControler)
+TEST_F(VehiclePoolControlerTest, registerVehicleCommandShouldTriggerVehicleRegistrationInVehiclePoolControler)
 {
     Commands::RegisterVehicle registerVehicleCommand;
     const auto packedRegisterVehicleCommand = createRegisterVehicleCommand(vehicleId);
@@ -142,7 +129,7 @@ TEST_F(VehicleControlerTest, registerVehicleCommandShouldTriggerVehicleRegistrat
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehicleControlerTest, registerUserCommandShouldTriggerVehicleRentProcedureInVehiclePoolControler)
+TEST_F(VehiclePoolControlerTest, registerUserCommandShouldTriggerVehicleRentProcedureInVehiclePoolControler)
 {
     Commands::RegisterUserCommand registerUserCommand;
     const auto packedRegisterUserCommand = createRegisterUserCommand(vehicleId);

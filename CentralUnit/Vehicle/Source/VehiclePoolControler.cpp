@@ -40,21 +40,32 @@ void VehiclePoolControler::controlVehiclePool()
     }
 }
 
+void VehiclePoolControler::vehicleEmergencyStop(const Vehicle& vehicle, const int vehicleId)
+{          
+    auto pinsConfiguration = vehicle.getCurrentPinsConfiguration();
+
+    clearPinsValues(pinsConfiguration);
+
+    auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
+                                                              .vehicleId(vehicleId)
+                                                              .build();
+
+    sendCommand(std::move(commandToSend));
+}
+
 void VehiclePoolControler::vehiclePoolEmergencyStop()
 {
     for (const auto vehicleId : _vehiclePool.getRentedVehicleIds())
     {
-        auto vehicle = _vehiclePool.getVehicle(vehicleId);
-
-        auto pinsConfiguration = vehicle.value()->getCurrentPinsConfiguration();
-
-        clearPinsValues(pinsConfiguration);
-
-        auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
-                                                                  .vehicleId(vehicleId)
-                                                                  .build();
-
-        sendCommand(std::move(commandToSend));
+        if (auto vehicle = _vehiclePool.getVehicle(vehicleId))
+        {
+            vehicleEmergencyStop(*vehicle.value(), vehicleId);      
+        }
+        else
+        {
+            ERROR("Cannot get rented vehicle !");
+        }
+        
     }
 }
 

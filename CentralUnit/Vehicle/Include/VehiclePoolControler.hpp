@@ -8,6 +8,7 @@ class CommandReceiver;
 class CommandSender;
 class VehiclePool;
 class VehicleFactory;
+class Vehicle;
 
 class VehiclePoolControler
 {
@@ -24,6 +25,7 @@ private:
     void handleRegisterUserCommand(const google::protobuf::Any&) const;
     template <typename Command> void sendCommand(Command&&) const;
     void clearPinsValues(PinsConfiguration&) const;
+    void vehicleEmergencyStop(const Vehicle&, int vehicleId);
 
     CommandReceiver& _commandReceiver;
     CommandSender& _commandSender;

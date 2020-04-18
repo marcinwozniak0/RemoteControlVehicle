@@ -4,8 +4,8 @@
 #include "VehicleFactory.hpp"
 #include "Logger.hpp"
 
-InternalVehiclePool::InternalVehiclePool(const VehicleFactory& vehicleFacotry)
-    : _vehicleFactory(vehicleFacotry)
+InternalVehiclePool::InternalVehiclePool(const VehicleFactory& vehicleFactory)
+    : _vehicleFactory(vehicleFactory)
 {}
 
 std::optional<std::shared_ptr<Vehicle>> InternalVehiclePool::getVehicle(int vehicleId)
@@ -39,7 +39,7 @@ std::optional<int> InternalVehiclePool::getVehicleIndex(const int vehicleId) con
 
 bool InternalVehiclePool::rentVehicle(int vehicleId)
 {
-    if (isPossibleToAddNewVehicle(vehicleId))
+    if (isPossibleToRentNewVehicle(vehicleId))
     {
         _rentedVehicles.push_back(vehicleId);
         return true;
@@ -74,7 +74,7 @@ bool InternalVehiclePool::registerVehicle(Commands::RegisterVehicle&& registerVe
     }
 }
 
-bool InternalVehiclePool::isPossibleToAddNewVehicle(int vehicleId) const
+bool InternalVehiclePool::isPossibleToRentNewVehicle(int vehicleId) const
 {
     return isVehicleReqistered(vehicleId) and not isVehicleRented(vehicleId);
 }

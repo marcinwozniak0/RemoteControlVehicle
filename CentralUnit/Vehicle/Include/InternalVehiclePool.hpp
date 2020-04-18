@@ -20,7 +20,7 @@ public:
 private:
     bool isVehicleReqistered(int vehicleId) const;
     bool isVehicleRented(int vehicleId) const;
-    bool isPossibleToAddNewVehicle(int vehicleId) const;
+    bool isPossibleToRentNewVehicle(int vehicleId) const;
     std::optional<int> getVehicleIndex(const int vehicleId) const;
 
     std::vector<std::shared_ptr<Vehicle>> _vehiclePool;

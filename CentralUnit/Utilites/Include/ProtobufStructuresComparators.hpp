@@ -6,9 +6,15 @@
 #include <ControlerCommandToRun.pb.h>
 #include <InitCommands.pb.h>
 #include <RegisterVehicle.pb.h>
+#include <ThreeWheeledVehicleConfiguration.pb.h>
 
 #include "MapComparator.hpp"
 #include "VehicleTypes.hpp"
+
+namespace google::protobuf
+{
+inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf::Any& rhs); 
+}
 
 namespace Commands
 {
@@ -26,10 +32,10 @@ inline bool operator==(const Commands::ControlerCommandToRun& lhs, const Command
 
 inline bool operator==(const Commands::RegisterVehicle& lhs, const Commands::RegisterVehicle& rhs)
 {
-    return lhs.vehicle_id() == rhs.vehicle_id();
-    //TODO extend
+    return lhs.vehicle_id() == rhs.vehicle_id() and
+           lhs.vehicle_type() == lhs.vehicle_type() and
+           lhs.vehicle_configuration() == lhs.vehicle_configuration();
 }
-
 }//Commands
 
 namespace google::protobuf
@@ -44,6 +50,18 @@ inline bool operator==(const google::protobuf::Map<int, int>& lhs, const google:
     return Comparators::mapComparator(lhs, rhs);
 }
 
+inline bool operator==(const ThreeWheeledVehicleConfiguration& lhs, const ThreeWheeledVehicleConfiguration& rhs)
+{
+    return lhs.first_engine_first_output() == rhs.first_engine_first_output() and
+           lhs.first_engine_second_output() == rhs.first_engine_second_output() and
+           lhs.first_engine_pwm() == rhs.first_engine_pwm() and
+           lhs.second_engine_first_output() == rhs.second_engine_first_output() and
+           lhs.second_engine_second_output() == rhs.second_engine_second_output() and
+           lhs.second_engine_pwm() == rhs.second_engine_pwm() and
+           lhs.steering_wheel_pwm_range() == rhs.steering_wheel_pwm_range() and
+           lhs.engines_pwm_range() == rhs.engines_pwm_range();
+}
+
 inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf::Any& rhs)
 {
     if(lhs.Is<Commands::ControlerCommandToRun>() and rhs.Is<Commands::ControlerCommandToRun>())
@@ -55,6 +73,16 @@ inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf:
         rhs.UnpackTo(&rhsCommand);
 
         return lhsCommand == rhsCommand;
+    }
+    else if(lhs.Is<ThreeWheeledVehicleConfiguration>() and rhs.Is<ThreeWheeledVehicleConfiguration>())
+    {
+        ThreeWheeledVehicleConfiguration lhsConfiguration;
+        ThreeWheeledVehicleConfiguration rhsConfiguration;
+
+        lhs.UnpackTo(&lhsConfiguration);
+        rhs.UnpackTo(&rhsConfiguration);
+
+        return lhsConfiguration == rhsConfiguration;
     }
 
     return false;

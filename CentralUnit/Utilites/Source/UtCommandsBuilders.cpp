@@ -5,6 +5,7 @@
 #include <ControlerCommandToRun.pb.h>
 #include <RegisterVehicle.pb.h>
 #include <RegisterUserCommand.pb.h>
+#include <ThreeWheeledVehicleConfiguration.pb.h>
 
 #include "UtCommandsBuilders.hpp"
 
@@ -71,7 +72,14 @@ google::protobuf::Any createRegisterVehicleCommand(const int vehicleId)
     google::protobuf::Any topLevelMessage;
 
     registerVehicleCommand.set_vehicle_id(vehicleId);
+    registerVehicleCommand.set_vehicle_type(Commands::VehicleType::THREE_WHEELED);
 
+    ThreeWheeledVehicleConfiguration vehicleConfiguration {};
+    google::protobuf::Any packedVehicleConfiguration {};
+    packedVehicleConfiguration.PackFrom(vehicleConfiguration);
+
+    *registerVehicleCommand.mutable_vehicle_configuration() = packedVehicleConfiguration;
+    
     topLevelMessage.PackFrom(registerVehicleCommand);
 
     return topLevelMessage;
@@ -89,3 +97,4 @@ google::protobuf::Any createRegisterUserCommand(const int vehicleId)
     return topLevelMessage;
 }
 }//UTHelpers
+
