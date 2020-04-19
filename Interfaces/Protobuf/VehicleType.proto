@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "VehicleType";
+
+enum VehicleType
+{
+    THREE_WHEELED = 0;
+}

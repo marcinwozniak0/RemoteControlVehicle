@@ -6,7 +6,10 @@ set(PROTO_FILES ControlerCommandToRun.proto
                 UserCommandToStart.proto
                 UserCommandToStop.proto
                 InitCommands.proto
-                RegisterUserCommand.proto)
+                RegisterUserCommand.proto
+                VehicleType.proto
+                RegisterVehicle.proto
+                ThreeWheeledVehicleConfiguration.proto)
 PROTOBUF_GENERATE_CPP(ProtoSources ProtoHeaders ${PROTO_FILES})
 add_library(commands STATIC ${ProtoSources})
 target_link_libraries(commands ${PROTOBUF_LIBRARY})

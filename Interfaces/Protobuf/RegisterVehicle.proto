@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package Commands;
+
+import "VehicleType.proto";
+import "google/protobuf/any.proto";
+
+option java_package = "com.interfaces.proto";
+option java_outer_classname = "RegisterVehicleProto";
+
+message RegisterVehicle
+{
+    int32 vehicle_id = 1;
+    VehicleType vehicle_type = 2;
+    google.protobuf.Any vehicle_configuration = 3;
+}

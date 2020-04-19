@@ -5,9 +5,11 @@
 
 namespace UTHelpers
 {
-const google::protobuf::Any createDeactivateCommand();
-const google::protobuf::Any createUserCommandToStart(const int);
-const google::protobuf::Any createUserCommandToStop(const int);
-const google::protobuf::Any createUnknownCommand();
-const google::protobuf::Any createUserCommandToRun(const int32_t, const int32_t, const int);
+google::protobuf::Any createDeactivateCommand();
+google::protobuf::Any createUserCommandToStart(int);
+google::protobuf::Any createUserCommandToStop(int);
+google::protobuf::Any createUnknownCommand();
+google::protobuf::Any createUserCommandToRun(int32_t, int32_t, int);
+google::protobuf::Any createRegisterVehicleCommand(int);
+google::protobuf::Any createRegisterUserCommand(int);
 }//UTHelpers

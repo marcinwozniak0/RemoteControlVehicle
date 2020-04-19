@@ -1,20 +1,30 @@
 #pragma once
 
 #include <vector>
-#include <memory>
+#include <optional>
 
 #include "VehiclePool.hpp"
+
+class VehicleFactory;
 
 class InternalVehiclePool : public VehiclePool
 {
 public:
-    Vehicle& getVehicle(int vehicleId) override;
-    void addVehicle(int vehicleId) override;
-    bool isVehicleReqistered(int vehicleId) const override;
-    bool isVehicleInUse(int vehicleId) const override;
+    InternalVehiclePool(const VehicleFactory&);
 
+    std::optional<std::shared_ptr<Vehicle>> getVehicle(int vehicleId) override;
+    bool rentVehicle(int vehicleId) override;
+    bool registerVehicle(Commands::RegisterVehicle&&) override;
+    const std::vector<int>& getRentedVehicleIds() const override;
+    
 private:
-    std::vector<std::unique_ptr<Vehicle>> _vehiclePool;
+    bool isVehicleReqistered(int vehicleId) const;
+    bool isVehicleRented(int vehicleId) const;
+    bool isPossibleToRentNewVehicle(int vehicleId) const;
+    std::optional<int> getVehicleIndex(const int vehicleId) const;
+
+    std::vector<std::shared_ptr<Vehicle>> _vehiclePool;
     std::vector<int> _registeredVehicles;
-    std::vector<int> _vehiclesInUse;
+    std::vector<int> _rentedVehicles;
+    const VehicleFactory& _vehicleFactory;
 };

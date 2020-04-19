@@ -1,10 +1,12 @@
 #include <thread>
 #include <chrono>
+#include <google/protobuf/any.pb.h>
 
 #include <UserCommandToStart.pb.h>
 #include <UserCommandToStop.pb.h>
 #include <UserCommandToRun.pb.h>
 #include <RegisterUserCommand.pb.h>
+#include <RegisterVehicle.pb.h>
 #include <Deactivate.pb.h>
 
 #include "Logger.hpp"
@@ -39,18 +41,32 @@ void VehiclePoolControler::controlVehiclePool()
     }
 }
 
-void VehiclePoolControler::vehicleEmergencyStop()
-{
-    //TODO co z ta metoda, teraz nie ma sensu
-     auto& vehicle = _vehiclePool.getVehicle(0);
+void VehiclePoolControler::vehicleEmergencyStop(const Vehicle& vehicle, const int vehicleId)
+{          
     auto pinsConfiguration = vehicle.getCurrentPinsConfiguration();
 
     clearPinsValues(pinsConfiguration);
 
     auto commandToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(pinsConfiguration)
+                                                              .vehicleId(vehicleId)
                                                               .build();
 
     sendCommand(std::move(commandToSend));
+}
+
+void VehiclePoolControler::vehiclePoolEmergencyStop()
+{
+    for (const auto vehicleId : _vehiclePool.getRentedVehicleIds())
+    {
+        if (auto vehicle = _vehiclePool.getVehicle(vehicleId))
+        {
+            vehicleEmergencyStop(*vehicle.value(), vehicleId);      
+        }
+        else
+        {
+            ERROR("Cannot get rented vehicle !");
+        } 
+    }
 }
 
 void VehiclePoolControler::clearPinsValues(PinsConfiguration& pinsConfiguration) const
@@ -75,19 +91,17 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     {
         handleRegisterUserCommand(command);
     }
+    else if (command.Is<Commands::RegisterVehicle>())
+    {
+        handleRegisterVehicleCommand(command);
+    }
     else if (command.Is<Commands::UserCommandToStart>())
     {
-        Commands::UserCommandToStart payload;
-        command.UnpackTo(&payload);
-        auto& vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-        vehicle.startVehicle();
+        handleUserCommandToStart(command);
     }
     else if (command.Is<Commands::UserCommandToStop>())
     {
-        Commands::UserCommandToStop payload;
-        command.UnpackTo(&payload);
-        auto& vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-        vehicle.stopVehicle();
+        handleUserCommandToStop(command);
     }
     else if(command.Is<Commands::UserCommandToRun>())
     {
@@ -101,7 +115,6 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     {
         ERROR("Handling of this command is not implemented.");
     }
-    
 }
 
 void VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& command) const
@@ -110,10 +123,10 @@ void VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& c
     command.UnpackTo(&payload);
 
     const auto vehicleId = payload.vehicle_id();
-    auto& vehicle = _vehiclePool.getVehicle(vehicleId);
+    auto vehicle = _vehiclePool.getVehicle(vehicleId);
 
-    vehicle.applyNewConfiguration(payload.coordinate_system());
-    const auto newPinsConfiguration = vehicle.getCurrentPinsConfiguration();
+    vehicle.value()->applyNewConfiguration(payload.coordinate_system());
+    const auto newPinsConfiguration = vehicle.value()->getCurrentPinsConfiguration();
     auto messageToSend = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(newPinsConfiguration)
                                                               .vehicleId(vehicleId)  
                                                               .build();
@@ -126,11 +139,29 @@ void VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any
     Commands::RegisterUserCommand payload;
     command.UnpackTo(&payload);
 
-    //registerUSer
-        //check is possible
-        
-    //TODO
-    //1. Find vehicle in VehiclePool
-    //2. 
+    _vehiclePool.rentVehicle(payload.vehicle_id()); 
 }
 
+void VehiclePoolControler::handleUserCommandToStop(const google::protobuf::Any& command) const
+{
+    Commands::UserCommandToStop payload;
+    command.UnpackTo(&payload);
+    auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
+    vehicle.value()->stopVehicle();
+}
+
+void VehiclePoolControler::handleUserCommandToStart(const google::protobuf::Any& command) const
+{
+    Commands::UserCommandToStart payload;
+    command.UnpackTo(&payload);
+    auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
+    vehicle.value()->startVehicle();
+}
+
+void VehiclePoolControler::handleRegisterVehicleCommand(const google::protobuf::Any& command) const
+{
+    Commands::RegisterVehicle payload;
+    command.UnpackTo(&payload);
+
+    _vehiclePool.registerVehicle(std::move(payload));
+}

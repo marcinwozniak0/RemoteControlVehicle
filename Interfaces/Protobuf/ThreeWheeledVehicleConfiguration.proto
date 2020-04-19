@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message ThreeWheeledVehicleConfiguration
+{
+    int32 first_engine_first_output = 1;
+    int32 first_engine_second_output = 2;
+    int32 first_engine_pwm = 3;
+    int32 second_engine_first_output = 4;
+    int32 second_engine_second_output = 5;
+    int32 second_engine_pwm = 6;
+    int32 engines_pwm_range = 7;
+    int32 steering_wheel_pwm = 8;
+    int32 steering_wheel_pwm_range = 9;
+}

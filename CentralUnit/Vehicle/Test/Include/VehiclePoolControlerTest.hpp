@@ -13,13 +13,13 @@
 
 using namespace ::testing;
 
-class VehicleControlerTest : public Test
+class VehiclePoolControlerTest : public Test
 {
 public:
-    VehicleControlerTest()
+    VehiclePoolControlerTest()
         : _sut(_commandReceiverMock, _commandSenderMock, _vehiclePoolMock)
     {
-        ON_CALL(_vehiclePoolMock, getVehicle(_)).WillByDefault(ReturnRef(_vehicleMock));
+        ON_CALL(_vehiclePoolMock, getVehicle(_)).WillByDefault(Return(_vehicleMock));
     }
 
     VehiclePoolControler _sut;
@@ -27,6 +27,7 @@ public:
     NiceMock<CommandReceiverMock> _commandReceiverMock;
     NiceMock<CommandSenderMock> _commandSenderMock;
     NiceMock<VehiclePoolMock> _vehiclePoolMock;
-    NiceMock<VehicleMock> _vehicleMock;
+    std::shared_ptr<NiceMock<VehicleMock>> _vehicleMock = std::make_shared<NiceMock<VehicleMock>>();
+    std::shared_ptr<NiceMock<VehicleMock>> _secondVehicleMock = std::make_shared<NiceMock<VehicleMock>>();
 };
 
