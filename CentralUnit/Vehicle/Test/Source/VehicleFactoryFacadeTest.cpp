@@ -12,7 +12,7 @@ Commands::RegisterVehicle createRegisterVehicleCommandWithVehicleType()
 {
     Commands::RegisterVehicle registerVehicleCommand {};
     registerVehicleCommand.set_vehicle_id(vehicleId);
-    registerVehicleCommand.set_vehicle_type(Commands::VehicleType::THREE_WHEELED);
+    registerVehicleCommand.set_vehicle_type(VehicleType::THREE_WHEELED);
 
     ThreeWheeledVehicleConfiguration vehicleConfiguration {};
     google::protobuf::Any packedVehicleConfiguration {};

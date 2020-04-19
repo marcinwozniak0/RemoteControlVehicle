@@ -8,7 +8,7 @@ VehicleFactoryFacade::VehicleFactoryFacade(const VehicleFactory& threeWheeledVeh
 
 std::unique_ptr<Vehicle> VehicleFactoryFacade::create(Commands::RegisterVehicle&& registerVehicleCommand) const
 {
-    if (Commands::VehicleType::THREE_WHEELED == registerVehicleCommand.vehicle_type())
+    if (VehicleType::THREE_WHEELED == registerVehicleCommand.vehicle_type())
     {
         return _threeWheeledVehicleFactory.create(std::move(registerVehicleCommand));
     }  

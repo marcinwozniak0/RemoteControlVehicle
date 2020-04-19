@@ -62,27 +62,27 @@ inline bool operator==(const ThreeWheeledVehicleConfiguration& lhs, const ThreeW
            lhs.engines_pwm_range() == rhs.engines_pwm_range();
 }
 
+template <typename PackedProtoType>
+inline bool comparePackedProtoTypes(const google::protobuf::Any& lhs, const google::protobuf::Any& rhs)
+{
+    PackedProtoType lhsInnerProtoStructure;
+    PackedProtoType rhsInnerProtoStructure;
+
+    lhs.UnpackTo(&lhsInnerProtoStructure);
+    rhs.UnpackTo(&rhsInnerProtoStructure);
+
+    return lhsInnerProtoStructure == rhsInnerProtoStructure;
+}
+
 inline bool operator==(const google::protobuf::Any& lhs, const google::protobuf::Any& rhs)
 {
     if(lhs.Is<Commands::ControlerCommandToRun>() and rhs.Is<Commands::ControlerCommandToRun>())
     {
-        Commands::ControlerCommandToRun lhsCommand;
-        Commands::ControlerCommandToRun rhsCommand;
-
-        lhs.UnpackTo(&lhsCommand);
-        rhs.UnpackTo(&rhsCommand);
-
-        return lhsCommand == rhsCommand;
+        return comparePackedProtoTypes<Commands::ControlerCommandToRun>(lhs, rhs);
     }
     else if(lhs.Is<ThreeWheeledVehicleConfiguration>() and rhs.Is<ThreeWheeledVehicleConfiguration>())
     {
-        ThreeWheeledVehicleConfiguration lhsConfiguration;
-        ThreeWheeledVehicleConfiguration rhsConfiguration;
-
-        lhs.UnpackTo(&lhsConfiguration);
-        rhs.UnpackTo(&rhsConfiguration);
-
-        return lhsConfiguration == rhsConfiguration;
+        return comparePackedProtoTypes<ThreeWheeledVehicleConfiguration>(lhs, rhs);
     }
 
     return false;

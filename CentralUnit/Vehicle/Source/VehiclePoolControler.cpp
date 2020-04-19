@@ -1,5 +1,6 @@
 #include <thread>
 #include <chrono>
+#include <google/protobuf/any.pb.h>
 
 #include <UserCommandToStart.pb.h>
 #include <UserCommandToStop.pb.h>
@@ -64,8 +65,7 @@ void VehiclePoolControler::vehiclePoolEmergencyStop()
         else
         {
             ERROR("Cannot get rented vehicle !");
-        }
-        
+        } 
     }
 }
 
@@ -93,24 +93,15 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     }
     else if (command.Is<Commands::RegisterVehicle>())
     {
-        Commands::RegisterVehicle payload;
-        command.UnpackTo(&payload);
-
-        _vehiclePool.registerVehicle(std::move(payload));
+        handleRegisterVehicleCommand(command);
     }
     else if (command.Is<Commands::UserCommandToStart>())
     {
-        Commands::UserCommandToStart payload;
-        command.UnpackTo(&payload);
-        auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-        vehicle.value()->startVehicle();
+        handleUserCommandToStart(command);
     }
     else if (command.Is<Commands::UserCommandToStop>())
     {
-        Commands::UserCommandToStop payload;
-        command.UnpackTo(&payload);
-        auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-        vehicle.value()->stopVehicle();
+        handleUserCommandToStop(command);
     }
     else if(command.Is<Commands::UserCommandToRun>())
     {
@@ -124,7 +115,6 @@ void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
     {
         ERROR("Handling of this command is not implemented.");
     }
-    
 }
 
 void VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& command) const
@@ -152,3 +142,26 @@ void VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any
     _vehiclePool.rentVehicle(payload.vehicle_id()); 
 }
 
+void VehiclePoolControler::handleUserCommandToStop(const google::protobuf::Any& command) const
+{
+    Commands::UserCommandToStop payload;
+    command.UnpackTo(&payload);
+    auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
+    vehicle.value()->stopVehicle();
+}
+
+void VehiclePoolControler::handleUserCommandToStart(const google::protobuf::Any& command) const
+{
+    Commands::UserCommandToStart payload;
+    command.UnpackTo(&payload);
+    auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
+    vehicle.value()->startVehicle();
+}
+
+void VehiclePoolControler::handleRegisterVehicleCommand(const google::protobuf::Any& command) const
+{
+    Commands::RegisterVehicle payload;
+    command.UnpackTo(&payload);
+
+    _vehiclePool.registerVehicle(std::move(payload));
+}

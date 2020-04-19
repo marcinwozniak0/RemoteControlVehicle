@@ -4,7 +4,6 @@
 
 #include "InternalVehiclePool.hpp"
 #include "VehicleFactoryMock.hpp"
-#include "VehicleMock.hpp"
 #include "PropulsionSystemMock.hpp"
 #include "SteeringSystemMock.hpp"
 #include "ThreeWheeledVehicle.hpp"

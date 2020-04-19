@@ -24,7 +24,8 @@ bool isAllFieldInitilized(const ThreeWheeledVehicleConfiguration& vehicleConfigu
            vehicleConfiguration.steering_wheel_pwm_range() not_eq UNINITIALIZED and
            vehicleConfiguration.engines_pwm_range() not_eq UNINITIALIZED;
 }    
-}
+}//namespace
+
 std::unique_ptr<Vehicle> ThreeWheeledVehicleFactory::create(Commands::RegisterVehicle&& registerVehicleCommand) const
 {
     ThreeWheeledVehicleConfiguration vehicleConfiguration;
