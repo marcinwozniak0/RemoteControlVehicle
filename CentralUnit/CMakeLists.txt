@@ -24,6 +24,7 @@ find_package(gRPC CONFIG REQUIRED)
 message(STATUS "Using gRPC ${gRPC_VERSION}")
 set(_GRPC_GRPCPP_UNSECURE gRPC::grpc++_unsecure)
 set(_GRPC_CPP_PLUGIN_EXECUTABLE $<TARGET_FILE:gRPC::grpc_cpp_plugin>)
+set(GENERATED_LIBS ${_GRPC_GRPCPP_UNSECURE} ${_PROTOBUF_LIBPROTOBUF})
 
 # GRPC GENERATED
 get_filename_component(hw_proto "../Interfaces/Protobuf/Client.proto" ABSOLUTE)
@@ -43,19 +44,23 @@ add_custom_command(
       DEPENDS "${hw_proto}")
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../Interfaces/Protobuf ${CMAKE_CURRENT_BINARY_DIR}/Interfaces/Protobuf)
-include_directories(${CMAKE_BINARY_DIR}/Interfaces/Protobuf)
 
-# GRPC INCLUDE FILES
+# GENERATED LIB
+add_library(grpc_lib STATIC ${hw_grpc_srcs})
+target_link_libraries(grpc_lib grpc++d)
+
+# GENERATED INCLUDE FILES
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/CMake/build/grpc/include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/CMake/build/remote_control_vehicle/Interfaces/Protobuf)
 
 # SRC
-include_directories(Vehicle/Include)
-include_directories(Router/Include)
-include_directories(VehicleEquipment/Include)
-include_directories(VehicleSystems/Include)
-include_directories(CommandsBuilders/Include)
-include_directories(Utilites/Include)
-include_directories(Logger/Include)
+include_directories(Vehicle/Include
+                    Router/Include
+                    VehicleEquipment/Include
+                    VehicleSystems/Include
+                    CommandsBuilders/Include
+                    Utilites/Include
+                    Logger/Include)
 add_subdirectory(Vehicle/Source)
 add_subdirectory(Router/Source)
 add_subdirectory(VehicleEquipment/Source)
@@ -65,17 +70,17 @@ add_subdirectory(Utilites/Source)
 add_subdirectory(Logger/Source)
 
 # TEST
-include_directories(VehicleSystems/Test/Mock)
-include_directories(VehicleSystems/Test/Include)
-include_directories(VehicleEquipment/Test/Mock)
-include_directories(VehicleEquipment/Test/Include)
-include_directories(Vehicle/Test/Mock)
-include_directories(Vehicle/Test/Include)
-include_directories(Router/Test/Mock)
-include_directories(Router/Test/Include)
-include_directories(CommandsBuilders/Test/Mock)
-include_directories(CommandsBuilders/Test/Include)
-include_directories(SystemTest/Test/Include)
+include_directories(VehicleSystems/Test/Mock
+                    VehicleSystems/Test/Include
+                    VehicleEquipment/Test/Mock
+                    VehicleEquipment/Test/Include
+                    Vehicle/Test/Mock
+                    Vehicle/Test/Include
+                    Router/Test/Mock
+                    Router/Test/Include
+                    CommandsBuilders/Test/Mock
+                    CommandsBuilders/Test/Include
+                    SystemTest/Test/Include)
 add_subdirectory(VehicleSystems/Test/Source)
 add_subdirectory(VehicleEquipment/Test/Source)
 add_subdirectory(Vehicle/Test/Source)
@@ -87,18 +92,12 @@ add_subdirectory(Utilites/Test/Source)
 # SRC LIB
 add_library(source_objects_lib OBJECT ${SOURCES})
 
-# GRPC GENERATED LIB
-add_library(grpc_lib STATIC ${hw_grpc_srcs})
-target_link_libraries(grpc_lib grpc++d)
-
 # BIN
 add_executable(remote_control_vehicle $<TARGET_OBJECTS:source_objects_lib> 
                                       $<TARGET_OBJECTS:grpc_lib>
                                       "main.cpp")
-target_link_libraries(remote_control_vehicle
-                     commands
-                     ${_GRPC_GRPCPP_UNSECURE}
-                     ${_PROTOBUF_LIBPROTOBUF})
+target_link_libraries(remote_control_vehicle ${GENERATED_LIBS}
+                                             commands)
 
 # UT
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
@@ -106,13 +105,10 @@ set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       ${TEST_FILES}
                       "MainTest.cpp")
 add_executable(remote_control_vehicle_ut ${TEST_BINARY_FILES})
-target_link_libraries(remote_control_vehicle_ut ${GTEST_MAIN_LIBRARY}
-                                                ${GTEST_LIBRARY}
-                                                ${GMOCK_MAIN_LIBRARY}
-                                                ${GMOCK_LIBRARY}
-                                                commands                             
-                                                ${_GRPC_GRPCPP_UNSECURE}
-                                                ${_PROTOBUF_LIBPROTOBUF})
+target_link_libraries(remote_control_vehicle_ut ${GTEST_LIBRARY}
+                                                ${GMOCK_LIBRARY}                                                                           
+                                                ${GENERATED_LIBS}
+                                                commands)
 
 # DEPENDENCIES
 add_dependencies(grpc_lib commands)
