@@ -1,6 +1,5 @@
 #pragma once
 
-#include "VehicleConfiguration.hpp"
 #include "VehicleTypes.hpp"
 
 class SteeringWheel

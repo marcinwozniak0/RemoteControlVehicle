@@ -1,10 +1,6 @@
 #pragma once
 
-#include <array>
-#include <stdint.h>
-
 #include "VehicleTypes.hpp"
-#include "VehicleConfiguration.hpp"
 
 class Engine
 {

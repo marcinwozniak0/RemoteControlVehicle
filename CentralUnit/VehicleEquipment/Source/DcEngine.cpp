@@ -1,4 +1,5 @@
 #include "DcEngine.hpp"
+#include "PinState.hpp"
 
 namespace
 {

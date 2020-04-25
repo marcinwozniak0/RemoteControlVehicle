@@ -1,7 +1,8 @@
 #include <utility>
 
 #include "L293DEngineDriver.hpp"
-#include "VehicleConfiguration.hpp"
+#include "PinState.hpp"
+#include "CoordinateSystem.hpp"
 #include "Logger.hpp"
 
 namespace
@@ -59,7 +60,7 @@ L293DEngineDriver::L293DEngineDriver(const int pwmRange)
 
 void L293DEngineDriver::fillPinsConfiguration(const Commands::CoordinateSystem& coordinates, PinsConfiguration& pinsConfiguration) const
 {
-    const auto pwmValue = _pwmRange * std::abs(coordinates.y_coordinate()) / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+    const auto pwmValue = _pwmRange * std::abs(coordinates.y_coordinate()) / COORDINATE_SYSTEM::RESOLUTION;
     constexpr auto directionChangeTreshold = 0;
 
     if (areCoordinatesInRange(coordinates) and directionChangeTreshold < coordinates.y_coordinate())
@@ -83,8 +84,8 @@ void L293DEngineDriver::fillPinsConfiguration(const Commands::CoordinateSystem& 
 
 bool L293DEngineDriver::areCoordinatesInRange(const Commands::CoordinateSystem& coordinates) const
 {
-    return coordinates.x_coordinate() <= EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and
-           coordinates.y_coordinate() <= EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and
-           coordinates.x_coordinate() >= -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION and
-           coordinates.y_coordinate() >= -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+    return coordinates.x_coordinate() <= COORDINATE_SYSTEM::RESOLUTION and
+           coordinates.y_coordinate() <= COORDINATE_SYSTEM::RESOLUTION and
+           coordinates.x_coordinate() >= -COORDINATE_SYSTEM::RESOLUTION and
+           coordinates.y_coordinate() >= -COORDINATE_SYSTEM::RESOLUTION;
 }

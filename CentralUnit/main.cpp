@@ -2,7 +2,6 @@
 #include <grpc++/grpc++.h>
 
 #include "VehiclePoolControler.hpp"
-#include "VehicleConfiguration.hpp"
 #include "GrpcCommandSender.hpp"
 #include "GrpcCommandReceiver.hpp"
 #include "InternalVehiclePool.hpp"

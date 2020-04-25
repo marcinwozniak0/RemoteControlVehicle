@@ -1,6 +1,7 @@
-#include "FrontAxialSteeringSystemTest.hpp"
-
 #include <UserCommandToRun.pb.h>
+
+#include "FrontAxialSteeringSystemTest.hpp"
+#include "CoordinateSystem.hpp"
 
 namespace
 {
@@ -9,7 +10,7 @@ static constexpr auto steeringWheelPwmDutyCycleIn30DegreesPosition = steeringWhe
 static constexpr auto steeringWheelPwmDutyCycleInMinus30DegreesPosition = steeringWheelPwmDutyCycleInNeutralPosition - 0.0166;
 static constexpr auto pwmMaxRange = 255;
 static constexpr auto pwmPinNumber = 13u;
-static constexpr auto coordinateSystemResolution = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+static constexpr auto coordinateSystemResolution = COORDINATE_SYSTEM::RESOLUTION;
 static constexpr int steeringWheelPwmValueInNeutralPosition = pwmMaxRange * steeringWheelPwmDutyCycleInNeutralPosition;
 static constexpr int steeringWheelPwmValueIn30DegreesPosition = pwmMaxRange * steeringWheelPwmDutyCycleIn30DegreesPosition;
 static constexpr int steeringWheelPwmValueInMinus30DegreesPosition = pwmMaxRange * steeringWheelPwmDutyCycleInMinus30DegreesPosition;

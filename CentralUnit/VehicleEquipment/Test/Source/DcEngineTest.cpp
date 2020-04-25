@@ -1,4 +1,5 @@
 #include "DcEngineTest.hpp"
+#include "PinState.hpp"
 
 namespace
 {

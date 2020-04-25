@@ -1,5 +1,6 @@
 #include "FrontAxialSteeringSystem.hpp"
 #include "SteeringWheel.hpp"
+#include "CoordinateSystem.hpp"
 
 namespace
 {
@@ -24,9 +25,9 @@ void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const Com
 
 int FrontAxialSteeringSystem::calculateSteeringAngle(const Commands::CoordinateSystem& coordinates) const
 {
-    if (coordinates.x_coordinate() == EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
+    if (coordinates.x_coordinate() == COORDINATE_SYSTEM::RESOLUTION)
         return -maxSteeringAngle;
-    else if (coordinates.x_coordinate() == -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
+    else if (coordinates.x_coordinate() == -COORDINATE_SYSTEM::RESOLUTION)
         return maxSteeringAngle;
 
     return {};

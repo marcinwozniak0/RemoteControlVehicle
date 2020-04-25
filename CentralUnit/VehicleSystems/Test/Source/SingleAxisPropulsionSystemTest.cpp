@@ -1,12 +1,13 @@
 #include "SingleAxisPropulsionSystemTest.hpp"
 #include "ProtobufStructuresComparators.hpp"
-#include "VehicleConfiguration.hpp"
+#include "PinState.hpp"
+#include "CoordinateSystem.hpp"
 
 namespace
 {
 constexpr auto xCoordinate = 1000;
 constexpr auto yCoordinate = 700;
-constexpr auto outOfRangeYCoordinate = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION + 700;
+constexpr auto outOfRangeYCoordinate = COORDINATE_SYSTEM::RESOLUTION + 700;
 constexpr auto firstEngineFirstInput = 10u;
 constexpr auto firstEngineSecondInput = 11u;
 constexpr auto firstEnginePwm = 12u;

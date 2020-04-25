@@ -1,4 +1,6 @@
 #include "L293DEngineDriverTest.hpp"
+#include "PinState.hpp"
+#include "CoordinateSystem.hpp"
 
 namespace
 {
@@ -6,7 +8,7 @@ constexpr int16_t xCoordinate = 1200;
 constexpr int16_t yCoordinateForForwardDirection = 3000;
 constexpr int16_t yCoordinateForBackwardDirection = -1000;
 constexpr int16_t yCoordinateForStopEngine = 0;
-constexpr int16_t overRangeCoordinate = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION + 15;
+constexpr int16_t overRangeCoordinate = COORDINATE_SYSTEM::RESOLUTION + 15;
 constexpr auto firstEngineFirstInput = 10u;
 constexpr auto firstEngineSecondInput = 11u;
 constexpr auto firstEnginePwm = 12u;
@@ -54,7 +56,7 @@ L293DEngineDriverTest::L293DEngineDriverTest()
 TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForForwardDirection)
 {
     const auto forwardDirectionCharacteristic = buildCoordinates(xCoordinate, yCoordinateForForwardDirection);
-    constexpr auto pwmValue = yCoordinateForForwardDirection * pwmRange / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+    constexpr auto pwmValue = yCoordinateForForwardDirection * pwmRange / COORDINATE_SYSTEM::RESOLUTION;
 
     const auto expectedPinsConfiguration = createExpectedPinsConfiguration(PIN_STATE::HIGH, PIN_STATE::LOW,
                                                                            PIN_STATE::LOW, PIN_STATE::HIGH, pwmValue);
@@ -68,7 +70,7 @@ TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForForwardDirection)
 TEST_F(L293DEngineDriverTest, shouldReturnPinValuesForBackwardDirection)
 {
     const auto backwardDirectionCharacteristic = buildCoordinates(xCoordinate, yCoordinateForBackwardDirection);
-    constexpr auto pwmValue = std::abs(yCoordinateForBackwardDirection) * pwmRange / EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
+    constexpr auto pwmValue = std::abs(yCoordinateForBackwardDirection) * pwmRange / COORDINATE_SYSTEM::RESOLUTION;
 
     const auto expectedPinsConfiguration = createExpectedPinsConfiguration(PIN_STATE::LOW, PIN_STATE::HIGH,
                                                                            PIN_STATE::HIGH, PIN_STATE::LOW, pwmValue);

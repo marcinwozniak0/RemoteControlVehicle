@@ -2,6 +2,7 @@
 
 #include "ThreeWheeledVehicleTest.hpp"
 #include "VehicleState.hpp"
+#include "PinState.hpp"
 
 namespace
 {
@@ -35,7 +36,7 @@ TEST_F(VehicleTest, vehicleStateShouldBeIdleAfterVehicleStop)
 
 TEST_F(VehicleTest, getCurrentPinsConfigurationShouldReturnPinsConfigurationOfAllVehicleSystems)
 {
-    const PinsConfiguration vehiclePinsConfiguration = {{firstPinNumber,  PIN_STATE::HIGH},
+    const PinsConfiguration vehiclePinsConfiguration = {{firstPinNumber, PIN_STATE::HIGH},
                                                         {secondPinNumber,PIN_STATE::HIGH},
                                                         {thirdPinNumber, 0}};
 

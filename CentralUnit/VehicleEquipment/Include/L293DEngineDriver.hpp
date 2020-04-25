@@ -1,7 +1,6 @@
 #pragma once
 
 #include "EngineDriver.hpp"
-#include "VehicleConfiguration.hpp"
 
 class L293DEngineDriver : public EngineDriver
 {

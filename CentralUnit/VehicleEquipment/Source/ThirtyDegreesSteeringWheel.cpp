@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "ThirtyDegreesSteeringWheel.hpp"
-#include "VehicleConfiguration.hpp"
+#include "PinState.hpp"
 
 ThirtyDegreesSteeringWheel::ThirtyDegreesSteeringWheel(const uint8_t pwmPinNumber)
     : _pinConfiguration({std::make_pair(pwmPinNumber, PIN_STATE::INITIAL_PWM)})
