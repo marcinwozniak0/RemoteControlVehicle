@@ -7,6 +7,6 @@
 class EngineDriverMock : public EngineDriver
 {
 public:
-    MOCK_CONST_METHOD1(calculatePinsConfiguration, const PinsConfiguration(const Commands::CoordinateSystem&));
+    MOCK_METHOD(void, fillPinsConfiguration, (const Commands::CoordinateSystem&, PinsConfiguration&), (const));
 };
 

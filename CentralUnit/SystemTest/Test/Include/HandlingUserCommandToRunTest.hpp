@@ -27,9 +27,9 @@ public:
     NiceMock<CommandReceiverMock> commandReceiverMock;
 
 private:
-    L293DEngineDriver engineDriver;
     DcEngine firstEngine;
     DcEngine secondEngine;
+    L293DEngineDriver engineDriver;
     SingleAxisPropulsionSystem propulsionSystem;
     ThirtyDegreesSteeringWheel steeringWheel;
     FrontAxialSteeringSystem steeringSystem;

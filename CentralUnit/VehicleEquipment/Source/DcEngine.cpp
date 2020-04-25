@@ -2,9 +2,7 @@
 
 namespace
 {
-constexpr uint8_t firstOutputPin = 0u;
-constexpr uint8_t secondOutputPin = 1u;
-constexpr uint8_t pwmPin = 2u;
+
 }
 
 DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
@@ -17,11 +15,11 @@ DcEngine::DcEngine(const uint8_t firstOutputPinNumber,
 
 void DcEngine::setPinsConfiguration(const PinsConfiguration& pinsConfiguration)
 {
-     for (auto& configuration : pinsConfiguration)
+     for (const auto& [pinNumber, pinState] : pinsConfiguration)
      {
-        if (_pinsConfiguration.end() not_eq _pinsConfiguration.find(configuration.first))
+        if (_pinsConfiguration.end() not_eq _pinsConfiguration.find(pinNumber))
         {
-            _pinsConfiguration[configuration.first] = configuration.second;
+            _pinsConfiguration[pinNumber] = pinState;
         }
      }
 

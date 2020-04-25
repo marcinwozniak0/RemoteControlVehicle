@@ -2,7 +2,6 @@
 #include <Acknowledge.pb.h>
 
 #include "GrpcCommandSender.hpp"
-#include "VehicleConfiguration.hpp"
 #include "CommunicationSocketException.hpp"
 #include "Logger.hpp"
 
@@ -13,6 +12,7 @@ GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub
     if (std::string::npos != connectionResult.find("RPC failed"))
     {
         ERROR(connectionResult);
+        //TODO cannot throw exception in CTOR !!!
         throw CommunicationSocketException{connectionResult};
     }
 }

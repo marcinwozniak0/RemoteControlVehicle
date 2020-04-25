@@ -15,16 +15,24 @@ namespace
 {
 constexpr int32_t zeroXCoordinate = 0;
 constexpr int32_t zeroYCoordinate = 0;
-constexpr auto vehicleId = 2;
+constexpr auto vehicleId = 2u;
+constexpr auto firstEngineFirstInput = 10u;
+constexpr auto firstEngineSecondInput = 11u;
+constexpr auto firstEnginePwm = 12u;
+constexpr auto secondEngineFirstInput = 13u;
+constexpr auto secondEngineSecondInput = 14u;
+constexpr auto secondEnginePwm = 15u;
+constexpr auto pwmRange = 255u;
 }//namespace
 
 DISABLED_HandlingUserCommandToRunTest::DISABLED_HandlingUserCommandToRunTest()
-        : firstEngine(PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,
-                      PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT,
-                      PIN_NUMBERS::FIRST_ENGINE_PWM)
-        , secondEngine(PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT,
-                       PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,
-                       PIN_NUMBERS::SECOND_ENGINE_PWM)
+        : firstEngine(firstEngineFirstInput,
+                      firstEngineSecondInput,
+                      firstEnginePwm)
+        , secondEngine(secondEngineFirstInput,
+                       secondEngineSecondInput,
+                       secondEnginePwm)
+        , engineDriver(pwmRange)
         , propulsionSystem(firstEngine, secondEngine, engineDriver)
         , steeringWheel(PIN_NUMBERS::STEERING_WHEEL_PWM)
         , steeringSystem(steeringWheel)
@@ -40,12 +48,12 @@ TEST_F(DISABLED_HandlingUserCommandToRunTest, ZeroZeroCoordinates)
             .WillOnce(Return(createUserCommandToRun(zeroXCoordinate, zeroYCoordinate, vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
-    const PinsConfiguration expectedNewPinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT, 1},
-                                                            {PIN_NUMBERS::FIRST_ENGINE_SECOND_OUTPUT, 1},
-                                                            {PIN_NUMBERS::FIRST_ENGINE_PWM, 0},
-                                                            {PIN_NUMBERS::SECOND_ENGINE_FIRST_OUTPUT, 1},
-                                                            {PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT, 1},
-                                                            {PIN_NUMBERS::SECOND_ENGINE_PWM, 0},
+    const PinsConfiguration expectedNewPinsConfiguration = {{firstEngineFirstInput, 1},
+                                                            {firstEngineSecondInput, 1},
+                                                            {firstEnginePwm, 0},
+                                                            {secondEngineFirstInput, 1},
+                                                            {secondEngineSecondInput, 1},
+                                                            {secondEnginePwm, 0},
                                                             {PIN_NUMBERS::STEERING_WHEEL_PWM, 19}};
 
     auto expectedMessage = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(expectedNewPinsConfiguration)

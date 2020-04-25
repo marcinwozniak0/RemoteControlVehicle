@@ -36,7 +36,7 @@ std::unique_ptr<Vehicle> ThreeWheeledVehicleFactory::create(Commands::RegisterVe
         return {};
     }
 
-    L293DEngineDriver engineDriver;
+    L293DEngineDriver engineDriver(vehicleConfiguration.engines_pwm_range());
     DcEngine firstEngine(vehicleConfiguration.first_engine_first_output(),
                          vehicleConfiguration.first_engine_second_output(),
                          vehicleConfiguration.first_engine_pwm());

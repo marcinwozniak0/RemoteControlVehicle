@@ -3,6 +3,13 @@
 #include "ThreeWheeledVehicleTest.hpp"
 #include "VehicleState.hpp"
 
+namespace
+{
+constexpr auto firstPinNumber = 23u;
+constexpr auto secondPinNumber = 11u;
+constexpr auto thirdPinNumber = 2u;
+}
+
 TEST_F(VehicleTest, vehicleStateShouldBeIdleByDefault)
 {
     EXPECT_EQ(VehicleState::Idle, _sut.getVehicleState());
@@ -28,14 +35,14 @@ TEST_F(VehicleTest, vehicleStateShouldBeIdleAfterVehicleStop)
 
 TEST_F(VehicleTest, getCurrentPinsConfigurationShouldReturnPinsConfigurationOfAllVehicleSystems)
 {
-    const PinsConfiguration vehiclePinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,  PIN_STATE::HIGH},
-                                                        {PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,PIN_STATE::HIGH},
-                                                        {PIN_NUMBERS::SECOND_ENGINE_PWM,          0}};
+    const PinsConfiguration vehiclePinsConfiguration = {{firstPinNumber,  PIN_STATE::HIGH},
+                                                        {secondPinNumber,PIN_STATE::HIGH},
+                                                        {thirdPinNumber, 0}};
 
-    const PinsConfiguration propulsionSystemPinsConfiguration = {{PIN_NUMBERS::FIRST_ENGINE_FIRST_OUTPUT,  PIN_STATE::HIGH}};
+    const PinsConfiguration propulsionSystemPinsConfiguration = {{firstPinNumber,  PIN_STATE::HIGH}};
 
-    const PinsConfiguration steeringSystemPinsConfiguration = {{PIN_NUMBERS::SECOND_ENGINE_SECOND_OUTPUT,PIN_STATE::HIGH},
-                                                               {PIN_NUMBERS::SECOND_ENGINE_PWM,          0}};
+    const PinsConfiguration steeringSystemPinsConfiguration = {{secondPinNumber,PIN_STATE::HIGH},
+                                                               {thirdPinNumber, 0}};
 
     EXPECT_CALL(_steeringSystemMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(propulsionSystemPinsConfiguration));
     EXPECT_CALL(_propulsionSystemMock, getPinsConfiguration()).WillRepeatedly(Return(steeringSystemPinsConfiguration));

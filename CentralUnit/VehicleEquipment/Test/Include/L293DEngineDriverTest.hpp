@@ -9,6 +9,7 @@ using namespace ::testing;
 class L293DEngineDriverTest : public Test
 {
 public:
+    L293DEngineDriverTest();
     L293DEngineDriver _sut;
 };
 
