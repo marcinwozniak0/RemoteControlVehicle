@@ -8,7 +8,36 @@
 #include "VehicleFactoryFacade.hpp"
 #include "ThreeWheeledVehicleFactory.hpp"
 
-int main()
+namespace
+{
+constexpr auto correctrNumberOfInputArguments = 3u;
+constexpr auto commandReceiverPort = 1u;
+constexpr auto commandSenderPort = 2u;
+constexpr auto defaultCommandReceiverPort = "5000";
+constexpr auto defaultCommandSenderPort = "3000";
+
+std::string getCommandReceiverIpAddress(int argc, char* argv[])
+{
+    std::string ipAddress = "127.0.0.1:";
+
+    correctrNumberOfInputArguments == argc ? ipAddress += argv[commandReceiverPort]
+                                           : ipAddress += defaultCommandReceiverPort;
+
+    return ipAddress;
+}
+
+std::string getCommandSenderIpAddress(int argc, char* argv[])
+{
+    std::string ipAddress = "127.0.0.1:";
+
+    correctrNumberOfInputArguments == argc ? ipAddress += argv[commandSenderPort]
+                                           : ipAddress += defaultCommandReceiverPort;
+
+    return ipAddress;
+}
+}//namespace
+
+int main(int argc, char* argv[])
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -16,10 +45,11 @@ int main()
 
     VehicleFactoryFacade vehicleFactoryFacade(threeWheeledVehicleFactory);
 
-    GrpcCommandReceiver commandReceiver("127.0.0.1:5000");
+    GrpcCommandReceiver commandReceiver(getCommandReceiverIpAddress(argc, argv));
 
     GrpcCommandSender commandSender(std::make_shared<Router::Stub>(
-        grpc::CreateChannel("127.0.0.1:3000", grpc::InsecureChannelCredentials())));
+        grpc::CreateChannel(getCommandSenderIpAddress(argc, argv),
+                            grpc::InsecureChannelCredentials())));
 
     InternalVehiclePool vehiclePool(vehicleFactoryFacade);
 
