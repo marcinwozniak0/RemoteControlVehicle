@@ -22,6 +22,7 @@ constexpr auto firstEnginePwm = 12u;
 constexpr auto secondEngineFirstInput = 13u;
 constexpr auto secondEngineSecondInput = 14u;
 constexpr auto secondEnginePwm = 15u;
+constexpr auto steeringWheelPwm = 16u;
 constexpr auto pwmRange = 255u;
 }//namespace
 
@@ -34,7 +35,7 @@ DISABLED_HandlingUserCommandToRunTest::DISABLED_HandlingUserCommandToRunTest()
                        secondEnginePwm)
         , engineDriver(pwmRange)
         , propulsionSystem(firstEngine, secondEngine, engineDriver)
-        , steeringWheel(PIN_NUMBERS::STEERING_WHEEL_PWM)
+        , steeringWheel(steeringWheelPwm)
         , steeringSystem(steeringWheel)
         , vehicle(propulsionSystem, steeringSystem)
         , vehicleFactory(threeWheeledVehicleFactory)
@@ -54,7 +55,7 @@ TEST_F(DISABLED_HandlingUserCommandToRunTest, ZeroZeroCoordinates)
                                                             {secondEngineFirstInput, 1},
                                                             {secondEngineSecondInput, 1},
                                                             {secondEnginePwm, 0},
-                                                            {PIN_NUMBERS::STEERING_WHEEL_PWM, 19}};
+                                                            {steeringWheelPwm, 19}};
 
     auto expectedMessage = ControlerCommandToRunMessageBuilder{}.pinsConfiguration(expectedNewPinsConfiguration)
                                                                 .build();

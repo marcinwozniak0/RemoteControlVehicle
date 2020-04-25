@@ -1,10 +1,5 @@
 #pragma once
 
-namespace PIN_NUMBERS
-{
-static constexpr auto STEERING_WHEEL_PWM = 44u;
-}//PIN_NUMBERS
-
 namespace PIN_STATE
 {
 static constexpr auto LOW = 0u;

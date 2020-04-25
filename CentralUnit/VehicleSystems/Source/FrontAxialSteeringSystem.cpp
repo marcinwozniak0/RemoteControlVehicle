@@ -1,7 +1,12 @@
 #include "FrontAxialSteeringSystem.hpp"
 #include "SteeringWheel.hpp"
 
-FrontAxialSteeringSystem::FrontAxialSteeringSystem(SteeringWheel&  steeringWheel)
+namespace
+{
+constexpr auto maxSteeringAngle = 30;
+}
+
+FrontAxialSteeringSystem::FrontAxialSteeringSystem(SteeringWheel& steeringWheel)
     : _steeringWheel(steeringWheel)
 {}
 
@@ -10,24 +15,28 @@ void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const Com
     auto steeringAngle = calculateSteeringAngle(coordinates);
     auto pwmValue = calculatePwmValue(steeringAngle);
 
-    _steeringWheel.setPinsConfiguration(PinsConfiguration{std::make_pair(PIN_NUMBERS::STEERING_WHEEL_PWM, pwmValue)});
+    auto pinsConfiguration = _steeringWheel.getPinsConfiguration();
+    auto& [pinNumber, pinValue] = *pinsConfiguration.begin();
+    pinValue = pwmValue;
+
+    _steeringWheel.setPinsConfiguration(pinsConfiguration);
 }
 
 int FrontAxialSteeringSystem::calculateSteeringAngle(const Commands::CoordinateSystem& coordinates) const
 {
     if (coordinates.x_coordinate() == EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
-        return -30;
+        return -maxSteeringAngle;
     else if (coordinates.x_coordinate() == -EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION)
-        return 30;
+        return maxSteeringAngle;
 
     return {};
 }
 
 int FrontAxialSteeringSystem::calculatePwmValue(const int steeringAngle) const
 {
-    if (-30 == steeringAngle)
+    if (-maxSteeringAngle == steeringAngle)
         return 14;
-    else if (30 == steeringAngle)
+    else if (maxSteeringAngle == steeringAngle)
        return 23;
 
     return 19;

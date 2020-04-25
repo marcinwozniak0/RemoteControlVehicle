@@ -8,11 +8,12 @@ static constexpr auto steeringWheelPwmDutyCycleInNeutralPosition = 0.075;
 static constexpr auto steeringWheelPwmDutyCycleIn30DegreesPosition = steeringWheelPwmDutyCycleInNeutralPosition + 0.0166;
 static constexpr auto steeringWheelPwmDutyCycleInMinus30DegreesPosition = steeringWheelPwmDutyCycleInNeutralPosition - 0.0166;
 static constexpr auto pwmMaxRange = 255;
-static constexpr auto pwmPinNumber = PIN_NUMBERS::STEERING_WHEEL_PWM;
+static constexpr auto pwmPinNumber = 13u;
 static constexpr auto coordinateSystemResolution = EXTERNAL_INTERFACES::COORDINATE_SYSTEM_RESOLUTION;
 static constexpr int steeringWheelPwmValueInNeutralPosition = pwmMaxRange * steeringWheelPwmDutyCycleInNeutralPosition;
 static constexpr int steeringWheelPwmValueIn30DegreesPosition = pwmMaxRange * steeringWheelPwmDutyCycleIn30DegreesPosition;
 static constexpr int steeringWheelPwmValueInMinus30DegreesPosition = pwmMaxRange * steeringWheelPwmDutyCycleInMinus30DegreesPosition;
+const PinsConfiguration steeringWheelPinsConfiguration = {{pwmPinNumber, 5648}};
 
 auto buildCoordinates(int x, int y)
 {
@@ -56,8 +57,9 @@ struct CalculatePwmValueTest : FrontAxialSteeringSystemTest,
                                ::WithParamInterface<PwmValueTest>
 {};
 
-TEST_P(CalculatePwmValueTest, FromGivenCoordinatesShouldApplyPwmValue)
+TEST_P(CalculatePwmValueTest, fromGivenCoordinatesShouldApplyPwmValue)
 {
+    EXPECT_CALL(_steeringWheelMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(steeringWheelPinsConfiguration));
     EXPECT_CALL(_steeringWheelMock, setPinsConfiguration(GetParam().expectedConfiguration));
 
     ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(GetParam().givenCoordinates));
