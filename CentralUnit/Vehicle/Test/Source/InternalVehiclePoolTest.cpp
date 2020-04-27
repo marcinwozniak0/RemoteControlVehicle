@@ -1,18 +1,35 @@
+#include "RegisterVehicle.pb.h"
+
 #include "InternalVehiclePoolTest.hpp"
+#include "ThreeWheeledVehicleFactory.hpp"
+#include "UtCommandsBuilders.hpp"
 
 namespace
 {
-constexpr auto firstVehicleId = 14;
-constexpr auto secondVehicleId = 2;
+constexpr auto firstVehicleId = 14u;
+constexpr auto secondVehicleId = 2u;
 
 Commands::RegisterVehicle createRegisterVehicleCommand(const int vehicleId = firstVehicleId)
 {
-    Commands::RegisterVehicle registerVehicleCommand;
+    auto packedCommand = UTHelpers::createRegisterVehicleCommand(vehicleId);
 
-    registerVehicleCommand.set_vehicle_id(vehicleId);
+    Commands::RegisterVehicle registerVehicleCommand;
+    packedCommand.UnpackTo(&registerVehicleCommand);
 
     return registerVehicleCommand;
 }
+
+auto createThreeWheeledVehicle(int vehicleId = firstVehicleId)
+{
+    ThreeWheeledVehicleFactory factory;
+    return factory.create(createRegisterVehicleCommand(vehicleId));
+}
+}//namespace
+
+InternalVehiclePoolTest::InternalVehiclePoolTest()
+    : _sut(_vehicleFactoryMock)
+{
+    ON_CALL(_vehicleFactoryMock, create(_)).WillByDefault(Return(ByMove(createThreeWheeledVehicle())));
 }
 
 void InternalVehiclePoolTest::registerVehicle(Commands::RegisterVehicle&& registerVehicleCommand)
@@ -50,7 +67,7 @@ TEST_F(InternalVehiclePoolTest, registerVehicleShouldReturnTrueIfPreviousRegiste
 
     ASSERT_FALSE(_sut.registerVehicle(createRegisterVehicleCommand()));
 
-    EXPECT_CALL(_vehicleFactoryMock, create(_)).WillOnce(Return(ByMove(std::make_unique<ThreeWheeledVehicle>(_propulsionSystemMock, _steeringSystemMock))));
+    EXPECT_CALL(_vehicleFactoryMock, create(_)).WillOnce(Return(ByMove(createThreeWheeledVehicle(secondVehicleId))));
 
     ASSERT_TRUE(_sut.registerVehicle(createRegisterVehicleCommand()));
 }

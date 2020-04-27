@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <memory>
 
 #include "SteeringSystem.hpp"
 
@@ -9,7 +9,7 @@ class SteeringWheel;
 class FrontAxialSteeringSystem : public SteeringSystem
 {
 public:
-    FrontAxialSteeringSystem(SteeringWheel&  steeringWheel);
+    FrontAxialSteeringSystem(std::unique_ptr<SteeringWheel>);
 
     void applyNewConfigurationBasedOnCoordinates(const Commands::CoordinateSystem&) override;
     const PinsConfiguration& getPinsConfiguration() const override;
@@ -18,5 +18,5 @@ private:
     int calculateSteeringAngle(const Commands::CoordinateSystem&) const;
     int calculatePwmValue(const int steeringAngle) const;
 
-    SteeringWheel& _steeringWheel;
+    std::unique_ptr<SteeringWheel> _steeringWheel;
 };

@@ -9,6 +9,34 @@
 
 #include "UtCommandsBuilders.hpp"
 
+namespace
+{
+constexpr auto firstEngineFirstInput = 1u;
+constexpr auto firstEngineSecondInput = 2u;
+constexpr auto firstEnginePwm = 3u;
+constexpr auto secondEngineFirstInput = 4u;
+constexpr auto secondEngineSecondInput = 5u;
+constexpr auto secondEnginePwm = 6u;
+constexpr auto steeringWheelPwm = 7u;
+auto pwmRange = 255u;
+
+ThreeWheeledVehicleConfiguration createThreeWheeledVehicleConfiguration()
+{
+    ThreeWheeledVehicleConfiguration vehicleConfiguration;
+    vehicleConfiguration.set_first_engine_first_output(firstEngineFirstInput);
+    vehicleConfiguration.set_first_engine_second_output(firstEngineSecondInput);
+    vehicleConfiguration.set_first_engine_pwm(firstEnginePwm);
+    vehicleConfiguration.set_second_engine_first_output(secondEngineFirstInput);
+    vehicleConfiguration.set_second_engine_second_output(secondEngineSecondInput);
+    vehicleConfiguration.set_second_engine_pwm(secondEnginePwm);
+    vehicleConfiguration.set_steering_wheel_pwm(steeringWheelPwm);
+    vehicleConfiguration.set_steering_wheel_pwm_range(pwmRange);
+    vehicleConfiguration.set_engines_pwm_range(pwmRange);
+
+    return vehicleConfiguration;
+}
+}//namespace
+
 namespace UTHelpers
 {
 google::protobuf::Any createDeactivateCommand()
@@ -50,8 +78,12 @@ google::protobuf::Any createUserCommandToRun(const int32_t xCoordinate, const in
     google::protobuf::Any topLevelMessage;
 
     userCommandToRun.set_vehicle_id(vehicleId);
-    userCommandToRun.mutable_coordinate_system()->set_x_coordinate(xCoordinate);
-    userCommandToRun.mutable_coordinate_system()->set_y_coordinate(yCoordinate);
+
+    Commands::CoordinateSystem coordinateSystem;
+    coordinateSystem.set_x_coordinate(xCoordinate);
+    coordinateSystem.set_y_coordinate(yCoordinate);
+
+    *userCommandToRun.mutable_coordinate_system() = coordinateSystem;
 
     topLevelMessage.PackFrom(userCommandToRun);
 
@@ -74,7 +106,7 @@ google::protobuf::Any createRegisterVehicleCommand(const int vehicleId)
     registerVehicleCommand.set_vehicle_id(vehicleId);
     registerVehicleCommand.set_vehicle_type(VehicleType::THREE_WHEELED);
 
-    ThreeWheeledVehicleConfiguration vehicleConfiguration {};
+    ThreeWheeledVehicleConfiguration vehicleConfiguration = createThreeWheeledVehicleConfiguration();
     google::protobuf::Any packedVehicleConfiguration {};
     packedVehicleConfiguration.PackFrom(vehicleConfiguration);
 

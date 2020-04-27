@@ -2,9 +2,10 @@
 #include "PropulsionSystem.hpp"
 #include "SteeringSystem.hpp"
 
-ThreeWheeledVehicle::ThreeWheeledVehicle(PropulsionSystem& propulsionSystem, SteeringSystem& steeringSystem)
-    : _propulsionSystem(propulsionSystem)
-    , _steeringSystem(steeringSystem)
+ThreeWheeledVehicle::ThreeWheeledVehicle(std::unique_ptr<PropulsionSystem> propulsionSystem,
+                                         std::unique_ptr<SteeringSystem> steeringSystem)
+    : _propulsionSystem(std::move(propulsionSystem))
+    , _steeringSystem(std::move(steeringSystem))
 {
     _vehicleState = VehicleState::Idle;
 }
@@ -31,14 +32,14 @@ VehicleState ThreeWheeledVehicle::getVehicleState()
 
 void ThreeWheeledVehicle::applyNewConfiguration(const Commands::CoordinateSystem& coordinateSystem)
 {
-    _propulsionSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
-    _steeringSystem.applyNewConfigurationBasedOnCoordinates(coordinateSystem);
+    _propulsionSystem->applyNewConfigurationBasedOnCoordinates(coordinateSystem);
+    _steeringSystem->applyNewConfigurationBasedOnCoordinates(coordinateSystem);
 }
 
 PinsConfiguration ThreeWheeledVehicle::getCurrentPinsConfiguration() const
 {
-    auto propulsionSystemPinsConfiguration = _propulsionSystem.getPinsConfiguration();
-    auto steeringSystemSystemPinsConfiguration = _steeringSystem.getPinsConfiguration();
+    auto propulsionSystemPinsConfiguration = _propulsionSystem->getPinsConfiguration();
+    auto steeringSystemSystemPinsConfiguration = _steeringSystem->getPinsConfiguration();
 
     auto& vehiclePinsConfiguration = propulsionSystemPinsConfiguration;
     vehiclePinsConfiguration.merge(steeringSystemSystemPinsConfiguration);

@@ -49,21 +49,21 @@ TEST_F(SingleAxisPropulsionSystemTest, eachEngineShouldHasTheSameSpeedValue)
 {
     const auto givenCoordinates = createCoordinates(xCoordinate, yCoordinate);
 
-    EXPECT_CALL(_leftEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(leftEnginePinsConfiguration));
-    EXPECT_CALL(_rightEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(rightEnginePinsConfiguration));
+    EXPECT_CALL(*_leftEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(leftEnginePinsConfiguration));
+    EXPECT_CALL(*_rightEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(rightEnginePinsConfiguration));
 
-    EXPECT_CALL(_engineDriverMock, fillPinsConfiguration(givenCoordinates, boothEnginesPinsConfiguration));
+    EXPECT_CALL(*_engineDriverMock, fillPinsConfiguration(givenCoordinates, boothEnginesPinsConfiguration));
 
-    EXPECT_CALL(_leftEngineMock, setPinsConfiguration(boothEnginesPinsConfiguration));
-    EXPECT_CALL(_rightEngineMock, setPinsConfiguration(boothEnginesPinsConfiguration));
+    EXPECT_CALL(*_leftEngineMock, setPinsConfiguration(boothEnginesPinsConfiguration));
+    EXPECT_CALL(*_rightEngineMock, setPinsConfiguration(boothEnginesPinsConfiguration));
 
     ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(givenCoordinates));
 }
 
 TEST_F(SingleAxisPropulsionSystemTest, getPinsConfigurationShouldReturnPinsConfigurationOfBoothEngines)
 {
-    EXPECT_CALL(_rightEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(rightEnginePinsConfiguration));
-    EXPECT_CALL(_leftEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(leftEnginePinsConfiguration));
+    EXPECT_CALL(*_rightEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(rightEnginePinsConfiguration));
+    EXPECT_CALL(*_leftEngineMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(leftEnginePinsConfiguration));
 
     ASSERT_EQ(boothEnginesPinsConfiguration, _sut.getPinsConfiguration());
 }

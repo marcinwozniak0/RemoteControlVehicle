@@ -10,6 +10,7 @@ constexpr auto initialized = 11u;
     
 Commands::RegisterVehicle createRegisterVehicleCommandWithInitializedConfiguration()
 {   
+    //TODO duplicated with UTMeassageBuilders
     ThreeWheeledVehicleConfiguration configuration;
     configuration.set_first_engine_first_output(initialized); 
     configuration.set_first_engine_second_output(initialized);
@@ -17,6 +18,7 @@ Commands::RegisterVehicle createRegisterVehicleCommandWithInitializedConfigurati
     configuration.set_second_engine_first_output(initialized);
     configuration.set_second_engine_second_output(initialized);
     configuration.set_second_engine_pwm(initialized);
+    configuration.set_steering_wheel_pwm(initialized);
     configuration.set_steering_wheel_pwm_range(initialized);
     configuration.set_engines_pwm_range(initialized);
 

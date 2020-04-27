@@ -1,6 +1,6 @@
 #pragma once
 
-#include <array>
+#include <memory>
 
 #include "PropulsionSystem.hpp"
 
@@ -10,13 +10,15 @@ class EngineDriver;
 class SingleAxisPropulsionSystem : public PropulsionSystem
 {
 public:
-    SingleAxisPropulsionSystem(Engine&, Engine&, const EngineDriver&);
+    SingleAxisPropulsionSystem(std::unique_ptr<Engine>,
+                               std::unique_ptr<Engine>,
+                               std::unique_ptr<const EngineDriver>);
 
     void applyNewConfigurationBasedOnCoordinates(const Commands::CoordinateSystem&) override;
     const PinsConfiguration getPinsConfiguration() const override;
 
 private:
-    Engine& _rightEngine;
-    Engine& _leftEngine;
-    const EngineDriver& _engineDriver;
+    std::unique_ptr<Engine> _rightEngine;
+    std::unique_ptr<Engine> _leftEngine;
+    std::unique_ptr<const EngineDriver> _engineDriver;
 };
