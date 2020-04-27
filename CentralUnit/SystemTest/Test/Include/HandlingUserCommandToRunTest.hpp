@@ -17,10 +17,10 @@
 
 using namespace ::testing;
 
-class DISABLED_HandlingUserCommandToRunTest : public Test
+class HandlingUserCommandToRunTest : public Test
 {
 public:
-    DISABLED_HandlingUserCommandToRunTest();
+    HandlingUserCommandToRunTest();
 
     NiceMock<CommandSenderMock> commandSenderMock;
     NiceMock<CommandReceiverMock> commandReceiverMock;

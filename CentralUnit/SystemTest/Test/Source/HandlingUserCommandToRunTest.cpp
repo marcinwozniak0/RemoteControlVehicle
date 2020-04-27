@@ -16,17 +16,17 @@ namespace
 constexpr int32_t zeroXCoordinate = 0;
 constexpr int32_t zeroYCoordinate = 0;
 constexpr auto vehicleId = 2u;
-constexpr auto firstEngineFirstInput = 10u;
-constexpr auto firstEngineSecondInput = 11u;
-constexpr auto firstEnginePwm = 12u;
-constexpr auto secondEngineFirstInput = 13u;
-constexpr auto secondEngineSecondInput = 14u;
-constexpr auto secondEnginePwm = 15u;
-constexpr auto steeringWheelPwm = 16u;
+constexpr auto firstEngineFirstInput = 1u;
+constexpr auto firstEngineSecondInput = 2u;
+constexpr auto firstEnginePwm = 3u;
+constexpr auto secondEngineFirstInput = 4u;
+constexpr auto secondEngineSecondInput = 5u;
+constexpr auto secondEnginePwm = 6u;
+constexpr auto steeringWheelPwm = 7u;
 constexpr auto pwmRange = 255u;
 }//namespace
 
-DISABLED_HandlingUserCommandToRunTest::DISABLED_HandlingUserCommandToRunTest()
+HandlingUserCommandToRunTest::HandlingUserCommandToRunTest()
         : firstEngine(firstEngineFirstInput,
                       firstEngineSecondInput,
                       firstEnginePwm)
@@ -34,18 +34,23 @@ DISABLED_HandlingUserCommandToRunTest::DISABLED_HandlingUserCommandToRunTest()
                        secondEngineSecondInput,
                        secondEnginePwm)
         , engineDriver(pwmRange)
-        , propulsionSystem(firstEngine, secondEngine, engineDriver)
+        , propulsionSystem(std::make_unique<DcEngine>(firstEngine),
+                           std::make_unique<DcEngine>(secondEngine),
+                           std::make_unique<L293DEngineDriver>(engineDriver))
         , steeringWheel(steeringWheelPwm)
-        , steeringSystem(steeringWheel)
-        , vehicle(propulsionSystem, steeringSystem)
+        , steeringSystem(std::make_unique<ThirtyDegreesSteeringWheel>(steeringWheel))
+        , vehicle(std::make_unique<SingleAxisPropulsionSystem>(std::move(propulsionSystem)),
+                  std::make_unique<FrontAxialSteeringSystem>(std::move(steeringSystem)))
         , vehicleFactory(threeWheeledVehicleFactory)
         , vehiclePool(vehicleFactory)
         , vehiclePoolControler(commandReceiverMock, commandSenderMock, vehiclePool)
     {}
 
-TEST_F(DISABLED_HandlingUserCommandToRunTest, ZeroZeroCoordinates)
+TEST_F(HandlingUserCommandToRunTest, ZeroZeroCoordinates)
 {
-    EXPECT_CALL(commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(commandReceiverMock, takeMessageFromQueue()).Times(4)
+            .WillOnce(Return(createRegisterVehicleCommand(vehicleId)))
+            .WillOnce(Return(createRegisterUserCommand(vehicleId)))
             .WillOnce(Return(createUserCommandToRun(zeroXCoordinate, zeroYCoordinate, vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
