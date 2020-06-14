@@ -4,19 +4,23 @@
 
 #include "ThreeWheeledVehicle.hpp"
 #include "PropulsionSystemMock.hpp"
-#include "EngineMock.hpp"
 #include "SteeringSystemMock.hpp"
+#include "MockPointer.hpp"
 
 using namespace ::testing;
 
-class VehicleTest : public Test
+class ThreeWheeledVehicleTest : public Test
 {
 public:
-    VehicleTest()
-        : _sut(_propulsionSystemMock, _steeringSystemMock)
+    ThreeWheeledVehicleTest()
+        : _propulsionSystemMock(makeMockPointer<NiceMock<PropulsionSystemMock>>())
+        , _steeringSystemMock(makeMockPointer<NiceMock<SteeringSystemMock>>())
+        , _sut(_propulsionSystemMock.ownershipHandover(),
+               _steeringSystemMock.ownershipHandover())
     {}
 
-    NiceMock<PropulsionSystemMock> _propulsionSystemMock;
-    NiceMock<SteeringSystemMock> _steeringSystemMock;
+    MockPointer<NiceMock<PropulsionSystemMock>> _propulsionSystemMock;
+    MockPointer<NiceMock<SteeringSystemMock>> _steeringSystemMock;
     ThreeWheeledVehicle _sut;
+
 };

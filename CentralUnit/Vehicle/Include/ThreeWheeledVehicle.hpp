@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <UserCommandToRun.pb.h>
 
 #include "Vehicle.hpp"
@@ -10,7 +12,8 @@ class SteeringSystem;
 class ThreeWheeledVehicle : public Vehicle
 {
 public:
-    ThreeWheeledVehicle(PropulsionSystem&, SteeringSystem&);
+    ThreeWheeledVehicle(std::unique_ptr<PropulsionSystem>,
+                        std::unique_ptr<SteeringSystem>);
 
     void startVehicle() override;
     void stopVehicle() override;
@@ -23,7 +26,7 @@ public:
 
 private:
     VehicleState _vehicleState;
-    PropulsionSystem& _propulsionSystem;
-    SteeringSystem& _steeringSystem;
+    std::unique_ptr<PropulsionSystem> _propulsionSystem;
+    std::unique_ptr<SteeringSystem> _steeringSystem;
 
 };

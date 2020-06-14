@@ -29,7 +29,7 @@ auto buildCoordinates(int x, int y)
 TEST_F(FrontAxialSteeringSystemTest, GetPinsConfigurationShouldCallSameMethodFromSteeringWheel)
 {
     PinsConfiguration pinsConfiguration {};
-    EXPECT_CALL(_steeringWheelMock, getPinsConfiguration()).WillOnce(ReturnRef(pinsConfiguration));
+    EXPECT_CALL(*_steeringWheelMock, getPinsConfiguration()).WillOnce(ReturnRef(pinsConfiguration));
 
     ASSERT_NO_THROW(_sut.getPinsConfiguration());
 }
@@ -60,8 +60,8 @@ struct CalculatePwmValueTest : FrontAxialSteeringSystemTest,
 
 TEST_P(CalculatePwmValueTest, fromGivenCoordinatesShouldApplyPwmValue)
 {
-    EXPECT_CALL(_steeringWheelMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(steeringWheelPinsConfiguration));
-    EXPECT_CALL(_steeringWheelMock, setPinsConfiguration(GetParam().expectedConfiguration));
+    EXPECT_CALL(*_steeringWheelMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(steeringWheelPinsConfiguration));
+    EXPECT_CALL(*_steeringWheelMock, setPinsConfiguration(GetParam().expectedConfiguration));
 
     ASSERT_NO_THROW(_sut.applyNewConfigurationBasedOnCoordinates(GetParam().givenCoordinates));
 }

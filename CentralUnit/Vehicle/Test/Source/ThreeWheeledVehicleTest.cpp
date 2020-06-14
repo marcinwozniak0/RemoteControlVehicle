@@ -11,30 +11,30 @@ constexpr auto secondPinNumber = 11u;
 constexpr auto thirdPinNumber = 2u;
 }
 
-TEST_F(VehicleTest, vehicleStateShouldBeIdleByDefault)
+TEST_F(ThreeWheeledVehicleTest, vehicleStateShouldBeIdleByDefault)
 {
     EXPECT_EQ(VehicleState::Idle, _sut.getVehicleState());
 }
 
-TEST_F(VehicleTest, vehicleStateShouldBeManualAfterVehicleStart)
+TEST_F(ThreeWheeledVehicleTest, vehicleStateShouldBeManualAfterVehicleStart)
 {
     _sut.startVehicle();
     EXPECT_EQ(VehicleState::Manual, _sut.getVehicleState());
 }
 
-TEST_F(VehicleTest, vehicleStateShouldBeAutoAfterSwitchToAutomaticMode)
+TEST_F(ThreeWheeledVehicleTest, vehicleStateShouldBeAutoAfterSwitchToAutomaticMode)
 {
     _sut.switchToAutomaticMode();
     EXPECT_EQ(VehicleState::Auto, _sut.getVehicleState());
 }
 
-TEST_F(VehicleTest, vehicleStateShouldBeIdleAfterVehicleStop)
+TEST_F(ThreeWheeledVehicleTest, vehicleStateShouldBeIdleAfterVehicleStop)
 {
     _sut.stopVehicle();
     EXPECT_EQ(VehicleState::Idle, _sut.getVehicleState());
 }
 
-TEST_F(VehicleTest, getCurrentPinsConfigurationShouldReturnPinsConfigurationOfAllVehicleSystems)
+TEST_F(ThreeWheeledVehicleTest, getCurrentPinsConfigurationShouldReturnPinsConfigurationOfAllVehicleSystems)
 {
     const PinsConfiguration vehiclePinsConfiguration = {{firstPinNumber, PIN_STATE::HIGH},
                                                         {secondPinNumber,PIN_STATE::HIGH},
@@ -45,8 +45,8 @@ TEST_F(VehicleTest, getCurrentPinsConfigurationShouldReturnPinsConfigurationOfAl
     const PinsConfiguration steeringSystemPinsConfiguration = {{secondPinNumber,PIN_STATE::HIGH},
                                                                {thirdPinNumber, 0}};
 
-    EXPECT_CALL(_steeringSystemMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(propulsionSystemPinsConfiguration));
-    EXPECT_CALL(_propulsionSystemMock, getPinsConfiguration()).WillRepeatedly(Return(steeringSystemPinsConfiguration));
+    EXPECT_CALL(*_steeringSystemMock, getPinsConfiguration()).WillRepeatedly(ReturnRef(propulsionSystemPinsConfiguration));
+    EXPECT_CALL(*_propulsionSystemMock, getPinsConfiguration()).WillRepeatedly(Return(steeringSystemPinsConfiguration));
 
     EXPECT_EQ(vehiclePinsConfiguration, _sut.getCurrentPinsConfiguration());
 }

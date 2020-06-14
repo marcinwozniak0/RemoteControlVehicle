@@ -7,8 +7,8 @@ namespace
 constexpr auto maxSteeringAngle = 30;
 }
 
-FrontAxialSteeringSystem::FrontAxialSteeringSystem(SteeringWheel& steeringWheel)
-    : _steeringWheel(steeringWheel)
+FrontAxialSteeringSystem::FrontAxialSteeringSystem(std::unique_ptr<SteeringWheel> steeringWheel)
+    : _steeringWheel(std::move(steeringWheel))
 {}
 
 void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const Commands::CoordinateSystem& coordinates)
@@ -16,11 +16,11 @@ void FrontAxialSteeringSystem::applyNewConfigurationBasedOnCoordinates(const Com
     auto steeringAngle = calculateSteeringAngle(coordinates);
     auto pwmValue = calculatePwmValue(steeringAngle);
 
-    auto pinsConfiguration = _steeringWheel.getPinsConfiguration();
+    auto pinsConfiguration = _steeringWheel->getPinsConfiguration();
     auto& [pinNumber, pinValue] = *pinsConfiguration.begin();
     pinValue = pwmValue;
 
-    _steeringWheel.setPinsConfiguration(pinsConfiguration);
+    _steeringWheel->setPinsConfiguration(pinsConfiguration);
 }
 
 int FrontAxialSteeringSystem::calculateSteeringAngle(const Commands::CoordinateSystem& coordinates) const
@@ -45,5 +45,5 @@ int FrontAxialSteeringSystem::calculatePwmValue(const int steeringAngle) const
 
 const PinsConfiguration& FrontAxialSteeringSystem::getPinsConfiguration() const
 {
-    return _steeringWheel.getPinsConfiguration();
+    return _steeringWheel->getPinsConfiguration();
 }

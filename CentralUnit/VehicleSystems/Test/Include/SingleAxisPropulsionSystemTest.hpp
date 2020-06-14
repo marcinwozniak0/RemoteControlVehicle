@@ -1,11 +1,11 @@
 #pragma once
 
 #include <gmock/gmock.h>
-#include <gtest/gtest.h>
 
 #include "EngineMock.hpp"
 #include "SingleAxisPropulsionSystem.hpp"
 #include "EngineDriverMock.hpp"
+#include "MockPointer.hpp"
 
 using namespace ::testing;
 
@@ -13,11 +13,16 @@ class SingleAxisPropulsionSystemTest : public Test
 {
 public:
     SingleAxisPropulsionSystemTest()
-        : _sut(_rightEngineMock, _leftEngineMock, _engineDriverMock)
+        : _rightEngineMock(makeMockPointer<NiceMock<EngineMock>>())
+        , _leftEngineMock(makeMockPointer<NiceMock<EngineMock>>())
+        , _engineDriverMock(makeMockPointer<NiceMock<EngineDriverMock>>())
+        , _sut(_rightEngineMock.ownershipHandover(),
+               _leftEngineMock.ownershipHandover(),
+               _engineDriverMock.ownershipHandover())
     {}
 
+    MockPointer<NiceMock<EngineMock>> _rightEngineMock;
+    MockPointer<NiceMock<EngineMock>> _leftEngineMock;
+    MockPointer<NiceMock<EngineDriverMock>> _engineDriverMock;
     SingleAxisPropulsionSystem _sut;
-    NiceMock<EngineMock> _rightEngineMock;
-    NiceMock<EngineMock> _leftEngineMock;
-    NiceMock<EngineDriverMock> _engineDriverMock;
 };

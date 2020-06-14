@@ -2,6 +2,7 @@
 #include <string>
 
 #include <Deactivate.pb.h>
+#include <google/protobuf/any.pb.h>
 
 #include "CommandDebuger.hpp"
 #include "UtCommandsBuilders.hpp"

@@ -3,6 +3,7 @@
 #include <google/protobuf/any.h>
 
 #include "ThreeWheeledVehicleFactoryTest.hpp"
+#include "UtCommandsBuilders.hpp"
 
 namespace
 {
@@ -10,15 +11,7 @@ constexpr auto initialized = 11u;
     
 Commands::RegisterVehicle createRegisterVehicleCommandWithInitializedConfiguration()
 {   
-    ThreeWheeledVehicleConfiguration configuration;
-    configuration.set_first_engine_first_output(initialized); 
-    configuration.set_first_engine_second_output(initialized);
-    configuration.set_first_engine_pwm(initialized);
-    configuration.set_second_engine_first_output(initialized);
-    configuration.set_second_engine_second_output(initialized);
-    configuration.set_second_engine_pwm(initialized);
-    configuration.set_steering_wheel_pwm_range(initialized);
-    configuration.set_engines_pwm_range(initialized);
+    auto configuration = UTHelpers::createThreeWheeledVehicleConfiguration();
 
     google::protobuf::Any packedConfiguration;
     packedConfiguration.PackFrom(configuration);
