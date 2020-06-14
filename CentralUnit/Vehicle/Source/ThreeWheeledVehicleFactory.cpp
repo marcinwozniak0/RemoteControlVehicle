@@ -10,6 +10,7 @@
 #include "FrontAxialSteeringSystem.hpp"
 #include "ThreeWheeledVehicle.hpp"
 #include "InternalVehiclePool.hpp"
+#include "Logger.hpp"
 
 namespace
 {
@@ -42,6 +43,7 @@ std::unique_ptr<Vehicle> ThreeWheeledVehicleFactory::create(Commands::RegisterVe
     
     if (not isAllFieldInitilized(vehicleConfiguration))
     {
+        WARNING("Fields in vehicle configuration are uninitialized");
         return {};
     }
 

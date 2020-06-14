@@ -4,14 +4,13 @@
 
 #include "InternalVehiclePool.hpp"
 #include "VehicleFactoryMock.hpp"
-#include "ThreeWheeledVehicle.hpp"
 
 using namespace ::testing;
 
 class InternalVehiclePoolTest : public Test
 {
 public:
-    InternalVehiclePoolTest() ;
+    InternalVehiclePoolTest();
 
     InternalVehiclePool _sut;
 
