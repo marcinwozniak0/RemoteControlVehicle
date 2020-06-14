@@ -13,7 +13,7 @@ public class CommandSender {
     private ManagedChannel channel;
 
     public CommandSender() {
-    channel = ManagedChannelBuilder.forAddress("localhost", 3000)
+    channel = ManagedChannelBuilder.forAddress("localhost", 5000)
     .usePlaintext()
     .build();
 
