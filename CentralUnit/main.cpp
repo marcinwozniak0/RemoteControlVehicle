@@ -7,6 +7,7 @@
 #include "InternalVehiclePool.hpp"
 #include "VehicleFactoryFacade.hpp"
 #include "ThreeWheeledVehicleFactory.hpp"
+#include "Logger.hpp"
 
 namespace
 {
@@ -31,7 +32,7 @@ std::string getCommandSenderIpAddress(int argc, char* argv[])
     std::string ipAddress = "127.0.0.1:";
 
     correctrNumberOfInputArguments == argc ? ipAddress += argv[commandSenderPort]
-                                           : ipAddress += defaultCommandReceiverPort;
+                                           : ipAddress += defaultCommandSenderPort;
 
     return ipAddress;
 }
@@ -39,6 +40,8 @@ std::string getCommandSenderIpAddress(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+    clearLogs();
+
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
     ThreeWheeledVehicleFactory threeWheeledVehicleFactory;

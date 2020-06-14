@@ -11,7 +11,7 @@ constexpr char warningLevel[] = "WRN  ";
 constexpr char errorLevel[]   = "ERR  ";
 constexpr char infoLevel[]    = "INF  ";
 constexpr auto distanceBetweenLineNumberAndLogLevel = 4u;
-constexpr auto logFileName = "loggs.txt";
+const std::string logFileName = "logs.txt";
 
 
 std::string getFileName(const source_location& location)
@@ -87,4 +87,10 @@ void ERROR(std::string_view infoToLog, const source_location& location)
 void INFO(std::string_view infoToLog, const source_location& location)
 {
     saveLog<infoLevel>(infoToLog, location);
+}
+
+void clearLogs()
+{
+    const auto commandToRemoveLogsFile = "rm -rf " + logFileName;
+    system(commandToRemoveLogsFile.c_str());
 }
