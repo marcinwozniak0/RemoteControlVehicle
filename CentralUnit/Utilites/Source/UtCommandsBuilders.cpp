@@ -6,19 +6,24 @@
 #include <RegisterVehicle.pb.h>
 #include <RegisterUserCommand.pb.h>
 #include <ThreeWheeledVehicleConfiguration.pb.h>
+#include <google/protobuf/any.pb.h>
 
 #include "UtCommandsBuilders.hpp"
 
 namespace
 {
 constexpr auto firstEngineFirstInput = 1u;
-constexpr auto firstEngineSecondInput = 2u;
+constexpr auto firstEngineSecondInput = 0u;
 constexpr auto firstEnginePwm = 3u;
 constexpr auto secondEngineFirstInput = 4u;
 constexpr auto secondEngineSecondInput = 5u;
 constexpr auto secondEnginePwm = 6u;
 constexpr auto steeringWheelPwm = 7u;
 auto pwmRange = 255u;
+}//namespace
+
+namespace UTHelpers
+{
 
 ThreeWheeledVehicleConfiguration createThreeWheeledVehicleConfiguration()
 {
@@ -35,10 +40,7 @@ ThreeWheeledVehicleConfiguration createThreeWheeledVehicleConfiguration()
 
     return vehicleConfiguration;
 }
-}//namespace
 
-namespace UTHelpers
-{
 google::protobuf::Any createDeactivateCommand()
 {
     Commands::Deactivate deactivateMessage;

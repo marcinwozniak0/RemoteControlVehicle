@@ -1,7 +1,13 @@
 #pragma once
 
 #include <string>
-#include <google/protobuf/any.pb.h>
+
+struct ThreeWheeledVehicleConfiguration;
+
+namespace google::protobuf
+{
+struct Any;
+}
 
 namespace UTHelpers
 {
@@ -12,4 +18,5 @@ google::protobuf::Any createUnknownCommand();
 google::protobuf::Any createUserCommandToRun(int32_t, int32_t, int);
 google::protobuf::Any createRegisterVehicleCommand(int);
 google::protobuf::Any createRegisterUserCommand(int);
+ThreeWheeledVehicleConfiguration createThreeWheeledVehicleConfiguration();
 }//UTHelpers
