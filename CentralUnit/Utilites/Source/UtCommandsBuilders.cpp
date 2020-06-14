@@ -13,7 +13,7 @@
 namespace
 {
 constexpr auto firstEngineFirstInput = 1u;
-constexpr auto firstEngineSecondInput = 0u;
+constexpr auto firstEngineSecondInput = 2u;
 constexpr auto firstEnginePwm = 3u;
 constexpr auto secondEngineFirstInput = 4u;
 constexpr auto secondEngineSecondInput = 5u;
