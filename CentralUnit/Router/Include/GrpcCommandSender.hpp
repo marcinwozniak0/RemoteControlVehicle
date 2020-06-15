@@ -16,6 +16,7 @@ public:
 
 private:
     std::string connectWithServer() const;
+    template <typename Timer> void tryConnectWithServer(Timer&) const;
     
     std::shared_ptr<Router::StubInterface> _stub;
 };

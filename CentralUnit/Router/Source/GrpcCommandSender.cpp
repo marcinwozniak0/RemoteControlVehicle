@@ -1,19 +1,71 @@
+#include <chrono>
+#include <thread>
+
 #include <InitCommands.pb.h>
 #include <Acknowledge.pb.h>
 
 #include "GrpcCommandSender.hpp"
 #include "CommunicationSocketException.hpp"
+#include "AutoStartingTimer.hpp"
 #include "Logger.hpp"
+
+namespace
+{
+using namespace std::literals::chrono_literals;
+using namespace std::chrono;
+
+constexpr auto nextReconnectionAttempt = 1s;
+constexpr auto totalTimeToWaitForConnection = 60s;
+constexpr auto nonZeroStatus = 1u;
+
+template <typename Timer>
+bool isWaitForConnectionTimerExpired(const Timer& waitForConnectionTimer)
+{
+    if (totalTimeToWaitForConnection == waitForConnectionTimer.getElapsedTime())
+    {
+        ERROR("Wait for connection timer expired!. Program will be terminated");
+        std::exit(nonZeroStatus);
+    }
+
+    return false;
+}
+
+template <typename Timer>
+bool shouldWaitForConnectionEstablish(const Timer& waitForConnectionTimer)
+{
+    return waitForConnectionTimer.isTimerRunning() and not isWaitForConnectionTimerExpired(waitForConnectionTimer);
+}
+
+void waitForNextReconnectionAttempt()
+{
+    std::this_thread::sleep_for(nextReconnectionAttempt);
+}
+}//namespace
 
 GrpcCommandSender::GrpcCommandSender(std::shared_ptr<Router::StubInterface> stub)
     : _stub(stub)
 {
+    AutoStartingTimer<seconds> waitForConnectionTimer;
+
+    while (shouldWaitForConnectionEstablish(waitForConnectionTimer))
+    {
+        tryConnectWithServer(waitForConnectionTimer);
+    }
+}
+
+template <typename Timer>
+void GrpcCommandSender::tryConnectWithServer(Timer& waitForConnectionTimer) const
+{
     const auto connectionResult = connectWithServer();
+
     if (std::string::npos != connectionResult.find("RPC failed"))
     {
-        ERROR(connectionResult);
-        //TODO cannot throw exception in CTOR !!!
-        throw CommunicationSocketException{connectionResult};
+        INFO("Cannot establish connection. Next reconnection attempt will be processed");
+        waitForNextReconnectionAttempt();
+    }
+    else
+    {
+        waitForConnectionTimer.stop();
     }
 }
 
