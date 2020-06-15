@@ -3,6 +3,7 @@
 
 #include <Deactivate.pb.h>
 #include <UserCommandToRun.pb.h>
+#include <Acknowledge.pb.h>
 
 #include "HandlingUserCommandToRunTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
@@ -48,7 +49,7 @@ HandlingUserCommandToRunTest::HandlingUserCommandToRunTest()
 
 TEST_F(HandlingUserCommandToRunTest, ZeroZeroCoordinates)
 {
-    EXPECT_CALL(commandReceiverMock, takeMessageFromQueue()).Times(4)
+    EXPECT_CALL(commandReceiverMock, takeCommandToProcess()).Times(4)
             .WillOnce(Return(createRegisterVehicleCommand(vehicleId)))
             .WillOnce(Return(createRegisterUserCommand(vehicleId)))
             .WillOnce(Return(createUserCommandToRun(zeroXCoordinate, zeroYCoordinate, vehicleId)))

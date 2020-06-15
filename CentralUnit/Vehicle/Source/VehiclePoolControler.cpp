@@ -8,6 +8,7 @@
 #include <RegisterUserCommand.pb.h>
 #include <RegisterVehicle.pb.h>
 #include <Deactivate.pb.h>
+#include <Acknowledge.pb.h>
 
 #include "Logger.hpp"
 #include "CommandDebuger.hpp"
@@ -17,6 +18,21 @@
 #include "CommandSender.hpp"
 #include "VehiclePool.hpp"
 #include "Vehicle.hpp"
+
+namespace
+{
+Commands::Acknowledge createAcknowledge(bool status = true,
+                                        const std::string& additionalInfo = "")
+{
+    Commands::Acknowledge acknowledge;
+    acknowledge.set_status(status ? Commands::Status::SUCCESS
+                                  : Commands::Status::FAILED);
+    acknowledge.set_additional_info(additionalInfo);
+
+    return acknowledge;
+}
+
+}//namespace
 
 VehiclePoolControler::VehiclePoolControler(CommandReceiver& commandReceiver,
                                    CommandSender& commandSender,
@@ -32,9 +48,10 @@ void VehiclePoolControler::controlVehiclePool()
 {
     while(_isControlerActive)
     {
-        if (const auto command = _commandReceiver.takeMessageFromQueue())
+        if (const auto command = _commandReceiver.takeCommandToProcess())
         {
-            handleCommand(command.value());
+            auto ack = handleCommand(command.value());
+            _commandReceiver.setAcknowledgeToSend(std::move(ack));
         }
     //TODO try to use condition variable instead of sleeping
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -83,41 +100,43 @@ void VehiclePoolControler::sendCommand(Command&& command) const
     _commandSender.sendCommand(std::move(command));
 }
 
-void VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
+Commands::Acknowledge VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
 {
     INFO("Handle command : " + CommandDebuger::getCommandName(command));
 
     if (command.Is<Commands::RegisterUserCommand>())
     {
-        handleRegisterUserCommand(command);
+        return handleRegisterUserCommand(command);
     }
     else if (command.Is<Commands::RegisterVehicle>())
     {
-        handleRegisterVehicleCommand(command);
+        return handleRegisterVehicleCommand(command);
     }
     else if (command.Is<Commands::UserCommandToStart>())
     {
-        handleUserCommandToStart(command);
+        return handleUserCommandToStart(command);
     }
     else if (command.Is<Commands::UserCommandToStop>())
     {
-        handleUserCommandToStop(command);
+        return handleUserCommandToStop(command);
     }
     else if(command.Is<Commands::UserCommandToRun>())
     {
-        handleUserCommandToRun(command);
+        return handleUserCommandToRun(command);
     }
     else if(command.Is<Commands::Deactivate>())
     {
         _isControlerActive = false;
+        return createAcknowledge();
     }
     else
     {
+        return createAcknowledge();//unsupported command
         ERROR("Handling of this command is not implemented.");
     }
 }
 
-void VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& command) const
+Commands::Acknowledge VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& command) const
 {
     Commands::UserCommandToRun payload;
     command.UnpackTo(&payload);
@@ -131,37 +150,42 @@ void VehiclePoolControler::handleUserCommandToRun(const google::protobuf::Any& c
                                                               .vehicleId(vehicleId)  
                                                               .build();
 
-    sendCommand(std::move(messageToSend));
+    sendCommand(std::move(messageToSend)); //TODO sprawdzic wszystkie wysylanie ackow, Jaki status kiedy trzeba ustawic
+    return createAcknowledge();
 }
-
-void VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any& command) const
+Commands::Acknowledge VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any& command) const
 {
     Commands::RegisterUserCommand payload;
     command.UnpackTo(&payload);
 
-    _vehiclePool.rentVehicle(payload.vehicle_id()); 
+    bool isRentSuccess = _vehiclePool.rentVehicle(payload.vehicle_id());
+
+    return createAcknowledge(isRentSuccess);
 }
 
-void VehiclePoolControler::handleUserCommandToStop(const google::protobuf::Any& command) const
+Commands::Acknowledge VehiclePoolControler::handleUserCommandToStop(const google::protobuf::Any& command) const
 {
     Commands::UserCommandToStop payload;
     command.UnpackTo(&payload);
     auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
     vehicle.value()->stopVehicle();
+    return createAcknowledge();
 }
 
-void VehiclePoolControler::handleUserCommandToStart(const google::protobuf::Any& command) const
+Commands::Acknowledge VehiclePoolControler::handleUserCommandToStart(const google::protobuf::Any& command) const
 {
     Commands::UserCommandToStart payload;
     command.UnpackTo(&payload);
     auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
     vehicle.value()->startVehicle();
+    return createAcknowledge();
 }
 
-void VehiclePoolControler::handleRegisterVehicleCommand(const google::protobuf::Any& command) const
+Commands::Acknowledge VehiclePoolControler::handleRegisterVehicleCommand(const google::protobuf::Any& command) const
 {
     Commands::RegisterVehicle payload;
     command.UnpackTo(&payload);
 
-    _vehiclePool.registerVehicle(std::move(payload));
+    bool isRegisterSuccess = _vehiclePool.registerVehicle(std::move(payload));
+    return createAcknowledge(isRegisterSuccess);
 }

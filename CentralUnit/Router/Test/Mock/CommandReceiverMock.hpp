@@ -7,5 +7,6 @@
 class CommandReceiverMock : public CommandReceiver
 {
 public:
-    MOCK_METHOD(std::optional<const google::protobuf::Any>, takeMessageFromQueue, ());
+    MOCK_METHOD(std::optional<const google::protobuf::Any>, takeCommandToProcess, ());
+    MOCK_METHOD(void, setAcknowledgeToSend, (Commands::Acknowledge&&));
 };

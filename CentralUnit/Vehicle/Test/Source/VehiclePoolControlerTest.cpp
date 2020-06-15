@@ -6,6 +6,7 @@
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
 #include <RegisterUserCommand.pb.h>
+#include <Acknowledge.pb.h>
 
 #include "VehiclePoolControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
@@ -29,7 +30,7 @@ const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
     EXPECT_CALL(*_vehicleMock, startVehicle());
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
@@ -39,7 +40,7 @@ TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 TEST_F(VehiclePoolControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
     EXPECT_CALL(*_vehicleMock, stopVehicle());
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(3)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(3)
             .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createUserCommandToStop(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
@@ -49,7 +50,7 @@ TEST_F(VehiclePoolControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 
 TEST_F(VehiclePoolControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate, vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
@@ -108,7 +109,7 @@ TEST_F(VehiclePoolControlerTest, onEmergencyStopShouldNotSendCommandToRunWhenVeh
 
 TEST_F(VehiclePoolControlerTest, unknownCommandShouldBeIngored)
 {
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUnknownCommand()))
             .WillOnce(Return(createDeactivateCommand()));
 
@@ -121,7 +122,7 @@ TEST_F(VehiclePoolControlerTest, registerVehicleCommandShouldTriggerVehicleRegis
     const auto packedRegisterVehicleCommand = createRegisterVehicleCommand(vehicleId);
     packedRegisterVehicleCommand.UnpackTo(&registerVehicleCommand);
 
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(packedRegisterVehicleCommand))
             .WillOnce(Return(createDeactivateCommand()));
 
@@ -137,7 +138,7 @@ TEST_F(VehiclePoolControlerTest, registerUserCommandShouldTriggerVehicleRentProc
     const auto packedRegisterUserCommand = createRegisterUserCommand(vehicleId);
     packedRegisterUserCommand.UnpackTo(&registerUserCommand);
 
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(packedRegisterUserCommand))
             .WillOnce(Return(createDeactivateCommand()));
 

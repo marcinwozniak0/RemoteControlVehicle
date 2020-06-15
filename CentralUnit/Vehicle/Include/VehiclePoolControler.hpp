@@ -9,6 +9,11 @@ namespace google::protobuf
 class Any;
 }
 
+namespace Commands
+{
+class Acknowledge;
+}
+
 class CommandReceiver;
 class CommandSender;
 class VehiclePool;
@@ -24,12 +29,12 @@ public:
 
 private:
     std::optional<std::string> getMessageToExecute();
-    void handleCommand(const google::protobuf::Any&);
-    void handleUserCommandToRun(const google::protobuf::Any&) const;
-    void handleRegisterUserCommand(const google::protobuf::Any&) const;
-    void handleUserCommandToStop(const google::protobuf::Any&) const;
-    void handleUserCommandToStart(const google::protobuf::Any&) const;
-    void handleRegisterVehicleCommand(const google::protobuf::Any&) const;
+    Commands::Acknowledge handleCommand(const google::protobuf::Any&); //TODO tutaj bool, i gdzie indziej rzutowania na status
+    Commands::Acknowledge handleUserCommandToRun(const google::protobuf::Any&) const;
+    Commands::Acknowledge handleRegisterUserCommand(const google::protobuf::Any&) const;
+    Commands::Acknowledge handleUserCommandToStop(const google::protobuf::Any&) const;
+    Commands::Acknowledge handleUserCommandToStart(const google::protobuf::Any&) const;
+    Commands::Acknowledge handleRegisterVehicleCommand(const google::protobuf::Any&) const;
     template <typename Command> void sendCommand(Command&&) const;
     void clearPinsValues(PinsConfiguration&) const;
     void vehicleEmergencyStop(const Vehicle&, int vehicleId);
