@@ -14,6 +14,7 @@
 #include "CommandDebuger.hpp"
 #include "VehiclePoolControler.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
+#include "AcknowledgeBuilder.hpp"
 #include "CommandReceiver.hpp"
 #include "CommandSender.hpp"
 #include "VehiclePool.hpp"
@@ -21,15 +22,18 @@
 
 namespace
 {
-Commands::Acknowledge createAcknowledge(bool status = true,
-                                        const std::string& additionalInfo = "")
-{
-    Commands::Acknowledge acknowledge;
-    acknowledge.set_status(status ? Commands::Status::SUCCESS
-                                  : Commands::Status::FAILED);
-    acknowledge.set_additional_info(additionalInfo);
+constexpr bool SUCCESS = true;
+constexpr bool FAILED = false;
 
-    return acknowledge;
+auto createAcknowledge(bool status = SUCCESS,
+                       const std::string& additionalInfo = "")
+{
+    const auto convertedStatus = status ? Commands::Status::SUCCESS
+                                        : Commands::Status::FAILED;
+
+    return AcknowledgeBuilder{}.status(convertedStatus)
+                               .additionalInformation(additionalInfo)
+                               .build();
 }
 
 void waitForNextCommandToProcess()
@@ -57,8 +61,8 @@ void VehiclePoolControler::controlVehiclePool()
     {
         if (const auto command = _commandReceiver.takeCommandToProcess())
         {
-            auto ack = handleCommand(command.value());
-            _commandReceiver.setAcknowledgeToSend(std::move(ack));
+            auto acknowledge = handleCommand(command.value());
+            _commandReceiver.setAcknowledgeToSend(std::move(acknowledge));
         }
         else
         {
@@ -140,8 +144,8 @@ Commands::Acknowledge VehiclePoolControler::handleCommand(const google::protobuf
     }
     else
     {
-        return createAcknowledge();//unsupported command
         ERROR("Handling of this command is not implemented.");
+        return createAcknowledge(FAILED, "Unsupported handling of command in CentralUnit");
     }
 }
 

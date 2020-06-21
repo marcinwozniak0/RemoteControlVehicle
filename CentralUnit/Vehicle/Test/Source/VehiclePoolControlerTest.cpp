@@ -12,6 +12,7 @@
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "ProtobufStructuresComparators.hpp"
 #include "UtCommandsBuilders.hpp"
+#include "AcknowledgeBuilder.hpp"
 
 using namespace Comparators;
 using namespace UTHelpers;
@@ -25,7 +26,29 @@ constexpr auto secondVehicleId = 2u;
 constexpr auto unknownVehicleId = 22u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
+constexpr auto unknownCommadAcknowledgeInfo = "Unsupported handling of command in CentralUnit";
+constexpr auto SUCCESS = Commands::Status::SUCCESS;
+constexpr auto FAILED = Commands::Status::FAILED;
+
+auto createExpectedAcknowledge(Commands::Status status = SUCCESS,
+                               const std::string& additionalInfo = "")
+{
+    return AcknowledgeBuilder{}.status(status)
+                               .additionalInformation(additionalInfo)
+                               .build();
 }
+}//namespace
+
+void VehiclePoolControlerTest::expectAcknowledgeForDeactivateCommand()
+{
+    EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(createExpectedAcknowledge()));
+}
+
+void VehiclePoolControlerTest::expectAcknowledge(Commands::Acknowledge&& expectedAcknowledge)
+{
+    EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(std::move(expectedAcknowledge)));
+}
+
 
 TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
@@ -112,6 +135,9 @@ TEST_F(VehiclePoolControlerTest, unknownCommandShouldBeIngored)
     EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUnknownCommand()))
             .WillOnce(Return(createDeactivateCommand()));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED, unknownCommadAcknowledgeInfo));
 
     _sut.controlVehiclePool();
 }
