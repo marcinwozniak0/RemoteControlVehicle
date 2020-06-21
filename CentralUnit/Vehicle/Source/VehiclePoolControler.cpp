@@ -32,6 +32,13 @@ Commands::Acknowledge createAcknowledge(bool status = true,
     return acknowledge;
 }
 
+void waitForNextCommandToProcess()
+{
+    using namespace std::chrono_literals;
+    constexpr auto timeToWait = 50ms;
+    std::this_thread::sleep_for(timeToWait);
+}
+
 }//namespace
 
 VehiclePoolControler::VehiclePoolControler(CommandReceiver& commandReceiver,
@@ -53,8 +60,10 @@ void VehiclePoolControler::controlVehiclePool()
             auto ack = handleCommand(command.value());
             _commandReceiver.setAcknowledgeToSend(std::move(ack));
         }
-    //TODO try to use condition variable instead of sleeping
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        else
+        {
+            waitForNextCommandToProcess();
+        }
     }
 }
 
