@@ -23,6 +23,7 @@ public:
     }
 
     void expectAcknowledgeForDeactivateCommand();
+    void expectSuccessAcknowledges();
     void expectAcknowledge(Commands::Acknowledge&&);
 
     VehiclePoolControler _sut;

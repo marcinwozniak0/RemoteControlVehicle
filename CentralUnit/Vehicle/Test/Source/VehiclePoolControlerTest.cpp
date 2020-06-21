@@ -27,10 +27,11 @@ constexpr auto unknownVehicleId = 22u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 constexpr auto unknownCommadAcknowledgeInfo = "Unsupported handling of command in CentralUnit";
-constexpr auto SUCCESS = Commands::Status::SUCCESS;
-constexpr auto FAILED = Commands::Status::FAILED;
+constexpr auto sendingSuccess = true;
+constexpr auto SUCCESS_STATUS = Commands::Status::SUCCESS;
+constexpr auto FAILED_STATUS = Commands::Status::FAILED;
 
-auto createExpectedAcknowledge(Commands::Status status = SUCCESS,
+auto createExpectedAcknowledge(Commands::Status status = SUCCESS_STATUS,
                                const std::string& additionalInfo = "")
 {
     return AcknowledgeBuilder{}.status(status)
@@ -44,11 +45,16 @@ void VehiclePoolControlerTest::expectAcknowledgeForDeactivateCommand()
     EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(createExpectedAcknowledge()));
 }
 
+void VehiclePoolControlerTest::expectSuccessAcknowledges()
+{
+    EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(createExpectedAcknowledge()))
+            .WillRepeatedly(Return());
+}
+
 void VehiclePoolControlerTest::expectAcknowledge(Commands::Acknowledge&& expectedAcknowledge)
 {
     EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(std::move(expectedAcknowledge)));
 }
-
 
 TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
@@ -87,7 +93,24 @@ TEST_F(VehiclePoolControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendN
 
     EXPECT_CALL(*_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend))).WillOnce(Return(sendingSuccess));
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest, afterUnsuccessfulUserCommandToRunHandlingShouldSetAcknowledgeStatusToFailed)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate, vehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(*_vehicleMock, applyNewConfiguration(_));
+    EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration());
+    EXPECT_CALL(_commandSenderMock, sendCommand(_)).WillOnce(Return(not sendingSuccess));
+
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
+    expectAcknowledgeForDeactivateCommand();
 
     _sut.controlVehiclePool();
 }
@@ -137,7 +160,7 @@ TEST_F(VehiclePoolControlerTest, unknownCommandShouldBeIngored)
             .WillOnce(Return(createDeactivateCommand()));
 
     expectAcknowledgeForDeactivateCommand();
-    expectAcknowledge(createExpectedAcknowledge(FAILED, unknownCommadAcknowledgeInfo));
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, unknownCommadAcknowledgeInfo));
 
     _sut.controlVehiclePool();
 }

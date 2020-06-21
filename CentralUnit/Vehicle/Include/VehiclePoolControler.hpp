@@ -35,7 +35,7 @@ private:
     Commands::Acknowledge handleUserCommandToStop(const google::protobuf::Any&) const;
     Commands::Acknowledge handleUserCommandToStart(const google::protobuf::Any&) const;
     Commands::Acknowledge handleRegisterVehicleCommand(const google::protobuf::Any&) const;
-    template <typename Command> void sendCommand(Command&&) const;
+    template <typename Command> bool sendCommand(Command&&) const;
     void clearPinsValues(PinsConfiguration&) const;
     void vehicleEmergencyStop(const Vehicle&, int vehicleId);
 

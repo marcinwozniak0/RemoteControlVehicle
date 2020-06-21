@@ -108,9 +108,9 @@ void VehiclePoolControler::clearPinsValues(PinsConfiguration& pinsConfiguration)
 }
 
 template <typename Command>
-void VehiclePoolControler::sendCommand(Command&& command) const
+bool VehiclePoolControler::sendCommand(Command&& command) const
 {
-    _commandSender.sendCommand(std::move(command));
+    return _commandSender.sendCommand(std::move(command));
 }
 
 Commands::Acknowledge VehiclePoolControler::handleCommand(const google::protobuf::Any& command)
@@ -163,8 +163,9 @@ Commands::Acknowledge VehiclePoolControler::handleUserCommandToRun(const google:
                                                               .vehicleId(vehicleId)  
                                                               .build();
 
-    sendCommand(std::move(messageToSend)); //TODO sprawdzic wszystkie wysylanie ackow, Jaki status kiedy trzeba ustawic
-    return createAcknowledge();
+    bool status = sendCommand(std::move(messageToSend));
+
+    return createAcknowledge(status);
 }
 Commands::Acknowledge VehiclePoolControler::handleRegisterUserCommand(const google::protobuf::Any& command) const
 {
