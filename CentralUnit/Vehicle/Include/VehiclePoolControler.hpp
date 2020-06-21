@@ -29,7 +29,7 @@ public:
 
 private:
     std::optional<std::string> getMessageToExecute();
-    Commands::Acknowledge handleCommand(const google::protobuf::Any&); //TODO tutaj bool, i gdzie indziej rzutowania na status
+    Commands::Acknowledge handleCommand(const google::protobuf::Any&);
     Commands::Acknowledge handleUserCommandToRun(const google::protobuf::Any&) const;
     Commands::Acknowledge handleRegisterUserCommand(const google::protobuf::Any&) const;
     Commands::Acknowledge handleUserCommandToStop(const google::protobuf::Any&) const;

@@ -18,7 +18,6 @@ private:
     grpc::Status SayHello(grpc::ServerContext* context, const InitCommands::HelloRequest* request, InitCommands::HelloReply* response) override;
     void startListeningOnPort(const std::string& portAddress);
     void waitForCommandProcessingFinish() const;
-    Commands::Acknowledge assignAcknowledge();
 
     std::unique_ptr<grpc::Server> _server;
     std::optional<google::protobuf::Any> _commandToProcess;
