@@ -29,7 +29,7 @@ const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
 constexpr auto unsupportedCommandInfo = "Unsupported handling of command in CentralUnit";
 constexpr auto vehicleNotFoundInfo = "Vehicle with received id was not found";
 constexpr auto vehicleNotFound = std::nullopt;
-constexpr auto sendingSuccess = true;
+constexpr auto success = true;
 constexpr auto SUCCESS_STATUS = Commands::Status::SUCCESS;
 constexpr auto FAILED_STATUS = Commands::Status::FAILED;
 
@@ -128,7 +128,7 @@ TEST_F(VehiclePoolControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendN
 
     EXPECT_CALL(*_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend))).WillOnce(Return(sendingSuccess));
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend))).WillOnce(Return(success));
     expectSuccessAcknowledges();
 
     _sut.controlVehiclePool();
@@ -142,7 +142,7 @@ TEST_F(VehiclePoolControlerTest, afterUnsuccessfulUserCommandToRunHandlingShould
 
     EXPECT_CALL(*_vehicleMock, applyNewConfiguration(_));
     EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration());
-    EXPECT_CALL(_commandSenderMock, sendCommand(_)).WillOnce(Return(not sendingSuccess));
+    EXPECT_CALL(_commandSenderMock, sendCommand(_)).WillOnce(Return(not success));
 
     expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
     expectAcknowledgeForDeactivateCommand();
@@ -210,8 +210,23 @@ TEST_F(VehiclePoolControlerTest, registerVehicleCommandShouldTriggerVehicleRegis
             .WillOnce(Return(packedRegisterVehicleCommand))
             .WillOnce(Return(createDeactivateCommand()));
 
-    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(registerVehicleCommand)));
+    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(registerVehicleCommand))).WillOnce(Return(success));
 
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest, shouldSetAcknowledgeStatusToFailedWhenRegistrationFailed)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createRegisterVehicleCommand(vehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(_))).WillOnce(Return(not success));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
 
     _sut.controlVehiclePool();
 }
