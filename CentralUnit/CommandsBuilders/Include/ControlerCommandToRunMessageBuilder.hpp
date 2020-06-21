@@ -5,7 +5,12 @@
 #include "MessageBuilder.hpp"
 #include "VehicleTypes.hpp"
 
-class ControlerCommandToRunMessageBuilder : public MessageBuilder
+namespace google::protobuf
+{
+class Any;
+}
+
+class ControlerCommandToRunMessageBuilder : public MessageBuilder<google::protobuf::Any>
 {
 public:
     google::protobuf::Any build() const override;
