@@ -181,9 +181,13 @@ Commands::Acknowledge VehiclePoolControler::handleUserCommandToStop(const google
 {
     Commands::UserCommandToStop payload;
     command.UnpackTo(&payload);
-    auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id());
-    vehicle.value()->stopVehicle();
-    return createAcknowledge();
+    if (auto vehicle = _vehiclePool.getVehicle(payload.vehicle_id()))
+    {
+        vehicle.value()->stopVehicle();
+        return createAcknowledge();
+    }
+
+    return createAcknowledge(FAILED, "Vehicle with received id was not found");
 }
 
 Commands::Acknowledge VehiclePoolControler::handleUserCommandToStart(const google::protobuf::Any& command) const
