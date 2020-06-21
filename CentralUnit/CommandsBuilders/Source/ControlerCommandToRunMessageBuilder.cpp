@@ -1,3 +1,5 @@
+#include <google/protobuf/any.pb.h>
+
 #include "ControlerCommandToRunMessageBuilder.hpp"
 
 ControlerCommandToRunMessageBuilder ControlerCommandToRunMessageBuilder::pinsConfiguration(const PinsConfiguration& configuration)

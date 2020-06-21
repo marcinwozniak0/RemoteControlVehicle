@@ -7,6 +7,7 @@
 #include <InitCommands.pb.h>
 #include <RegisterVehicle.pb.h>
 #include <ThreeWheeledVehicleConfiguration.pb.h>
+#include <Acknowledge.pb.h>
 
 #include "MapComparator.hpp"
 #include "VehicleTypes.hpp"
@@ -35,6 +36,12 @@ inline bool operator==(const Commands::RegisterVehicle& lhs, const Commands::Reg
     return lhs.vehicle_id() == rhs.vehicle_id() and
            lhs.vehicle_type() == lhs.vehicle_type() and
            lhs.vehicle_configuration() == lhs.vehicle_configuration();
+}
+
+inline bool operator==(const Commands::Acknowledge& lhs, const Commands::Acknowledge& rhs)
+{
+    return lhs.status() == rhs.status() and
+           lhs.additional_info() == lhs.additional_info();
 }
 }//Commands
 

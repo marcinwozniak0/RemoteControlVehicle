@@ -22,6 +22,10 @@ public:
         ON_CALL(_vehiclePoolMock, getVehicle(_)).WillByDefault(Return(_vehicleMock));
     }
 
+    void expectAcknowledgeForDeactivateCommand();
+    void expectSuccessAcknowledges();
+    void expectAcknowledge(Commands::Acknowledge&&);
+
     VehiclePoolControler _sut;
 
     NiceMock<CommandReceiverMock> _commandReceiverMock;

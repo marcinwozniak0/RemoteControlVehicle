@@ -9,5 +9,6 @@ option java_outer_classname = "AcknowledgeProto";
 
 message Acknowledge
 {
-    Status status = 1;    
+    Status status = 1;   
+    string additional_info = 2;
 }

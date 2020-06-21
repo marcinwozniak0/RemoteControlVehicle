@@ -3,7 +3,7 @@
 class CommandSender 
 {
 public:
-    virtual void sendCommand(google::protobuf::Any&&) = 0;
+    virtual bool sendCommand(google::protobuf::Any&&) = 0;
 
     virtual ~CommandSender() = default;
 };

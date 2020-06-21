@@ -94,7 +94,7 @@ std::string GrpcCommandSender::connectWithServer() const
     }
 }
 
-void GrpcCommandSender::sendCommand(google::protobuf::Any&& commandToSend)
+bool GrpcCommandSender::sendCommand(google::protobuf::Any&& commandToSend)
 {
     Commands::Acknowledge acknowledge;
 
@@ -105,5 +105,8 @@ void GrpcCommandSender::sendCommand(google::protobuf::Any&& commandToSend)
     if (not status.ok())
     {
         ERROR("Command was not send! " + status.error_message());
+        return false;
     }
+
+    return true;
 }

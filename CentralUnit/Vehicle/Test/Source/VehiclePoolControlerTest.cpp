@@ -6,11 +6,13 @@
 #include <UserCommandToRun.pb.h>
 #include <ControlerCommandToRun.pb.h>
 #include <RegisterUserCommand.pb.h>
+#include <Acknowledge.pb.h>
 
 #include "VehiclePoolControlerTest.hpp"
 #include "ControlerCommandToRunMessageBuilder.hpp"
 #include "ProtobufStructuresComparators.hpp"
 #include "UtCommandsBuilders.hpp"
+#include "AcknowledgeBuilder.hpp"
 
 using namespace Comparators;
 using namespace UTHelpers;
@@ -24,14 +26,61 @@ constexpr auto secondVehicleId = 2u;
 constexpr auto unknownVehicleId = 22u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
+constexpr auto unsupportedCommandInfo = "Unsupported handling of command in CentralUnit";
+constexpr auto vehicleNotFoundInfo = "Vehicle with received id was not found";
+constexpr auto vehicleNotFound = std::nullopt;
+constexpr auto success = true;
+constexpr auto SUCCESS_STATUS = Commands::Status::SUCCESS;
+constexpr auto FAILED_STATUS = Commands::Status::FAILED;
+
+auto createExpectedAcknowledge(Commands::Status status = SUCCESS_STATUS,
+                               const std::string& additionalInfo = "")
+{
+    return AcknowledgeBuilder{}.status(status)
+                               .additionalInformation(additionalInfo)
+                               .build();
+}
+}//namespace
+
+void VehiclePoolControlerTest::expectAcknowledgeForDeactivateCommand()
+{
+    EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(createExpectedAcknowledge()));
+}
+
+void VehiclePoolControlerTest::expectSuccessAcknowledges()
+{
+    EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(createExpectedAcknowledge()))
+            .WillRepeatedly(Return());
+}
+
+void VehiclePoolControlerTest::expectAcknowledge(Commands::Acknowledge&& expectedAcknowledge)
+{
+    EXPECT_CALL(_commandReceiverMock, setAcknowledgeToSend(std::move(expectedAcknowledge)));
 }
 
 TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 {
     EXPECT_CALL(*_vehicleMock, startVehicle());
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
+
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest,
+       whenVehicleWihtReceivedVehicleIdFromUserCommandToStartDoesNotExistShouldSetAcknowledgeStatusToFailed)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createUserCommandToStart(unknownVehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(vehicleNotFound));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, vehicleNotFoundInfo));
 
     _sut.controlVehiclePool();
 }
@@ -39,17 +88,33 @@ TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
 TEST_F(VehiclePoolControlerTest, shouldStopVehicleAfterReceiveStopsCommand)
 {
     EXPECT_CALL(*_vehicleMock, stopVehicle());
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(3)
-            .WillOnce(Return(createUserCommandToStart(vehicleId)))
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUserCommandToStop(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
+
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest,
+       whenVehicleWihtReceivedVehicleIdFromUserCommandToStopDoesNotExistShouldSetAcknowledgeStatusToFailed)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createUserCommandToStop(unknownVehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(vehicleNotFound));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, vehicleNotFoundInfo));
 
     _sut.controlVehiclePool();
 }
 
 TEST_F(VehiclePoolControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendNewVehicleConfiguration)
 {
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate, vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
@@ -63,7 +128,24 @@ TEST_F(VehiclePoolControlerTest, afterReceiveUserCommandToRunShouldApplyAndSendN
 
     EXPECT_CALL(*_vehicleMock, applyNewConfiguration(coordinates));
     EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration()).WillOnce(Return(configuration));
-    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend)));
+    EXPECT_CALL(_commandSenderMock, sendCommand(std::move(messageToSend))).WillOnce(Return(success));
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest, afterUnsuccessfulUserCommandToRunHandlingShouldSetAcknowledgeStatusToFailed)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createUserCommandToRun(xCoordinate, yCoordinate, vehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(*_vehicleMock, applyNewConfiguration(_));
+    EXPECT_CALL(*_vehicleMock, getCurrentPinsConfiguration());
+    EXPECT_CALL(_commandSenderMock, sendCommand(_)).WillOnce(Return(not success));
+
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
+    expectAcknowledgeForDeactivateCommand();
 
     _sut.controlVehiclePool();
 }
@@ -100,7 +182,7 @@ TEST_F(VehiclePoolControlerTest, onEmergencyStopShouldNotSendCommandToRunWhenVeh
     const std::vector<int> vehicleIds {unknownVehicleId};  
     
     EXPECT_CALL(_vehiclePoolMock, getRentedVehicleIds()).WillOnce(ReturnRef(vehicleIds));
-    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(vehicleNotFound));
     EXPECT_CALL(_commandSenderMock, sendCommand(_)).Times(0);
 
     _sut.vehiclePoolEmergencyStop();
@@ -108,9 +190,12 @@ TEST_F(VehiclePoolControlerTest, onEmergencyStopShouldNotSendCommandToRunWhenVeh
 
 TEST_F(VehiclePoolControlerTest, unknownCommandShouldBeIngored)
 {
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createUnknownCommand()))
             .WillOnce(Return(createDeactivateCommand()));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, unsupportedCommandInfo));
 
     _sut.controlVehiclePool();
 }
@@ -121,12 +206,27 @@ TEST_F(VehiclePoolControlerTest, registerVehicleCommandShouldTriggerVehicleRegis
     const auto packedRegisterVehicleCommand = createRegisterVehicleCommand(vehicleId);
     packedRegisterVehicleCommand.UnpackTo(&registerVehicleCommand);
 
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(packedRegisterVehicleCommand))
             .WillOnce(Return(createDeactivateCommand()));
 
-    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(registerVehicleCommand)));
+    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(registerVehicleCommand))).WillOnce(Return(success));
 
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest, shouldSetAcknowledgeStatusToFailedWhenHandlingOfRegisterVehicleCommandFails)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createRegisterVehicleCommand(vehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, registerVehicle(std::move(_))).WillOnce(Return(not success));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
 
     _sut.controlVehiclePool();
 }
@@ -137,11 +237,27 @@ TEST_F(VehiclePoolControlerTest, registerUserCommandShouldTriggerVehicleRentProc
     const auto packedRegisterUserCommand = createRegisterUserCommand(vehicleId);
     packedRegisterUserCommand.UnpackTo(&registerUserCommand);
 
-    EXPECT_CALL(_commandReceiverMock, takeMessageFromQueue()).Times(2)
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(packedRegisterUserCommand))
             .WillOnce(Return(createDeactivateCommand()));
 
-    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId));
+    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId)).WillOnce(Return(success));
+
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest, shouldSetAcknowledgeStatusToFailedWhenHandlingOfRegisterUserCommandFails)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createRegisterUserCommand(vehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId)).WillOnce(Return(not success));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
 
     _sut.controlVehiclePool();
 }

@@ -30,6 +30,7 @@ public:
         _serverThread = std::make_unique<std::thread>([this](){initServer();});
         _clientThread = std::make_unique<std::thread>([this](){initClient();});
         waitForConnectionEstablish();
+        setDummyAcknowledge();
     }
 
     ~GrpcCommandReceiverTest()
@@ -68,6 +69,11 @@ private:
     void waitForConnectionEstablish()
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    void setDummyAcknowledge()
+    {
+        _sut->setAcknowledgeToSend(Commands::Acknowledge{});
     }
 
 };
