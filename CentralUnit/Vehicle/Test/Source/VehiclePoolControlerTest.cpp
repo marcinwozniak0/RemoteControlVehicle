@@ -26,8 +26,9 @@ constexpr auto secondVehicleId = 2u;
 constexpr auto unknownVehicleId = 22u;
 const PinsConfiguration configuration = {{1, 1}, {2, 11}};
 const PinsConfiguration zeroedConfiguration = {{1, 0}, {2, 0}};
-constexpr auto unknownCommadAcknowledgeInfo = "Unsupported handling of command in CentralUnit";
-constexpr auto failedUserCommandToStopInfo = "Vehicle with received id was not found";
+constexpr auto unsupportedCommandInfo = "Unsupported handling of command in CentralUnit";
+constexpr auto vehicleNotFoundInfo = "Vehicle with received id was not found";
+constexpr auto vehicleNotFound = std::nullopt;
 constexpr auto sendingSuccess = true;
 constexpr auto SUCCESS_STATUS = Commands::Status::SUCCESS;
 constexpr auto FAILED_STATUS = Commands::Status::FAILED;
@@ -64,6 +65,23 @@ TEST_F(VehiclePoolControlerTest, shouldStartVehicleAfterReceiveStartsCommand)
             .WillOnce(Return(createUserCommandToStart(vehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest,
+       whenVehicleWihtReceivedVehicleIdFromUserCommandToStartDoesNotExistShouldSetAcknowledgeStatusToFailed)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createUserCommandToStart(unknownVehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(vehicleNotFound));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, vehicleNotFoundInfo));
+
     _sut.controlVehiclePool();
 }
 
@@ -86,10 +104,10 @@ TEST_F(VehiclePoolControlerTest,
             .WillOnce(Return(createUserCommandToStop(unknownVehicleId)))
             .WillOnce(Return(createDeactivateCommand()));
 
-    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(vehicleNotFound));
 
     expectAcknowledgeForDeactivateCommand();
-    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, failedUserCommandToStopInfo));
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, vehicleNotFoundInfo));
 
     _sut.controlVehiclePool();
 }
@@ -164,7 +182,7 @@ TEST_F(VehiclePoolControlerTest, onEmergencyStopShouldNotSendCommandToRunWhenVeh
     const std::vector<int> vehicleIds {unknownVehicleId};  
     
     EXPECT_CALL(_vehiclePoolMock, getRentedVehicleIds()).WillOnce(ReturnRef(vehicleIds));
-    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(std::nullopt));
+    EXPECT_CALL(_vehiclePoolMock, getVehicle(unknownVehicleId)).WillOnce(Return(vehicleNotFound));
     EXPECT_CALL(_commandSenderMock, sendCommand(_)).Times(0);
 
     _sut.vehiclePoolEmergencyStop();
@@ -177,7 +195,7 @@ TEST_F(VehiclePoolControlerTest, unknownCommandShouldBeIngored)
             .WillOnce(Return(createDeactivateCommand()));
 
     expectAcknowledgeForDeactivateCommand();
-    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, unknownCommadAcknowledgeInfo));
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS, unsupportedCommandInfo));
 
     _sut.controlVehiclePool();
 }
