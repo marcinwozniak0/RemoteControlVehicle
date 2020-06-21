@@ -217,7 +217,7 @@ TEST_F(VehiclePoolControlerTest, registerVehicleCommandShouldTriggerVehicleRegis
     _sut.controlVehiclePool();
 }
 
-TEST_F(VehiclePoolControlerTest, shouldSetAcknowledgeStatusToFailedWhenRegistrationFailed)
+TEST_F(VehiclePoolControlerTest, shouldSetAcknowledgeStatusToFailedWhenHandlingOfRegisterVehicleCommandFails)
 {
     EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
             .WillOnce(Return(createRegisterVehicleCommand(vehicleId)))
@@ -241,7 +241,23 @@ TEST_F(VehiclePoolControlerTest, registerUserCommandShouldTriggerVehicleRentProc
             .WillOnce(Return(packedRegisterUserCommand))
             .WillOnce(Return(createDeactivateCommand()));
 
-    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId));
+    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId)).WillOnce(Return(success));
+
+    expectSuccessAcknowledges();
+
+    _sut.controlVehiclePool();
+}
+
+TEST_F(VehiclePoolControlerTest, shouldSetAcknowledgeStatusToFailedWhenHandlingOfRegisterUserCommandFails)
+{
+    EXPECT_CALL(_commandReceiverMock, takeCommandToProcess()).Times(2)
+            .WillOnce(Return(createRegisterUserCommand(vehicleId)))
+            .WillOnce(Return(createDeactivateCommand()));
+
+    EXPECT_CALL(_vehiclePoolMock, rentVehicle(vehicleId)).WillOnce(Return(not success));
+
+    expectAcknowledgeForDeactivateCommand();
+    expectAcknowledge(createExpectedAcknowledge(FAILED_STATUS));
 
     _sut.controlVehiclePool();
 }
