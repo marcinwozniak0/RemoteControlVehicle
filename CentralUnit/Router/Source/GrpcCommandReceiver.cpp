@@ -2,6 +2,7 @@
 #include <chrono>
 
 #include "GrpcCommandReceiver.hpp"
+#include "AcknowledgeBuilder.hpp"
 #include "Logger.hpp"
 
 namespace
@@ -45,15 +46,30 @@ void GrpcCommandReceiver::setAcknowledgeToSend(Commands::Acknowledge&& acknowled
 grpc::Status GrpcCommandReceiver::SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Commands::Acknowledge* response)
 {
     INFO("Command received. Command will be processed");
+
+    _acknowledgeToSend.reset();
+
     _commandToProcess = *request;
 
     waitForCommandProcessingFinish();
-    INFO("Command processing finished with status = " + getStatusAsString(_acknowledgeToSend.value().status()));
 
-    *response = _acknowledgeToSend.value();
-    _acknowledgeToSend.reset();
+    *response = assignAcknowledge();
 
     return grpc::Status::OK;
+}
+
+Commands::Acknowledge GrpcCommandReceiver::assignAcknowledge()
+{
+    if (_acknowledgeToSend.has_value())
+    {
+        INFO("Command processing finished with status = " + getStatusAsString(_acknowledgeToSend.value().status()));
+        return _acknowledgeToSend.value();
+    }
+    else
+    {
+        INFO("Acknowledge was not set. Sending default acknowledge");
+        return AcknowledgeBuilder{}.build();
+    }
 }
 
 grpc::Status GrpcCommandReceiver::SayHello(grpc::ServerContext* context, const InitCommands::HelloRequest* request, InitCommands::HelloReply* response)
