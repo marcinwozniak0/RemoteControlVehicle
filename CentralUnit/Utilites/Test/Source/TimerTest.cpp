@@ -1,24 +1,29 @@
 #include <gtest/gtest.h>
 #include <chrono>
 #include <thread>
+#include <ratio>
 
 #include "Timer.hpp"
 
-namespace std::chrono {
-std::ostream& operator<<(std::ostream& stream, milliseconds const& milliseconds)
+using namespace testing;
+using namespace std::chrono_literals;
+
+using TimeTick = duration<int64_t, std::centi>;
+using CentiSecond = std::chrono::duration<long double, std::centi>;
+
+namespace std::chrono
 {
-  return stream << "Timestamp = " << milliseconds.count();
+std::ostream& operator<<(std::ostream& stream, TimeTick const& milliseconds)
+{
+  return stream << "Time stamp = " << milliseconds.count();
 }
 }//std::chrono
 
-using namespace testing;
-using namespace std::literals::chrono_literals;
-
 namespace
 {
-constexpr auto zeroedTimerValue = 0ms;
-constexpr auto timeStamp = 1ms;
-constexpr auto twoTimeStamps = 2ms;
+constexpr auto zeroedTimerValue = CentiSecond(0);
+constexpr auto timeStamp = CentiSecond(1);
+constexpr auto twoTimeStamps = CentiSecond(2);
 
 void elapsOneTimeStamp()
 {
@@ -28,9 +33,8 @@ void elapsOneTimeStamp()
 
 struct TimerTest : Test
 {
-    Timer<milliseconds> _sut;
+    Timer<TimeTick> _sut;
 };
-
 
 TEST_F(TimerTest, timerShouldReturnZeroAtBegin)
 {
