@@ -45,6 +45,7 @@ if(ANDROID)
       main.cpp
       qml.qrc
       commandreceiver.cpp
+      GrpcCommandSender.cpp
     )
 else()
     add_executable(VehicleSimulator
@@ -52,6 +53,7 @@ else()
       main.cpp
       qml.qrc
       commandreceiver.cpp
+      GrpcCommandSender.cpp
     )
 endif()
 
