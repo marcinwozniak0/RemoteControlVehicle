@@ -9,15 +9,17 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts \
                                         -pthread \
                                         -g")
-# QT
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/../CentralUnit/External_GTest.cmake)
+
+# QT
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 CONFIG COMPONENTS REQUIRED Core
-                                     Quick
-                                     Gui)
+                                            Quick
+                                            Gui)
 
 # PROTOBUF
 set(protobuf_MODULE_COMPATIBLE TRUE)
@@ -60,12 +62,26 @@ target_link_libraries(grpc_lib grpc++d)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/CMake/build/grpc/include/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/CMake/build/vehicle_simulator/Interfaces/Protobuf)
 
-add_executable(vehicle_simulator $<TARGET_OBJECTS:grpc_lib>
+# SRC
+include_directories(RentalOffice/Include)
+add_subdirectory(RentalOffice/Source)
+
+# TEST
+include_directories(RentalOffice/Test/Mock)
+add_subdirectory(RentalOffice/Test/Source)
+
+# SRC LIB
+add_library(source_objects_lib OBJECT ${SOURCES})
+
+# BIN
+add_executable(vehicle_simulator $<TARGET_OBJECTS:source_objects_lib>
+                                 $<TARGET_OBJECTS:grpc_lib>
                                  main.cpp
-                                 qml.qrc
                                  main.qml
+                                 qml.qrc
                                  CommandReceiver.cpp
-                                 GrpcCommandSender.cpp)
+                                 GrpcCommandSender.cpp
+                                 Number.cpp)
 
 
 target_compile_definitions(vehicle_simulator
@@ -74,3 +90,14 @@ target_link_libraries(vehicle_simulator ${GENERATED_LIBS}
                                         commands
                                         Qt5::Core
                                         Qt5::Quick)
+
+# BIN UT
+set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
+                      $<TARGET_OBJECTS:grpc_lib>
+                      ${TEST_FILES}
+                      "MainTest.cpp")
+add_executable(vehicle_simulator_ut ${TEST_BINARY_FILES})
+target_link_libraries(vehicle_simulator_ut ${GTEST_LIBRARY}
+                                           ${GMOCK_LIBRARY}
+                                           ${GENERATED_LIBS}
+                                           commands)
