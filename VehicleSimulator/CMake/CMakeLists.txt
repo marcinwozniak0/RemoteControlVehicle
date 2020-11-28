@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
-# Project
-project(RemoteControlVehicleSuperBuild C CXX)
+project(VehicleSimulatorSuperBuild C CXX)
 
 include(ExternalProject)
 
@@ -98,9 +97,9 @@ ExternalProject_Add(grpc
 # have already been installed.
 
 ExternalProject_Add(RemoteControlVehicle
-  PREFIX remote_control_vehicle_super_build
+  PREFIX vehicle_simulator_super_build
   SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.."
-  BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/remote_control_vehicle"
+  BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/vehicle_simulator"
   INSTALL_COMMAND ""
   CMAKE_CACHE_ARGS
         -DProtobuf_DIR:PATH=${_FINDPACKAGE_PROTOBUF_CONFIG_DIR}

@@ -19,16 +19,16 @@ apt-get install --yes libssl-dev
 wget -qO- "https://cmake.org/files/v3.15/cmake-3.15.0-Linux-x86_64.tar.gz" | tar --strip-components=1 -xz -C /usr/local
 
 #PROTOC
-PROTOC_ZIP=protoc-3.11.2-linux-x86_64.zip
-curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.11.2/$PROTOC_ZIP
+PROTOC_ZIP=protoc-3.13.0-linux-x86_64.zip
+curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/$PROTOC_ZIP
 unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
 unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
 rm -f $PROTOC_ZIP
 
 #PROTOBUF LIBS
-wget https://github.com/protocolbuffers/protobuf/releases/download/v3.8.0/protobuf-all-3.8.0.zip
-unzip protobuf-all-3.8.0.zip
-cd protobuf-3.8.0
+wget https://github.com/protocolbuffers/protobuf/releases/download/v3.13.0/protobuf-all-3.13.0.zip
+unzip protobuf-all-3.13.0.zip
+cd protobuf-3.13.0
 ./autogen.sh
 ./configure
 make -j8

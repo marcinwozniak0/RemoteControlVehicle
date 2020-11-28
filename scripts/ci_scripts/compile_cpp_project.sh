@@ -2,7 +2,7 @@
 cd /builds/marcinwozniak0/RemoteControlVehicle/CentralUnit/CMake
 mkdir build
 cd build
-git clone -b v1.25.0 https://github.com/grpc/grpc
+git clone -b v1.32.0 https://github.com/grpc/grpc
 cd grpc
 git submodule update --init
 cd ..

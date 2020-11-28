@@ -1,19 +1,16 @@
 #pragma once
 
-#include <queue>
 #include <grpc++/grpc++.h>
 
 #include <Client.grpc.pb.h>
 
-#include "CommandReceiver.hpp"
-
-class GrpcCommandReceiver : public CommandReceiver, public Router::Service 
+class GrpcCommandReceiver : public Router::Service
 {
 public:
     GrpcCommandReceiver(const std::string& portAddress);
 
-    std::optional<const google::protobuf::Any> takeCommandToProcess() override;
-    void setAcknowledgeToSend(Commands::Acknowledge&&) override;
+    std::optional<const google::protobuf::Any> takeCommandToProcess();
+    void setAcknowledgeToSend(Commands::Acknowledge&&);
 
 private:
     grpc::Status SendCommand(grpc::ServerContext* context, const google::protobuf::Any* request, Commands::Acknowledge* response) override;
