@@ -9,8 +9,12 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fconcepts \
                                         -pthread \
                                         -g")
-
 # QT
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
 find_package(Qt5 CONFIG COMPONENTS REQUIRED Core
                                      Quick
                                      Gui)
