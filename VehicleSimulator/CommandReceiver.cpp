@@ -1,7 +1,7 @@
 #include <thread>
 #include <chrono>
 
-#include "commandreceiver.hpp"
+#include "CommandReceiver.hpp"
 //#include "Logger.hpp"
 
 namespace

@@ -4,8 +4,6 @@
 
 #include <Client.grpc.pb.h>
 
-#include "commandreceiver.hpp"
-
 class GrpcCommandReceiver : public Router::Service
 {
 public:
