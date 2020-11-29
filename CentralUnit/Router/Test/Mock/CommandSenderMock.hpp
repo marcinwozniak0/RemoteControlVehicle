@@ -7,5 +7,5 @@
 class CommandSenderMock : public CommandSender
 {
 public:
-    MOCK_METHOD(bool, sendCommand, (google::protobuf::Any&&));
+    MOCK_METHOD(bool, sendCommand, (google::protobuf::Any&&), (override));
 };

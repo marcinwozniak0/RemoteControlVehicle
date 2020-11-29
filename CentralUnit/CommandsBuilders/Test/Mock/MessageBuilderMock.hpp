@@ -7,5 +7,5 @@
 class MessageBuilderMock : public MessageBuilder
 {
 public:
-    MOCK_CONST_METHOD0(build, google::protobuf::Any());
+    MOCK_METHOD(google::protobuf::Any, build, (), (const, override));
 };

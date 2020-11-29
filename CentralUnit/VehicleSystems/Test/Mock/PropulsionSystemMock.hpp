@@ -7,6 +7,6 @@
 class PropulsionSystemMock : public PropulsionSystem
 {
 public:
-    MOCK_METHOD1(applyNewConfigurationBasedOnCoordinates, void(const Commands::CoordinateSystem&));
-    MOCK_CONST_METHOD0(getPinsConfiguration, const PinsConfiguration());
+    MOCK_METHOD(void, applyNewConfigurationBasedOnCoordinates, (const Commands::CoordinateSystem&), (override));
+    MOCK_METHOD(const PinsConfiguration, getPinsConfiguration, (), (const, override));
 };

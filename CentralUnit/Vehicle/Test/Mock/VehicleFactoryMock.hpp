@@ -7,5 +7,5 @@
 class VehicleFactoryMock : public VehicleFactory
 {
 public:
-    MOCK_METHOD(std::unique_ptr<Vehicle>, create, (Commands::RegisterVehicle&&), (const));
+    MOCK_METHOD(std::unique_ptr<Vehicle>, create, (Commands::RegisterVehicle&&), (const, override));
 };

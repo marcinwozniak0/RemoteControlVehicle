@@ -7,6 +7,6 @@
 class EngineMock : public Engine
 {
 public:
-    MOCK_METHOD1(setPinsConfiguration, void(const PinsConfiguration&));
-    MOCK_CONST_METHOD0(getPinsConfiguration, const PinsConfiguration&());
+    MOCK_METHOD(void, setPinsConfiguration, (const PinsConfiguration&), (override));
+    MOCK_METHOD(const PinsConfiguration&, getPinsConfiguration, (), (const, override));
 };
