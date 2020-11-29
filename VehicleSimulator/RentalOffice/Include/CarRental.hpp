@@ -3,10 +3,11 @@
 #include <QObject>
 
 #include "RentalOffice.hpp"
+#include "Car.hpp"
 
-using RentalItem = int;
+using RentalItem = Car;
 
-class CarRental : public QObject, public RentalOffice<RentalItem>
+class CarRental : public QObject, public RentalOffice<Car>
 {
     Q_OBJECT
 public:
@@ -16,8 +17,8 @@ public:
 
     void registerNewItem() override {}
     void removeItem(const uint itemId) override {}
-    std::vector<RentalItem>& getAllItems() override {return cars;}
+    std::vector<Car>& getAllItems() override {return cars;}
 
 private:
-    std::vector<RentalItem> cars;
+    std::vector<Car> cars;
 };
