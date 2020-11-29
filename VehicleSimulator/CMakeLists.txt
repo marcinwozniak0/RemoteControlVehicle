@@ -76,6 +76,7 @@ add_subdirectory(RentalOffice/Source)
 
 # TEST
 include_directories(RentalOffice/Test/Mock)
+include_directories(RentalOffice/Test/Include)
 add_subdirectory(RentalOffice/Test/Source)
 
 # SRC LIB

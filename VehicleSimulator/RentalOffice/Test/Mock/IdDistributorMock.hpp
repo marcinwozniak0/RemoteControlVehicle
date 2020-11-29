@@ -7,5 +7,5 @@
 class IdDistributorMock : public IdDistributor
 {
 public:
-    MOCK_METHOD(uint, getFreeId, (), (override));
+    MOCK_METHOD(unsigned, getFreeId, (), (override));
 };

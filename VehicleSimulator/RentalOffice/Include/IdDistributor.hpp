@@ -3,5 +3,7 @@
 class IdDistributor
 {
 public:
-    uint virtual getFreeId() = 0;
+    unsigned virtual getFreeId() = 0;
+
+    ~IdDistributor() = default;
 };
