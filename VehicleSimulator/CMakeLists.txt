@@ -87,10 +87,11 @@ add_library(source_objects_lib OBJECT ${SOURCES}
 # BIN
 add_executable(vehicle_simulator $<TARGET_OBJECTS:source_objects_lib>
                                  $<TARGET_OBJECTS:grpc_lib>
-                                 ${FILES_FOR_QT_AUTOMOC}
                                  main.qml
                                  qml.qrc
-                                 main.cpp)
+                                 main.cpp
+                                 ${FILES_FOR_QT_AUTOMOC}
+                                 RentalOffice/Include/CarRentalController.hpp)
 
 target_compile_definitions(vehicle_simulator
                            PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)

@@ -4,6 +4,9 @@
 
 #include "GrpcCommandSender.hpp"
 #include "CommandReceiver.hpp"
+#include "CarRental.hpp"
+#include "CarRentalController.hpp"
+#include "CarIdDistributor.hpp"
 #include "Number.hpp"
 
 int main(int argc, char *argv[])
@@ -17,10 +20,16 @@ int main(int argc, char *argv[])
     GrpcCommandSender commandSender(std::make_shared<Router::Stub>(
         grpc::CreateChannel("127.0.0.1:5000",
                             grpc::InsecureChannelCredentials())));
+    CarIdDistributor idDistributor;
+    CarRental carRental(idDistributor);
+    CarRentalController carRentalController(commandReceiver,
+                                            commandSender,
+                                            carRental);
 
     QQmlApplicationEngine engine;
     Number number;
     engine.rootContext()->setContextProperty("cppNumber", &number);
+    engine.rootContext()->setContextProperty("CarRentalController", &carRentalController);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine,
