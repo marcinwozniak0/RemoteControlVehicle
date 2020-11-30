@@ -1,14 +1,14 @@
 #pragma once
 
-#include <vector>
+#include <set>
 
 template <typename Item>
 class RentalOffice
 {
 public:
-    virtual void registerNewItem() = 0;
-    virtual void removeItem(const uint itemId) = 0;
-    virtual std::vector<Item>& getAllItems() = 0;
+    virtual bool registerNewItem() = 0;
+    virtual bool removeItem(const uint itemId) = 0;
+    virtual std::set<Item>& getAllItems() = 0;
 
     ~RentalOffice() = default;
 };

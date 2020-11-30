@@ -5,20 +5,24 @@
 #include "RentalOffice.hpp"
 #include "Car.hpp"
 
+class IdDistributor;
+
 using RentalItem = Car;
 
 class CarRental : public QObject, public RentalOffice<Car>
 {
     Q_OBJECT
 public:
-    CarRental(QObject* parent = nullptr) :
-        QObject(parent)
+    CarRental(IdDistributor& idDistributor, QObject* parent = nullptr)
+        : QObject(parent)
+        , _idDistributor(idDistributor)
     {}
 
-    void registerNewItem() override {}
-    void removeItem(const uint itemId) override {}
-    std::vector<Car>& getAllItems() override {return cars;}
+    bool registerNewItem() override;
+    bool removeItem(const uint itemId) override;
+    std::set<Car>& getAllItems() override {return _cars;}
 
 private:
-    std::vector<Car> cars;
+    std::set<Car> _cars;
+    IdDistributor& _idDistributor;
 };

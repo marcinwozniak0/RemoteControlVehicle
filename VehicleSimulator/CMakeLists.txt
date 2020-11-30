@@ -104,11 +104,15 @@ target_link_libraries(vehicle_simulator commands
 set(TEST_BINARY_FILES $<TARGET_OBJECTS:source_objects_lib>
                       $<TARGET_OBJECTS:grpc_lib>
                       ${TEST_FILES}
+                      ${FILES_FOR_QT_AUTOMOC}
                       "MainTest.cpp")
 
 add_executable(vehicle_simulator_ut ${TEST_BINARY_FILES})
 
-target_link_libraries(vehicle_simulator_ut ${GTEST_LIBRARY}
+target_link_libraries(vehicle_simulator_ut commands
+                                           ${GTEST_LIBRARY}
                                            ${GMOCK_LIBRARY}
                                            ${GENERATED_LIBS}
-                                           commands)
+                                           Qt5::Core
+                                           Qt5::Quick
+                                           Qt5::Widgets)
