@@ -9,9 +9,10 @@ Window {
     title: qsTr("Hello World")
 
         Button {
-            text: "Decrement"
+            text: "Register"
             anchors.left: parent.left
-            onClicked: cppNumber.decrement()
+            onClicked: CarRentalController.registerNewItem();
+            //onClicked: cppNumber.decrement()
         }
         Button {
             text: "Increment"

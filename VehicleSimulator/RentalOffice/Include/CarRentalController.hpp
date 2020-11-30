@@ -20,6 +20,7 @@ public:
         , _rentalOffice(rentalOffice)
     {}
 
+public slots:
     void registerNewItem();
 
 private:
