@@ -1,8 +1,12 @@
 #pragma once
 
+#include "RentalItemStatus.hpp"
+
 struct Car
 {
-    Car(const uint id) : _id(id)
+    Car(const uint id)
+        : _id(id)
+        , _status(RentalItemStatus::Free)
     {}
 
     bool operator< (const Car& car) const
@@ -11,4 +15,5 @@ struct Car
     }
 
     const uint _id;
+    RentalItemStatus _status;
 };
