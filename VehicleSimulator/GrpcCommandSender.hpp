@@ -10,7 +10,7 @@ class GrpcCommandSender
 public:
     GrpcCommandSender(std::shared_ptr<Router::StubInterface>);
 
-    bool sendCommand(google::protobuf::Any&&);
+    std::optional<Commands::Acknowledge> sendCommand(google::protobuf::Any&&);
 
 private:
     std::string connectWithServer() const;

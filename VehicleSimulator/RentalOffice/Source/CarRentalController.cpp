@@ -56,9 +56,16 @@ google::protobuf::Any createRegisterVehicleCommand(const int vehicleId)
 
 void CarRentalController::registerNewItem()
 {
-    _rentalOffice.registerNewItem();
-    auto commandToSend = createRegisterVehicleCommand(5); //TODO how to take ID ?
-     _commandSender.sendCommand(std::move(commandToSend));
+    const auto itemId = _rentalOffice.registerNewItem();
 
-    //_commandSender.sendCommand() TODO send command
+    if (itemId)
+    {
+        auto commandToSend = createRegisterVehicleCommand(itemId.value());
+        const auto acknowledge = _commandSender.sendCommand(std::move(commandToSend));
+
+        if (not acknowledge or acknowledge.value().status() == Commands::Status::FAILED)
+        {
+            _rentalOffice.removeItem(itemId.value());
+        }
+    }
 }
