@@ -18,7 +18,7 @@ public:
         , _idDistributor(idDistributor)
     {}
 
-    bool registerNewItem() override;
+    std::optional<uint> registerNewItem() override;
     bool removeItem(const uint itemId) override;
     std::set<Car>& getAllItems() override {return _cars;}
 

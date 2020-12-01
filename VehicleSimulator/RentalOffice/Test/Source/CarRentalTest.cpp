@@ -10,20 +10,20 @@ TEST_F(CarRentalTest, rentedCarListShouldBeEmptyByDefault)
     ASSERT_TRUE(_sut.getAllItems().empty());
 }
 
-TEST_F(CarRentalTest, registerNewItemShouldReturnTrueWhenThereIsNoIdColision)
+TEST_F(CarRentalTest, registerNewItemShouldReturnRegisteredItemIdWhenThereIsNoIdColision)
 {
     EXPECT_CALL(_idDistributorMock, getFreeId()).WillRepeatedly(Return(firstId));
 
-    ASSERT_TRUE(_sut.registerNewItem());
+    ASSERT_EQ(_sut.registerNewItem(), firstId);
 }
 
-TEST_F(CarRentalTest, registerNewItemShouldReturnFalseWhenThereIsIdColision)
+TEST_F(CarRentalTest, registerNewItemShouldReturnNulloptWhenThereIsIdColision)
 {
     EXPECT_CALL(_idDistributorMock, getFreeId()).WillRepeatedly(Return(firstId));
 
     _sut.registerNewItem();
 
-    ASSERT_FALSE(_sut.registerNewItem());
+    ASSERT_EQ(_sut.registerNewItem(), std::nullopt);
 }
 
 TEST_F(CarRentalTest, registeredItemShouldBeStored)
